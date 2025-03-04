@@ -1,0 +1,28 @@
+python3 -m venv env
+env\Scripts\activate
+
+# cd C:\Users\Greattech\Documents\GitHub\PA2576-Programvaruintensiv-produktutveckling\Ivantesting
+
+
+/PA2576-Programvaruintensiv-produktutveckling
+│── /env                # Virtuellt environment (ska ignoreras i Git)
+│── /instance           # SQLite-databas (kan lagras här)
+│── /migrations         # Flask-Migrate filer (om du använder det)
+│── /static             # CSS, bilder, JavaScript
+│── /templates          # HTML-filer (om du har en frontend)
+│── /models             # Mapp för databaser och modeller
+│   │── __init__.py     # Initierar models-modulen
+│   │── models.py       # SQLAlchemy-databasmodeller
+│── /routes             # API-endpoints (Flask Blueprints)
+│   │── __init__.py     # Initierar routes-modulen
+│   │── user_routes.py  # Routes för användare
+│   │── post_routes.py  # Routes för inlägg
+│── /services           # Externa API-integrationer (ex. Spotify)
+│   │── spotify_service.py  # Hantering av Spotify API
+│── /utils              # Hjälpfunktioner och verktyg
+│   │── helpers.py      # Generella funktioner
+│── app.py              # Flask-applikationens startpunkt
+│── config.py           # Konfigurationsinställningar
+│── requirements.txt    # Lista över installerade Python-paket
+│── .gitignore          # Filer att ignorera i Git
+│── README.md           # Projektbeskrivning

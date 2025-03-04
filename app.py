@@ -1,10 +1,7 @@
+from dotenv import load_dotenv
+from pprint import pprint
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import requests
+import os
 
-app = Flask(__name__)
-
-# Databas-konfiguration (använd SQLite eller PostgreSQL)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///resonate.db'  # För SQLite
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
