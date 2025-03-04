@@ -1,7 +1,7 @@
 # cd C:\Users\Greattech\Documents\GitHub\PA2576-Programvaruintensiv-produktutveckling\Ivantesting
 
 from flask import Flask
-from databasetest import db, User, Follower, Post, Like, Comment, Song
+from IvanTesting.modelstest import db, User, Follower, Post, Like, Comment, Song
 
 app = Flask(__name__)
 
