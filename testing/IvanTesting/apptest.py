@@ -23,7 +23,7 @@ with app.app_context():  # Skapa en application context
         email="testuser@email.com",
         profilePicture="https://example.com/profile.jpg",
         favoriteGenres=["Rock", "Indie"]
-
+    )
 
     db.session.add(new_user)  # Lägg till användaren i databasen
     db.session.commit()  # Spara ändringen
