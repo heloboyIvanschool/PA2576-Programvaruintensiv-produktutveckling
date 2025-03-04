@@ -1,7 +1,7 @@
 # cd C:\Users\Greattech\Documents\GitHub\PA2576-Programvaruintensiv-produktutveckling\Ivantesting
 
 from flask import Flask
-from IvanTesting.modelstest import db, User, Follower, Post, Like, Comment, Song
+from modelstest import db, User, Follower, Post, Like, Comment, Song
 
 app = Flask(__name__)
 
@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///resonate.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db.init_app(app)  # ✅ Initiera db med appen
+db.init_app(app)  #Initiera db med appen
 
 # Skapa databasen om den inte finns
 with app.app_context():
