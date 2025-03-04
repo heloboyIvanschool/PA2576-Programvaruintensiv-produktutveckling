@@ -1,4 +1,4 @@
-# cd C:\Users\Greattech\Documents\GitHub\PA2576-Programvaruintensiv-produktutveckling\Ivantesting
+'''STFU'''
 
 from flask import Flask
 from modelstest import db, User, Follower, Post, Like, Comment, Song
@@ -14,7 +14,6 @@ db.init_app(app)  #Initiera db med appen
 # Skapa databasen om den inte finns
 with app.app_context():
     db.create_all()
-
 
 with app.app_context():  # Skapa en application context
     # Skapa en användare
@@ -47,5 +46,3 @@ with app.app_context():  # Skapa en application context
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-

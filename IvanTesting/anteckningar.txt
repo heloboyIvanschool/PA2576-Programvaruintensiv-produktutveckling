@@ -1,2 +1,4 @@
 python3 -m venv env
 env\Scripts\activate
+
+# cd C:\Users\Greattech\Documents\GitHub\PA2576-Programvaruintensiv-produktutveckling\Ivantesting
