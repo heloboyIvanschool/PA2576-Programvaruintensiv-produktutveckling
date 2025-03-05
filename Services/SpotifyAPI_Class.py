@@ -35,15 +35,15 @@ class search():
     def __init__(self):
         self.__token = spotifyAPI().get_token()
         self.__url = "https://api.spotify.com/v1/search"
-    
+
     def get_auth_header(self):
         return {"Authorization": "Bearer " + self.__token}
-    
+
     def get_query_url(self, query):
         query_url = self.__url + "?" + query
         result = get(query_url, headers=self.get_auth_header())
         return result
-    
+
 
 #Search for track
 
@@ -62,9 +62,9 @@ class search_for_track():
         if len(json_result) == 0:
             print("No tracks with this name exists...")
             return None
-    
+
         return json_result[0]
-    
+
     def get_track_name(self, track_name):
         track_data = self.get_json(track_name)
         return track_data["name"] if track_data else None
@@ -80,7 +80,7 @@ class search_for_track():
     def get_track_cover(self, track_name):
         track_data = self.get_json(track_name)
         return track_data["album"]["images"][0]["url"] if track_data else None
-    
+
 
 #Search for Album
 
@@ -99,9 +99,9 @@ class search_for_album():
         if len(json_result) == 0:
             print("No albums with this name exists...")
             return None
-    
+
         return json_result[0]
-    
+
     def get_album_name(self, album_name):
         album_data = self.get_json(album_name)
         return album_data["name"] if album_data else None
@@ -113,7 +113,7 @@ class search_for_album():
     def get_album_cover(self, album_name):
         album_data = self.get_json(album_name)
         return album_data["images"][0]["url"] if album_data else None
-    
+
 
 #Search for artist
 
@@ -132,9 +132,9 @@ class search_for_artist():
         if len(json_result) == 0:
             print("No artists with this name exists...")
             return None
-    
+
         return json_result[0]
-    
+
     def get_artist_name(self, artist_name):
         artist_data = self.get_json(artist_name)
         return artist_data["name"] if artist_data else None
@@ -142,10 +142,10 @@ class search_for_artist():
     def get_artist_cover(self, artist_name):
         artist_data = self.get_json(artist_name)
         return artist_data["images"][0]["url"] if artist_data else None
-    
 
 
-    
+
+
 spotify_search_for_track = search_for_track()
 
 track_name = "Om du var här"
