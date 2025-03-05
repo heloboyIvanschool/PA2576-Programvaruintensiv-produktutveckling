@@ -1,7 +1,4 @@
-
-
-
-# cd C:\Users\Greattech\Documents\GitHub\PA2576-Programvaruintensiv-produktutveckling\Ivantesting
+cd C:\Users\Greattech\Documents\GitHub\PA2576-Programvaruintensiv-produktutveckling\Ivantesting
 
 
 /PA2576-Programvaruintensiv-produktutveckling
@@ -41,3 +38,6 @@ pip freeze > requirements.txt
 
 installera paket från requirements:
 pip install -r requirements.txt
+
+
+***SAKER SOM 
