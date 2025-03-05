@@ -1,0 +1,47 @@
+cd C:\Users\Greattech\Documents\GitHub\PA2576-Programvaruintensiv-produktutveckling\Ivantesting
+
+
+/PA2576-Programvaruintensiv-produktutveckling
+│── /env                # Virtuellt environment (ska ignoreras i Git)
+│── /instance           # SQLite-databas (kan lagras här)
+│── /migrations         # Flask-Migrate filer (om du använder det)
+│── /static             # CSS, bilder, JavaScript
+│── /templates          # HTML-filer (om du har en frontend)
+│── /models             # Mapp för databaser och modeller
+│   │── __init__.py     # Initierar models-modulen
+│   │── models.py       # SQLAlchemy-databasmodeller
+│── /routes             # API-endpoints (Flask Blueprints)
+│   │── __init__.py     # Initierar routes-modulen
+│   │── user_routes.py  # Routes för användare
+│   │── post_routes.py  # Routes för inlägg
+│── /services           # Externa API-integrationer (ex. Spotify)
+│   │── spotify_service.py  # Hantering av Spotify API
+│── /utils              # Hjälpfunktioner och verktyg
+│   │── helpers.py      # Generella funktioner
+│── app.py              # Flask-applikationens startpunkt
+│── config.py           # Konfigurationsinställningar
+│── requirements.txt    # Lista över installerade Python-paket
+│── .gitignore          # Filer att ignorera i Git
+│── README.md           # Projektbeskrivning
+
+
+***SKRIVS I BASH TERMINALEN***
+
+Skapa en venv (om du inte redan har gjort det en gång innnan)
+python3 -m venv env
+
+Starta venv:
+source venv/Scripts/activate
+
+Uppdatera requirements:
+pip freeze > requirements.txt
+
+installera paket från requirements:
+pip install -r requirements.txt
+
+
+***SAKER SOM BORDE LÄGGAS TILL***
+
+Ifall vi vill lägga upp detta på en server
+session hantering / cookies
+CSRF-tokens i HTML formulär

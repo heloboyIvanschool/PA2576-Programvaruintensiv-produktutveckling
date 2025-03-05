@@ -1,0 +1,13 @@
+.vnev
+.env
+# i riktiga program så ska man inte pusha detta för då kan vem som helst komma och ta era API KEYS
+
+__pycache__/
+*.pyc
+*.pyo
+
+
+# skapa egna lokala datafiler sen
+# *.sqlite3
+# *.db
+# resonate.db
