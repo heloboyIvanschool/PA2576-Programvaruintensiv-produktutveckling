@@ -4,6 +4,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
+
 import os
 import json
 from datetime import datetime
@@ -12,10 +13,17 @@ load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
+
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')  # Change this to a random secret key
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max-limit
+
+# Initialize SQLAlchemy
+db = SQLAlchemy(app)
+
+with app.app_context():
+    db.create_all()
 
 @app.errorhandler(413)
 def request_entity_too_large(error):
@@ -28,15 +36,20 @@ SONG_PICS_FOLDER = os.path.join(UPLOAD_FOLDER, 'song_pics')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 # Make sure the upload folders exist
-os.makedirs(PROFILE_PICS_FOLDER, exist_ok=True)
+os.makedirs(PROFILE_PICS_FOLDER, exist_ok=True) # ändra så att bilder osv sparas privat i till profil
 os.makedirs(SONG_PICS_FOLDER, exist_ok=True)
 
 # Function to check if file extension is allowed
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    # Kolla om filnamnet har en punkt och om filändelsen är en av de tillåtna
+    if '.' in filename:
+        # Hämta filändelsen efter den sista punkten och gör den till små bokstäver
+        ext = filename.rsplit('.', 1)[1].lower()
+        # Kolla om den är i de tillåtna filändelserna
+        return ext in ALLOWED_EXTENSIONS
+    return False
 
-# Initialize SQLAlchemy
-db = SQLAlchemy(app)
+
 
 # Initialize Flask-Login
 login_manager = LoginManager()
