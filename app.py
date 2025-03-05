@@ -51,21 +51,21 @@ class User(UserMixin, db.Model):
     profile_picture = db.Column(db.String(120), default='default.jpg')
     favorite_genre = db.Column(db.String(50), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    
+
     # New fields for enhanced profile
     bio = db.Column(db.Text)
     song_picture = db.Column(db.String(128))
     sotd_title = db.Column(db.String(128))
     sotd_artist = db.Column(db.String(128))
     _favorite_songs = db.Column(db.Text)
-    
+
     # Define the relationship with followers
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
-    
+
     # Properties for favorite_songs
     @property
     def favorite_songs(self):
@@ -75,21 +75,21 @@ class User(UserMixin, db.Model):
             except:
                 return []
         return []
-     
+
     @favorite_songs.setter
     def favorite_songs(self, songs):
         self._favorite_songs = json.dumps(songs)
-    
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
-        
+
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-    
+
     def follow(self, user):
         if not self.is_following(user):
             self.followed.append(user)
-            
+
     def unfollow(self, user):
         if self.is_following(user):
             self.followed.remove(user)
@@ -121,15 +121,15 @@ def register():
         # Check if username or email already exists
         user_exists = User.query.filter_by(username=username).first()
         email_exists = User.query.filter_by(email=email).first()
-        
+
         if user_exists:
             flash('Username already exists.')
             return redirect(url_for('register'))
-        
+
         if email_exists:
             flash('Email already exists.')
             return redirect(url_for('register'))
-        
+
         # Handle profile picture upload
         if 'profile_picture' in request.files:
             file = request.files['profile_picture']
@@ -141,18 +141,18 @@ def register():
                 profile_pic = 'default.jpg'
         else:
             profile_pic = 'default.jpg'
-        
+
         # Create new user
         new_user = User(username=username, email=email, profile_picture=profile_pic, favorite_genre=favorite_genre)
         new_user.set_password(password)
-        
+
         # Add user to database
         db.session.add(new_user)
         db.session.commit()
-        
+
         flash('Registration successful! Please log in.')
         return redirect(url_for('login'))
-    
+
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -160,15 +160,15 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        
+
         user = User.query.filter_by(username=username).first()
-        
+
         if user and user.check_password(password):
             login_user(user)
             return redirect(url_for('profile', username=user.username))
         else:
             flash('Invalid username or password')
-    
+
     return render_template('login.html')
 
 @app.route('/logout')
@@ -190,27 +190,27 @@ def edit_profile():
         current_user.email = request.form['email']
         current_user.favorite_genre = request.form['favorite_genre']
         current_user.bio = request.form['bio']
-        
+
         # Process song of the day data
         current_user.sotd_title = request.form['sotd_title']
         current_user.sotd_artist = request.form['sotd_artist']
-        
+
         # Process favorite songs
         favorite_songs = []
         for i in range(5):  # We have 5 song slots
             title = request.form.get(f'song_title_{i}')
             artist = request.form.get(f'song_artist_{i}')
             icon = request.form.get(f'song_icon_{i}')
-            
+
             if title and artist:  # Only add if both title and artist are provided
                 favorite_songs.append({
                     'title': title,
                     'artist': artist,
                     'icon': icon
                 })
-        
+
         current_user.favorite_songs = favorite_songs
-        
+
         # Handle profile picture upload
         if 'profile_picture' in request.files and request.files['profile_picture'].filename:
             file = request.files['profile_picture']
@@ -218,7 +218,7 @@ def edit_profile():
                 filename = secure_filename(f"{current_user.username}_{int(datetime.utcnow().timestamp())}_profile.{file.filename.rsplit('.', 1)[1].lower()}")
                 file.save(os.path.join(PROFILE_PICS_FOLDER, filename))
                 current_user.profile_picture = filename
-        
+
         # Handle song picture upload
         if 'song_picture' in request.files and request.files['song_picture'].filename:
             file = request.files['song_picture']
@@ -226,12 +226,12 @@ def edit_profile():
                 filename = secure_filename(f"{current_user.username}_{int(datetime.utcnow().timestamp())}_song.{file.filename.rsplit('.', 1)[1].lower()}")
                 file.save(os.path.join(SONG_PICS_FOLDER, filename))
                 current_user.song_picture = filename
-        
+
         # Save changes to database
         db.session.commit()
         flash('Your profile has been updated!')
         return redirect(url_for('profile', username=current_user.username))
-    
+
     return render_template('edit_profile.html')
 
 @app.route('/follow/<username>')
@@ -244,7 +244,7 @@ def follow(username):
     if user == current_user:
         flash('You cannot follow yourself!')
         return redirect(url_for('profile', username=username))
-    
+
     current_user.follow(user)
     db.session.commit()
     flash(f'You are now following {username}!')
@@ -260,7 +260,7 @@ def unfollow(username):
     if user == current_user:
         flash('You cannot unfollow yourself!')
         return redirect(url_for('profile', username=username))
-    
+
     current_user.unfollow(user)
     db.session.commit()
     flash(f'You have unfollowed {username}.')
@@ -275,7 +275,7 @@ def users():
 def debug_user(username):
     """Debug route to check user data"""
     user = User.query.filter_by(username=username).first_or_404()
-    
+
     # Get all attributes of the user object
     user_data = {
         'username': user.username,
@@ -288,7 +288,7 @@ def debug_user(username):
         'sotd_artist': user.sotd_artist if hasattr(user, 'sotd_artist') else None,
         'favorite_songs': user.favorite_songs if hasattr(user, 'favorite_songs') else []
     }
-    
+
     return f"<pre>{json.dumps(user_data, indent=4)}</pre>"
 
 if __name__ == '__main__':
