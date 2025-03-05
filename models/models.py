@@ -1,8 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
-<<<<<<< HEAD
-=======
 
->>>>>>> 706df3c3be7bb8241ab514d4d1083a951b75b6aa
+
 db = SQLAlchemy()
 
 # 1️⃣ Users Table
@@ -11,10 +9,7 @@ class User(db.Model):
     userId = db.Column(db.String, primary_key=True)
     username = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-<<<<<<< HEAD
-=======
     password = db.Column(db.String(120), nullable=False)
->>>>>>> 706df3c3be7bb8241ab514d4d1083a951b75b6aa
     profilePicture = db.Column(db.String, nullable=True)
     favoriteGenres = db.Column(db.PickleType, nullable=True)
     createdAt = db.Column(db.DateTime, default=db.func.current_timestamp())
