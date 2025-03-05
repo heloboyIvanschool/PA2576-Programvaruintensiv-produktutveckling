@@ -1,0 +1,63 @@
+.navbar {
+    background-color: #fff; /* White background for the navbar */
+    padding: 1rem;
+    border-bottom: 1px solid #ccc; /* Horizontal line at the bottom of the navbar */
+    position: relative; /* Ensure the pseudo-elements are positioned correctly */
+  }
+  
+  .navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative; /* Ensure the pseudo-elements are positioned correctly */
+  }
+  
+  .navbar-logo, .navbar-menu, .navbar-profile {
+    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+  }
+  
+  .navbar-logo {
+    color: #333; /* Dark text color for better contrast on white background */
+    font-size: 1.5rem;
+    text-decoration: none;
+    border-right: none; /* Remove border from the logo */
+  }
+  
+  .navbar-menu {
+    display: flex;
+    gap: 2rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border-right: none; /* Remove border from the menu */
+  }
+  
+  .navbar-item {
+    color: #333; /* Dark text color for better contrast on white background */
+    text-decoration: none;
+    font-size: 1rem;
+  }
+  
+  .navbar-item:hover {
+    text-decoration: underline;
+  }
+  
+  .navbar-profile {
+    display: flex;
+    align-items: flex-start; /* Align username at the top of the profile picture */
+    gap: 0.5rem;
+  }
+  
+  .navbar-username {
+    color: #333; /* Dark text color for better contrast on white background */
+    font-size: 1rem;
+    align-self: flex-start; /* Align username at the top */
+  }
+  
+  .navbar-profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 0; /* Square profile picture */
+  }

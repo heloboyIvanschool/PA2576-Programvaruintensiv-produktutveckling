@@ -1,0 +1,86 @@
+.profile-container {
+  max-width: 800px;
+  margin: 10px;
+  margin-top: 10px;
+  padding: 2rem;
+  background-color: #f9f9f9;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.profile-pic-large {
+  width: 150px;
+  height: 150px;
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+}
+
+.profile-username {
+  font-size: 2rem;
+  color: #333;
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.profile-section {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.favorite-songs {
+  list-style-type: none;
+  padding: 0;
+}
+
+.favorite-songs li {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #666;
+}
+
+.favorite-songs-container {
+  margin: 10px;
+  background-color: #fff;
+  padding: 1rem;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  vertical-align: top;
+  width: 300px;
+}
+
+.showcase {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  vertical-align: top;
+  width: 45%;
+  margin-left: 2rem;
+}
+
+.showcase-section {
+  margin-bottom: 2rem;
+}
+
+.showcase-items {
+  display: flex;
+  gap: 1rem;
+}
+
+.showcase-item {
+  width: 100px;
+  height: 100px;
+  border-radius: 5px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+}
