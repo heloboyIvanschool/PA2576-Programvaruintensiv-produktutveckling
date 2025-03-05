@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h4>Create an Account</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                        <div class="form-text">Choose a unique username for your account.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                        <div class="form-text">We'll never share your email with anyone else.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        <div class="form-text">Choose a strong password to protect your account.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="favorite_genre" class="form-label">Favorite Genre</label>
+                        <input type="text" class="form-control" id="favorite_genre" name="favorite_genre">
+                        <div class="form-text">What type of content do you prefer?</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="profile_picture" class="form-label">Profile Picture</label>
+                        <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*">
+                        <div class="form-text">Upload a profile picture (optional).</div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Register</button>
+                    <a href="{{ url_for('login') }}" class="btn btn-link">Already have an account?</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
