@@ -1,5 +1,5 @@
-python3 -m venv env
-env\Scripts\activate
+
+
 
 # cd C:\Users\Greattech\Documents\GitHub\PA2576-Programvaruintensiv-produktutveckling\Ivantesting
 
@@ -26,3 +26,18 @@ env\Scripts\activate
 │── requirements.txt    # Lista över installerade Python-paket
 │── .gitignore          # Filer att ignorera i Git
 │── README.md           # Projektbeskrivning
+
+
+***SKRIVS I BASH TERMINALEN***
+
+Skapa en venv (om du inte redan har gjort det en gång innnan)
+python3 -m venv env
+
+Starta venv:
+source venv/Scripts/activate
+
+Uppdatera requirements:
+pip freeze > requirements.txt
+
+installera paket från requirements:
+pip install -r requirements.txt
