@@ -40,4 +40,8 @@ installera paket från requirements:
 pip install -r requirements.txt
 
 
-***SAKER SOM 
+***SAKER SOM BORDE LÄGGAS TILL***
+
+Ifall vi vill lägga upp detta på en server
+session hantering / cookies
+CSRF-tokens i HTML formulär
