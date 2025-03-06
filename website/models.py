@@ -43,8 +43,8 @@ class User(db.Model, UserMixin):
     def is_following(self, user):
         return self.following.filter(followers.c.followingId == user.userId).count() > 0
 
-    favorite_songs = db.relationship('Song', secondary=user_songs, back_populates='liked_by_users', cascade="all, delete")
-    favorite_albums = db.relationship('Album', secondary=user_albums, back_populates='liked_by_users', cascade="all, delete")
+    favorite_songs = db.relationship('Song', secondary='user_songs', back_populates='liked_by_users', cascade="all, delete")
+    favorite_albums = db.relationship('Album', secondary='user_albums', back_populates='liked_by_users', cascade="all, delete")
 
     def __repr__(self):
         return f'<User {self.username}>'
