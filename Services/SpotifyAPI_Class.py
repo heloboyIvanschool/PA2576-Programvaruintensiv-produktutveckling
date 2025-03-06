@@ -157,14 +157,14 @@ class search_for_artist():
     def get_artist_spotify_link(self, artist_name):
         artist_data = self.get_json(artist_name)
         return artist_data["external_urls"]["spotify"] if artist_data else None
+    
 
 
+print("\n---------------Låtinfo---------------")
 
 spotify_search_for_track = search_for_track()
 
 track_name = "Om du var här"
-
-print("\n---------------Låtinfo---------------")
 
 print("Låtnamn:", spotify_search_for_track.get_track_name(track_name))
 print("Artist:", spotify_search_for_track.get_track_artist(track_name))
@@ -174,11 +174,11 @@ print("Embed link:", spotify_search_for_track.get_track_embed_link(track_name))
 
 
 
+print("\n---------------Albuminfo---------------")
+
 spotify_search_for_album = search_for_album()
 
 album_name = "breakfast in america supertramp"
-
-print("\n---------------Albuminfo---------------")
 
 print("Albumnamn:", spotify_search_for_album.get_album_name(album_name))
 print("Artist:", spotify_search_for_album.get_album_artist(album_name))
@@ -187,11 +187,11 @@ print("Albumlänk", spotify_search_for_album.get_album_spotify_link(album_name))
 
 
 
+print("\n---------------Artistinfo---------------")
+
 spotify_search_for_artist = search_for_artist()
 
 artist_name = "sean banan"
-
-print("\n---------------Artistinfo---------------")
 
 print("Artistnamn:", spotify_search_for_artist.get_artist_name(artist_name))
 print("Coverbild:", spotify_search_for_artist.get_artist_cover(artist_name))

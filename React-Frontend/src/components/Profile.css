@@ -108,7 +108,9 @@
   margin: 0%;
   background-color: #fff;
   padding: 0.5rem;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  border-radius: 8px;
   display: inline-block;
   vertical-align: top;
   width: 20.5%;
@@ -130,18 +132,42 @@
 }
 
 .showcase-section {
-  margin-bottom: 0rem;
+  margin-bottom: 0;
+  padding: 0;
 }
 
 .showcase-section h2{
-  margin-bottom: 1px;
-  padding-bottom: 0px;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 .albums-container {
   padding: 0.5rem;
   padding-bottom: 5px;
   padding-top: 0px;
+  margin-bottom: 3px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.artists-container {
+  padding: 0.5rem;
+  padding-bottom: 5px;
+  padding-top: 0px;
+  margin-bottom: 3px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.badges-container {
+  padding: 0.5rem;
+  padding-bottom: 5px;
+  padding-top: 0px;
+  margin-bottom: 3px;
   background-color: #f0f0f0;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -151,7 +177,7 @@
 .showcase-items {
   display: flex;
   gap: 0.2rem;
-  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .showcase-item {
