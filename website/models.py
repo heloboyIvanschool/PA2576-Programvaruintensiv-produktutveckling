@@ -14,14 +14,14 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
-    profilePicture = db.Column(db.String, nullable=True)
-    favoriteGenres = db.Column(db.PickleType, nullable=True)
+    profile_picture = db.Column(db.String, nullable=True)
+    favorite_genres = db.Column(db.PickleType, nullable=True)
     createdAt = db.Column(db.DateTime(timezone=True), default=func.now())
 
     #realations
-    posts = db.relationship('Post', back_populates='user', cascade="all, delete-orphan")
-    likes = db.relationship('Like', back_populates='user', cascade="all, delete-orphan")
-    comments = db.relationship('Comment', back_populates='user', cascade="all, delete-orphan")
+    posts = db.relationship('Post', back_populates='user')
+    likes = db.relationship('Like', back_populates='user')
+    comments = db.relationship('Comment', back_populates='user')
 
     following = db.relationship(
         'User', secondary=followers,
@@ -45,16 +45,11 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f'<User {self.username}>'
 
-class Follower(db.Model):
-    __tablename__ = 'followers'
-    followerId = db.Column(db.Integer, db.ForeignKey('users.userId'), primary_key=True)
-    followingId = db.Column(db.Integer, db.ForeignKey('users.userId'), primary_key=True)
-
 class Post(db.Model):
     __tablename__ = 'posts'
     postId = db.Column(db.Integer, primary_key=True)
     userId = db.Column(db.Integer, db.ForeignKey('users.userId'), nullable=False)
-    songId = db.Column(db.String, nullable=False)
+    songId = db.Column(db.String, db.ForeignKey('songs.songId'), nullable=True)
     caption = db.Column(db.Text, nullable=True)
     likes = db.Column(db.Integer, default=0)
     createdAt = db.Column(db.DateTime(timezone=True), default=func.now())

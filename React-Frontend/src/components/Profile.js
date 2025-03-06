@@ -10,7 +10,9 @@ function Profile() {
       <div className="left-column">
       
         <div className="profile-group">
+
           <div className="profile-container">
+
             <div className="profile-header">
               <img src="https://i.scdn.co/image/ab67616d0000b273c447c48ddac6e8a417d0f77a" alt="Profile" className="profile-pic-large" />
               <h1 className="profile-username">Noclip
