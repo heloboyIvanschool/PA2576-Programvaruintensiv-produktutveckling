@@ -49,18 +49,21 @@ function Profile() {
         
             <div className='showcase'>
               <div className='showcase-section'>
-                <h2>Albums</h2>
-                <div className="showcase-items">
-                  <a href="https://open.spotify.com/album/0u7sgzvlLmPLvujXxy9EeY" target="_blank">
-                    <img src="https://i.scdn.co/image/ab67616d0000b273042dbf8721e37f11843bfeac" alt="Album 1" className="showcase-item" />
-                  </a>
-                  <a href="https://open.spotify.com/album/0NGM3Ftwjw0dLNpAowmz3x" target="_blank">
-                    <img src="https://i.scdn.co/image/ab67616d0000b273be6e758fe8300a72eceddb8f" alt="Album 1" className="showcase-item" />
-                  </a>
-                  <a href="https://open.spotify.com/album/1zcm3UvHNHpseYOUfd0pna" target="_blank">
-                    <img src="https://i.scdn.co/image/ab67616d0000b2735405ef9e393f5f1e53b4b42e" alt="Album 1" className="showcase-item" />
-                  </a>
-                </div> 
+                
+                <div className="albums-container">
+                  <h2>Albums</h2>
+                  <div className="showcase-items">
+                    <a href="https://open.spotify.com/album/0u7sgzvlLmPLvujXxy9EeY" target="_blank">
+                      <img src="https://i.scdn.co/image/ab67616d0000b273042dbf8721e37f11843bfeac" alt="Album 1" className="showcase-item" />
+                    </a>
+                    <a href="https://open.spotify.com/album/0NGM3Ftwjw0dLNpAowmz3x" target="_blank">
+                      <img src="https://i.scdn.co/image/ab67616d0000b273be6e758fe8300a72eceddb8f" alt="Album 1" className="showcase-item" />
+                    </a>
+                    <a href="https://open.spotify.com/album/1zcm3UvHNHpseYOUfd0pna" target="_blank">
+                      <img src="https://i.scdn.co/image/ab67616d0000b2735405ef9e393f5f1e53b4b42e" alt="Album 1" className="showcase-item" />
+                    </a>
+                  </div> 
+                </div>
               </div>
         
               <div className="showcase-section">
