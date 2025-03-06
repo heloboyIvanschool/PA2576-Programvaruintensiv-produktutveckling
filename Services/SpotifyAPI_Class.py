@@ -80,6 +80,13 @@ class search_for_track():
     def get_track_cover(self, track_name):
         track_data = self.get_json(track_name)
         return track_data["album"]["images"][0]["url"] if track_data else None
+    
+    def get_track_embed_link(self, track_name):
+        track_data = self.get_json(track_name)
+        if track_data:
+            track_id = track_data["id"]
+            return f"https://open.spotify.com/embed/track/{track_id}"
+        return None
 
 
 #Search for Album
@@ -163,6 +170,7 @@ print("Låtnamn:", spotify_search_for_track.get_track_name(track_name))
 print("Artist:", spotify_search_for_track.get_track_artist(track_name))
 print("Album:", spotify_search_for_track.get_track_album(track_name))
 print("Coverbild:", spotify_search_for_track.get_track_cover(track_name))
+print("Embed link:", spotify_search_for_track.get_track_embed_link(track_name))
 
 
 
