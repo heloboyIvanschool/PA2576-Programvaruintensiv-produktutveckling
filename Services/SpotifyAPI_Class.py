@@ -181,7 +181,7 @@ print("Albumlänk", spotify_search_for_album.get_album_spotify_link(album_name))
 
 spotify_search_for_artist = search_for_artist()
 
-artist_name = "toto"
+artist_name = "sean banan"
 
 print("\n---------------Artistinfo---------------")
 
