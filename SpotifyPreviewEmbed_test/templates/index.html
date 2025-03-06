@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Embed</title>
+    <style>
+        iframe {
+            border: none;
+            width: 100%;
+            height: 80px;  /* Adjust the height to focus on the play button */
+            max-width: 300px;  /* You can set a max width to fit your design */
+        }
+
+        iframe::-webkit-media-controls-panel {
+            display: none !important;
+        }
+
+        iframe::-webkit-media-controls-play-button {
+            display: block !important;
+        }
+
+        iframe::-webkit-media-controls-title {
+            display: none !important;
+        }
+
+        iframe::-webkit-media-controls-mute-button {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    {% if embed_url %}
+    <iframe src="{{ embed_url }}" width="300" height="300" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    {% else %}
+    <p>Sorry, no embed link available for this track.</p>
+    {% endif %}
+</body>
+</html>

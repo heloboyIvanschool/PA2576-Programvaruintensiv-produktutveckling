@@ -1,11 +1,12 @@
-#pip install requests
-#pip install python-dotenv
-
-from dotenv import load_dotenv
+from flask import Flask, render_template
 import os
+import requests
+from dotenv import load_dotenv
 import base64
 from requests import post, get
 import json
+
+app = Flask(__name__)
 
 
 class spotifyAPI:
@@ -35,15 +36,15 @@ class search():
     def __init__(self):
         self.__token = spotifyAPI().get_token()
         self.__url = "https://api.spotify.com/v1/search"
-
+    
     def get_auth_header(self):
         return {"Authorization": "Bearer " + self.__token}
-
+    
     def get_query_url(self, query):
         query_url = self.__url + "?" + query
         result = get(query_url, headers=self.get_auth_header())
         return result
-
+    
 
 #Search for track
 
@@ -62,9 +63,9 @@ class search_for_track():
         if len(json_result) == 0:
             print("No tracks with this name exists...")
             return None
-
+    
         return json_result[0]
-
+    
     def get_track_name(self, track_name):
         track_data = self.get_json(track_name)
         return track_data["name"] if track_data else None
@@ -80,7 +81,23 @@ class search_for_track():
     def get_track_cover(self, track_name):
         track_data = self.get_json(track_name)
         return track_data["album"]["images"][0]["url"] if track_data else None
-
+    
+    def get_track_embed_link(self, track_name):
+        track_data = self.get_json(track_name)
+        if track_data:
+            track_id = track_data["id"]
+            return f"https://open.spotify.com/embed/track/{track_id}"
+            #return f"https://open.spotify.com/embed/track/{track_id}?utm_source=generator&theme=0&show_artwork=0"
+        return None
+    
+    def get_track_spotify_link(self, track_name):
+        track_data = self.get_json(track_name)
+        return track_data["external_urls"]["spotify"] if track_data else None
+    
+    def get_track_id(self, track_name):
+        track_data = self.get_json(track_name)
+        return track_data["id"] if track_data else None
+    
 
 #Search for Album
 
@@ -99,9 +116,9 @@ class search_for_album():
         if len(json_result) == 0:
             print("No albums with this name exists...")
             return None
-
+    
         return json_result[0]
-
+    
     def get_album_name(self, album_name):
         album_data = self.get_json(album_name)
         return album_data["name"] if album_data else None
@@ -114,10 +131,6 @@ class search_for_album():
         album_data = self.get_json(album_name)
         return album_data["images"][0]["url"] if album_data else None
     
-    def get_album_spotify_link(self, album_name):
-        album_data = self.get_json(album_name)
-        return album_data["external_urls"]["spotify"] if album_data else None
-
 
 #Search for artist
 
@@ -136,9 +149,9 @@ class search_for_artist():
         if len(json_result) == 0:
             print("No artists with this name exists...")
             return None
-
+    
         return json_result[0]
-
+    
     def get_artist_name(self, artist_name):
         artist_data = self.get_json(artist_name)
         return artist_data["name"] if artist_data else None
@@ -147,15 +160,20 @@ class search_for_artist():
         artist_data = self.get_json(artist_name)
         return artist_data["images"][0]["url"] if artist_data else None
     
-    def get_artist_spotify_link(self, artist_name):
-        artist_data = self.get_json(artist_name)
-        return artist_data["external_urls"]["spotify"] if artist_data else None
-
-
-
 spotify_search_for_track = search_for_track()
-
-track_name = "Om du var här"
+    
+@app.route('/')
+def index():
+    track_name = "Thunderstruck"
+    
+    embed_url = spotify_search_for_track.get_track_embed_link(track_name)
+    
+    return render_template("index.html", embed_url=embed_url, track_name=track_name)
+    
+app.run(debug=True)
+    
+'''
+track_name = "om du var här"
 
 print("\n---------------Låtinfo---------------")
 
@@ -163,29 +181,32 @@ print("Låtnamn:", spotify_search_for_track.get_track_name(track_name))
 print("Artist:", spotify_search_for_track.get_track_artist(track_name))
 print("Album:", spotify_search_for_track.get_track_album(track_name))
 print("Coverbild:", spotify_search_for_track.get_track_cover(track_name))
-
+print("Embed link:", spotify_search_for_track.get_track_embed_link(track_name))
+print("Spotify Link:", spotify_search_for_track.get_track_spotify_link(track_name))
+print("LåtID:", spotify_search_for_track.get_track_id(track_name))
 
 
 spotify_search_for_album = search_for_album()
 
-album_name = "breakfast in america supertramp"
+album_name = "Brothers in arms"
 
 print("\n---------------Albuminfo---------------")
 
 print("Albumnamn:", spotify_search_for_album.get_album_name(album_name))
 print("Artist:", spotify_search_for_album.get_album_artist(album_name))
 print("Coverbild:", spotify_search_for_album.get_album_cover(album_name))
-print("Albumlänk", spotify_search_for_album.get_album_spotify_link(album_name))
 
 
 
 spotify_search_for_artist = search_for_artist()
 
-artist_name = "sean banan"
+artist_name = "kent"
 
 print("\n---------------Artistinfo---------------")
 
 print("Artistnamn:", spotify_search_for_artist.get_artist_name(artist_name))
 print("Coverbild:", spotify_search_for_artist.get_artist_cover(artist_name))
-print("Artistlänk", spotify_search_for_artist.get_artist_spotify_link(artist_name))
 
+
+#track_data = spotify_search_for_track.get_json("Shape of You")
+#print(json.dumps(track_data, indent=4))'''
