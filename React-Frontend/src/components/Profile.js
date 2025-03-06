@@ -1,5 +1,6 @@
 import React from 'react';
 import './Profile.css';
+import { Link } from 'react-router-dom';
 
 function Profile() {
   return (
@@ -12,10 +13,12 @@ function Profile() {
           <div className="profile-container">
             <div className="profile-header">
               <img src="https://i.scdn.co/image/ab67616d0000b273c447c48ddac6e8a417d0f77a" alt="Profile" className="profile-pic-large" />
-              <h1 className="profile-username">BillysPänPittsa
+              <h1 className="profile-username">Noclip
               </h1>
             </div>
+            <Link to="/profile-customization">Edit Profile</Link>
           </div>
+          
           
           
           <div className="favorite-songs-showcase">
@@ -88,6 +91,7 @@ function Profile() {
         <div className="post">Post 3</div>
       
       </div>
+      
     </div>
 
       
