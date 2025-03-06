@@ -1,52 +1,92 @@
-from flask_sqlalchemy import SQLAlchemy
+from . import db
+from flask_login import UserMixin
+from sqlalchemy.sql import func
 
+followers = db.Table(
+    'followers',
+    db.Column('followerId', db.Integer, db.ForeignKey('users.userId'), primary_key=True),
+    db.Column('followingId', db.Integer, db.ForeignKey('users.userId'), primary_key=True)
+)
 
-db = SQLAlchemy()
-
-# 1️⃣ Users Table
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
-    userId = db.Column(db.String, primary_key=True)
-    username = db.Column(db.String(80), nullable=False)
+    userId = db.Column(db.Integer, primary_key=True) # ifall man ändrar typen av nyckeln så msåte detta även ske i alla andra tabeller där nycklen används
+    username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     profilePicture = db.Column(db.String, nullable=True)
     favoriteGenres = db.Column(db.PickleType, nullable=True)
-    createdAt = db.Column(db.DateTime, default=db.func.current_timestamp())
+    createdAt = db.Column(db.DateTime(timezone=True), default=func.now())
 
-# 2️⃣ Followers Table
+    #realations
+    posts = db.relationship('Post', back_populates='user', cascade="all, delete-orphan")
+    likes = db.relationship('Like', back_populates='user', cascade="all, delete-orphan")
+    comments = db.relationship('Comment', back_populates='user', cascade="all, delete-orphan")
+
+    following = db.relationship(
+        'User', secondary=followers,
+        primaryjoin=(followers.c.followerId == userId),
+        secondaryjoin=(followers.c.followingId == userId),
+        backref=db.backref('followers', lazy='dynamic'),
+        lazy='dynamic'
+    )
+
+    def follow(self, user):
+        if not self.is_following(user):
+            self.following.append(user)
+
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.following.remove(user)
+
+    def is_following(self, user):
+        return self.following.filter(followers.c.followingId == user.userId).count() > 0
+
+    def __repr__(self):
+        return f'<User {self.username}>'
+
 class Follower(db.Model):
     __tablename__ = 'followers'
-    followerId = db.Column(db.String, db.ForeignKey('users.userId'), primary_key=True)
-    followingId = db.Column(db.String, db.ForeignKey('users.userId'), primary_key=True)
+    followerId = db.Column(db.Integer, db.ForeignKey('users.userId'), primary_key=True)
+    followingId = db.Column(db.Integer, db.ForeignKey('users.userId'), primary_key=True)
 
-# 3️⃣ Posts Table
 class Post(db.Model):
     __tablename__ = 'posts'
-    postId = db.Column(db.String, primary_key=True)
-    userId = db.Column(db.String, db.ForeignKey('users.userId'), nullable=False)
+    postId = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.Integer, db.ForeignKey('users.userId'), nullable=False)
     songId = db.Column(db.String, nullable=False)
     caption = db.Column(db.Text, nullable=True)
     likes = db.Column(db.Integer, default=0)
-    createdAt = db.Column(db.DateTime, default=db.func.current_timestamp())
+    createdAt = db.Column(db.DateTime(timezone=True), default=func.now())
 
-# 4️⃣ Likes Table
+    #realations
+    user = db.relationship('User', back_populates='posts')
+    likes = db.relationship('Like', back_populates='post', cascade="all, delete-orphan")
+    comments = db.relationship('Comment', back_populates='post', cascade="all, delete-orphan")
+    song = db.relationship('Song', back_populates='posts')
+
 class Like(db.Model):
     __tablename__ = 'likes'
     likeId = db.Column(db.String, primary_key=True)
-    userId = db.Column(db.String, db.ForeignKey('users.userId'), nullable=False)
-    postId = db.Column(db.String, db.ForeignKey('posts.postId'), nullable=False)
+    userId = db.Column(db.Integer, db.ForeignKey('users.userId'), nullable=False)
+    postId = db.Column(db.Integer, db.ForeignKey('posts.postId'), nullable=False)
 
-# 5️⃣ Comments Table
+    #relations
+    user = db.relationship('User', back_populates='likes')
+    post = db.relationship('Post', back_populates='likes')
+
 class Comment(db.Model):
     __tablename__ = 'comments'
     commentId = db.Column(db.String, primary_key=True)
-    userId = db.Column(db.String, db.ForeignKey('users.userId'), nullable=False)
-    postId = db.Column(db.String, db.ForeignKey('posts.postId'), nullable=False)
+    userId = db.Column(db.Integer, db.ForeignKey('users.userId'), nullable=False)
+    postId = db.Column(db.Integer, db.ForeignKey('posts.postId'), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    createdAt = db.Column(db.DateTime, default=db.func.current_timestamp())
+    createdAt = db.Column(db.DateTime(timezone=True), default=func.now())
 
-# 6️⃣ Songs Table
+    #realtions
+    user = db.relationship('User', back_populates='comments')
+    post = db.relationship('Post', back_populates='comments')
+
 class Song(db.Model):
     __tablename__ = 'songs'
     songId = db.Column(db.String, primary_key=True)
@@ -54,3 +94,6 @@ class Song(db.Model):
     artist = db.Column(db.String, nullable=False)
     album = db.Column(db.String, nullable=True)
     coverUrl = db.Column(db.String, nullable=True)
+
+    #relations
+    posts = db.relationship('Post', back_populates='song', cascade="all, delete-orphan")
