@@ -14,9 +14,18 @@ function Profile() {
           <div className="profile-container">
 
             <div className="profile-header">
-              <img src="https://i.scdn.co/image/ab67616d0000b273c447c48ddac6e8a417d0f77a" alt="Profile" className="profile-pic-large" />
-              <h1 className="profile-username">Noclip
-              </h1>
+            <img src="https://i.scdn.co/image/ab6761610000e5eba7874efb5aa08fc40af59c10" alt="Profile" className="profile-pic-large" />
+              
+              <div className="profile-info">
+                <h1 className="profile-username">Sean Banan </h1>
+
+                <div className="favorite-genres">
+                  <span className="genre">Rock</span>
+                  <span className="genre">Progressive-Rock</span>
+                  <span className="genre">House</span>
+                  <span className="genre">EDM</span>
+                </div>
+              </div> 
             </div>
             <Link to="/profile-customization">Edit Profile</Link>
           </div>

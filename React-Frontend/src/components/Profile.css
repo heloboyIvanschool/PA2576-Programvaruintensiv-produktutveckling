@@ -44,6 +44,24 @@
   color: #333;
 }
 
+.favorite-genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.genre {
+  background-color: #000;
+  color: #fff;
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
 .profile-content {
   display: flex;
   flex-direction: column;
