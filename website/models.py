@@ -4,8 +4,8 @@ from sqlalchemy.sql import func
 
 followers = db.Table(
     'followers',
-    db.Column('followerId', db.Integer, db.ForeignKey('users.userId'), primary_key=True),
-    db.Column('followingId', db.Integer, db.ForeignKey('users.userId'), primary_key=True)
+    db.Column('followerId', db.Integer, db.ForeignKey('users.userId', ondelete="CASCADE"), primary_key=True),
+    db.Column('followingId', db.Integer, db.ForeignKey('users.userId', ondelete="CASCADE"), primary_key=True)
 )
 
 class User(db.Model, UserMixin):
@@ -43,8 +43,8 @@ class User(db.Model, UserMixin):
     def is_following(self, user):
         return self.following.filter(followers.c.followingId == user.userId).count() > 0
 
-    favorite_songs = db.relationship('Song', secondary='user_songs', back_populates='liked_by_users')
-    favorite_albums = db.relationship('Album', secondary='user_albums', back_populates='liked_by_users')
+    favorite_songs = db.relationship('Song', secondary=user_songs, back_populates='liked_by_users', cascade="all, delete")
+    favorite_albums = db.relationship('Album', secondary=user_albums, back_populates='liked_by_users', cascade="all, delete")
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -66,7 +66,7 @@ class Post(db.Model):
 
 class Like(db.Model):
     __tablename__ = 'likes'
-    likeId = db.Column(db.String, primary_key=True)
+    likeId = db.Column(db.Integer, primary_key=True)
     userId = db.Column(db.Integer, db.ForeignKey('users.userId'), nullable=False)
     postId = db.Column(db.Integer, db.ForeignKey('posts.postId'), nullable=False)
 
@@ -76,7 +76,7 @@ class Like(db.Model):
 
 class Comment(db.Model):
     __tablename__ = 'comments'
-    commentId = db.Column(db.String, primary_key=True)
+    commentId = db.Column(db.Integer, primary_key=True)
     userId = db.Column(db.Integer, db.ForeignKey('users.userId'), nullable=False)
     postId = db.Column(db.Integer, db.ForeignKey('posts.postId'), nullable=False)
     content = db.Column(db.Text, nullable=False)
@@ -99,12 +99,12 @@ class Song(db.Model):
 
 user_songs = db.Table(
     'user_songs',
-    db.Column('userId', db.Integer, db.ForeignKey('users.userId'), primary_key=True),
-    db.Column('songId', db.String, db.ForeignKey('songs.songId'), primary_key=True)
+    db.Column('userId', db.Integer, db.ForeignKey('users.userId', ondelete="CASCADE"), primary_key=True),
+    db.Column('songId', db.String, db.ForeignKey('songs.songId', ondelete="CASCADE"), primary_key=True)
 )
 
 user_albums = db.Table(
     'user_albums',
-    db.Column('userId', db.Integer, db.ForeignKey('users.userId'), primary_key=True),
-    db.Column('albumId', db.String, db.ForeignKey('albums.albumId'), primary_key=True)
+    db.Column('userId', db.Integer, db.ForeignKey('users.userId', ondelete="CASCADE"), primary_key=True),
+    db.Column('albumId', db.String, db.ForeignKey('albums.albumId', ondelete="CASCADE"), primary_key=True)
 )

@@ -29,6 +29,7 @@ def login():
 @login_required
 def logout():
     logout_user()
+    flash("You have been logged out.", category="success")
     return redirect(url_for('auth.login'))
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
@@ -36,8 +37,13 @@ def sign_up():
     if request.method == 'POST':
         username = request.form.get('username')
         email = request.form.get('email')
-        password = request.form.get('password') #confirm password?
         favorite_genre = request.form.get('favorite_genre')
+        password = request.form.get('password')
+        password_confirm = request.form.get('password_confirm')
+
+        if password != password_confirm:
+            flash('Passwords do not match.', category='error')
+            return redirect(url_for('auth.sign_up'))
 
         # failchecks här
         user = User.query.filter_by(email=email).first()
@@ -50,10 +56,10 @@ def sign_up():
 
         else:
             new_user = User(username=username, email=email, favorite_genre=favorite_genre, password=generate_password_hash(password)) #profile_picture=profile_pic,
-            db.session(new_user)
+            db.session.add(new_user)
             db.session.commit()
-            login_user(user, remember=True)
-            flash('Account created', ) # category=success
+            login_user(new_user, remember=True)
+            flash('Account created', category='success')
             return redirect(url_for('views.home'))
 
         # user_exists = User.query.filter_by(username=username).first()
@@ -63,4 +69,4 @@ def sign_up():
         #     flash('Username already exists.', category='error') # sucsess
         #     return redirect(url_for('register'))
 
-    return render_template('sign_up.hmtl', user=current_user) #register
+    return render_template('sign_up.html', user=current_user) #register

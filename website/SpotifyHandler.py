@@ -2,8 +2,10 @@ import os
 import json
 import base64
 import requests
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Blueprint
 from dotenv import load_dotenv
+
+SpotifyHandler = Blueprint('SpotifyHandler', __name__)
 
 load_dotenv()
 
@@ -97,7 +99,7 @@ class SpotifySearch:
 
 
 # Flask-routes för att söka låtar, album och artister
-@SpotifyAPI.route('/search', methods=['GET'])
+@SpotifyHandler.route('/search', methods=['GET'])
 def search():
     query = request.args.get('query')
     search_type = request.args.get('type')

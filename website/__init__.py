@@ -11,17 +11,19 @@ db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
+
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+
     db.init_app(app)
 
     from .views import views
     from .auth import auth
+    from .models import User
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
 
-    from .models import User, Post, Like, Comment, Song
 
     with app.app_context():
         db.drop_all()
@@ -33,7 +35,9 @@ def create_app():
     login_manager.init_app(app)
 
     @login_manager.user_loader
-    def load_user(userId):
-        return User.query.get(int(userId))
+    def load_user(user_id):
+        if user_id is None:
+            return None
+        return User.query.get(int(user_id))
 
     return app
