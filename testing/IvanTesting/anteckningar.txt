@@ -25,6 +25,11 @@ cd C:\Users\Greattech\Documents\GitHub\PA2576-Programvaruintensiv-produktutveckl
 │── README.md           # Projektbeskrivning
 
 
+Look up http methods******
+GET req = retrivning inforamtion
+POST req = uptade / create
+
+
 ***SKRIVS I BASH TERMINALEN***
 
 Skapa en venv (om du inte redan har gjort det en gång innnan)
@@ -45,3 +50,5 @@ pip install -r requirements.txt
 Ifall vi vill lägga upp detta på en server
 session hantering / cookies
 CSRF-tokens i HTML formulär
+
+
