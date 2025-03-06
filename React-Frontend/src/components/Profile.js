@@ -67,26 +67,32 @@ function Profile() {
               </div>
         
               <div className="showcase-section">
-                <h2>Artists</h2>
-                <div className="showcase-items">
-                  <a href="https://open.spotify.com/artist/4KXp3xtaz1wWXnu5u34eVX" target="_blank">
-                    <img src="https://i.scdn.co/image/38129832f70d5798de2618faa55182407135842c" alt="Album 1" className="showcase-item" />
-                  </a>
-                  <a href="https://open.spotify.com/artist/4bthk9UfsYUYdcFyqxmSUU" target="_blank">
-                    <img src="https://i.scdn.co/image/ab6761610000e5eb1e63dea1bded4ae1d53b5c9a" alt="Album 1" className="showcase-item" />
-                  </a>
-                  <a href="https://open.spotify.com/artist/0PFtn5NtBbbUNbU9EAmIWF" target="_blank">
-                    <img src="https://i.scdn.co/image/ab6761610000e5eba59a5bcab211f964fe9bfb06" alt="Album 1" className="showcase-item" />
-                  </a>
+
+                <div className="artists-container">
+                  <h2>Artists</h2>
+                  <div className="showcase-items">
+                    <a href="https://open.spotify.com/artist/4KXp3xtaz1wWXnu5u34eVX" target="_blank">
+                      <img src="https://i.scdn.co/image/38129832f70d5798de2618faa55182407135842c" alt="Album 1" className="showcase-item" />
+                    </a>
+                    <a href="https://open.spotify.com/artist/4bthk9UfsYUYdcFyqxmSUU" target="_blank">
+                      <img src="https://i.scdn.co/image/ab6761610000e5eb1e63dea1bded4ae1d53b5c9a" alt="Album 1" className="showcase-item" />
+                    </a>
+                    <a href="https://open.spotify.com/artist/0PFtn5NtBbbUNbU9EAmIWF" target="_blank">
+                      <img src="https://i.scdn.co/image/ab6761610000e5eba59a5bcab211f964fe9bfb06" alt="Album 1" className="showcase-item" />
+                    </a>
+                  </div>
                 </div>
               </div>
         
               <div className="showcase-section">
-                <h2>Badges</h2>
-                <div className="showcase-items">
-                  <img src="https://i.scdn.co/image/38129832f70d5798de2618faa55182407135842c" alt="Badge 1" className="showcase-item" />
-                  <img src="https://i.scdn.co/image/ab67616d0000b273042dbf8721e37f11843bfeac" alt="Badge 2" className="showcase-item" />
-                  <img src="https://i.scdn.co/image/ab67616d0000b2730cd942c1a864afa4e92d04f2" alt="Badge 3" className="showcase-item" />
+
+                <div className="badges-container">
+                  <h2>Badges</h2>
+                  <div className="showcase-items">
+                    <img src="https://i.scdn.co/image/38129832f70d5798de2618faa55182407135842c" alt="Badge 1" className="showcase-item" />
+                    <img src="https://i.scdn.co/image/ab67616d0000b273042dbf8721e37f11843bfeac" alt="Badge 2" className="showcase-item" />
+                    <img src="https://i.scdn.co/image/ab67616d0000b2730cd942c1a864afa4e92d04f2" alt="Badge 3" className="showcase-item" />
+                  </div>
                 </div>
               </div>
             </div>

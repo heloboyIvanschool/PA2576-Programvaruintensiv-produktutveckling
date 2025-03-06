@@ -1,50 +1,64 @@
 .profile-customization-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-    background-color: #f9f9f9;
-  }
-  
-  .profile-customization-page h1 {
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 2rem;
-  }
-  
-  .form-group {
-    margin-bottom: 1.5rem;
-    width: 100%;
-    max-width: 500px;
-  }
-  
-  .form-group label {
-    display: block;
-    font-size: 1rem;
-    color: #666;
-    margin-bottom: 0.5rem;
-  }
-  
-  .form-group input {
-    width: 100%;
-    padding: 0.5rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  a {
-    color: #007bff;
-    text-decoration: none;
-    margin-top: 2rem;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-color: #f9f9f9;
+}
+
+.profile-customization-page h1 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  width: 100%;
+  max-width: 500px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+  margin-top: 2rem;
+}
+
+a:hover {
+  text-decoration: underline;
+}
