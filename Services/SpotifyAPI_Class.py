@@ -113,6 +113,10 @@ class search_for_album():
     def get_album_cover(self, album_name):
         album_data = self.get_json(album_name)
         return album_data["images"][0]["url"] if album_data else None
+    
+    def get_album_spotify_link(self, album_name):
+        album_data = self.get_json(album_name)
+        return album_data["external_urls"]["spotify"] if album_data else None
 
 
 #Search for artist
@@ -142,7 +146,10 @@ class search_for_artist():
     def get_artist_cover(self, artist_name):
         artist_data = self.get_json(artist_name)
         return artist_data["images"][0]["url"] if artist_data else None
-
+    
+    def get_artist_spotify_link(self, artist_name):
+        artist_data = self.get_json(artist_name)
+        return artist_data["external_urls"]["spotify"] if artist_data else None
 
 
 
@@ -161,22 +168,24 @@ print("Coverbild:", spotify_search_for_track.get_track_cover(track_name))
 
 spotify_search_for_album = search_for_album()
 
-album_name = "Brothers in arms"
+album_name = "breakfast in america supertramp"
 
 print("\n---------------Albuminfo---------------")
 
 print("Albumnamn:", spotify_search_for_album.get_album_name(album_name))
 print("Artist:", spotify_search_for_album.get_album_artist(album_name))
 print("Coverbild:", spotify_search_for_album.get_album_cover(album_name))
+print("Albumlänk", spotify_search_for_album.get_album_spotify_link(album_name))
 
 
 
 spotify_search_for_artist = search_for_artist()
 
-artist_name = "kent"
+artist_name = "toto"
 
 print("\n---------------Artistinfo---------------")
 
 print("Artistnamn:", spotify_search_for_artist.get_artist_name(artist_name))
 print("Coverbild:", spotify_search_for_artist.get_artist_cover(artist_name))
+print("Artistlänk", spotify_search_for_artist.get_artist_spotify_link(artist_name))
 
