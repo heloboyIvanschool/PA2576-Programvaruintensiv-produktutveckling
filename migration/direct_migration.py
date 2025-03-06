@@ -20,9 +20,9 @@ def migrate_database():
     if not db_path:
         print("Database file not found! Please run your app first to create it.")
         return
-    
+
     print("Starting direct database migration...")
-    
+
     # Connect to the database
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
