@@ -2,14 +2,17 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 db = SQLAlchemy()
-DB_NAME = 'database.db'
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     db.init_app(app)
 
     from .views import views
@@ -21,7 +24,9 @@ def create_app():
     from .models import User, Post, Like, Comment, Song
 
     with app.app_context():
-        create_database()
+        db.drop_all()
+        db.create_all()
+        # create_database()
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
@@ -32,8 +37,3 @@ def create_app():
         return User.query.get(int(userId))
 
     return app
-
-def create_database():
-    if not path.exists('website/' + DB_NAME):
-        db.create_all()
-        print('Creaed db')

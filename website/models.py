@@ -17,6 +17,7 @@ class User(db.Model, UserMixin):
     profile_picture = db.Column(db.String, nullable=True)
     favorite_genres = db.Column(db.PickleType, nullable=True)
     createdAt = db.Column(db.DateTime(timezone=True), default=func.now())
+    role = db.Column(db.String(50), default='user')
 
     #realations
     posts = db.relationship('Post', back_populates='user')
