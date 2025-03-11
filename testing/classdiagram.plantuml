@@ -91,18 +91,18 @@ package "Database" {
     + UpdateProfileInfo()
   }
   
-  Profile -- User
-  Profile -- Post
-  Profile -- Album
-  Profile -- Song
-  Profile -- Artist
-  Post -- Comment
-  Post -- Like
-  Post -- Song
-  Post -- Album
-  Post -- Artist
-  User -- Like
-  User -- Comment
+  Profile "1" -- "1" User
+  Profile "1" -- "*" Post
+  Profile "1" -- "*" Album
+  Profile "1" -- "*" Song
+  Profile "1" -- "*" Artist
+  Post "1" -- "*" Comment
+  Post "1" -- "*" Like
+  Post "1" -- "*" Song
+  Post "1" -- "*" Album
+  Post "1" -- "*" Artist
+  User "1" -- "*" Like
+  User "1" -- "*" Comment
 }
 
 package "Python"{
@@ -128,8 +128,8 @@ package "Python"{
     class SearchRoute<<route>>{
     }
     
-    SpotifyAPI -- SpotifySearch
-    SearchRoute -- SpotifySearch
+    SpotifyAPI "1" -- "*" SpotifySearch
+    SearchRoute "1" -- "*" SpotifySearch
   }
   
   package "OAuth"{
@@ -149,7 +149,7 @@ package "Python"{
     class LoginRoute<<route>> {
     }
 
-    OAuth -- LoginRoute
+    OAuth "1" -- "*" LoginRoute
   }
 
   class Main<<file>>{
@@ -193,12 +193,12 @@ package "JavaScript"{
     }
     
     Profile "1" *-- "1" ProfileHeader
-    Profile "1" *-- "1" FavoriteSongsShowcase
-    Profile "1" *-- "1" AlbumsShowcase
-    Profile "1" *-- "1" ArtistsShowcase
-    Profile "1" *-- "1" BadgesShowcase
-    Profile "1" *-- "1" Feed
+    Profile "1" *-- "*" TopSongs
+    Profile "1" *-- "*" AlbumsShowcase
+    Profile "1" *-- "*" ArtistsShowcase
+    Profile "1" *-- "*" BadgesShowcase
+    Profile "1" *-- "*" Feed
   }
-
 }
+
 @enduml
