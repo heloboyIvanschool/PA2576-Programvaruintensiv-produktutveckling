@@ -10,7 +10,7 @@ package "Database" {
     - ProfilePicture: image
     - CreatedAt: str
     - Role: str
-    + GetUserInfo()
+    + GetUserInfo(): info
     + UpdateUserInfo()
   }
 
@@ -22,7 +22,7 @@ package "Database" {
     - Likes: int
     - CreatedAT: str
     - Comments: list
-    + GetPostInfo()
+    + GetPostInfo(): info
     + UpdatePostInfo()
   }
 
@@ -30,7 +30,7 @@ package "Database" {
     - LikeID: str
     - UserID: str
     - PostID: str
-    + GetLikeInfo()
+    + GetLikeInfo(): info
     + UpdateLikeInfo()
   }
 
@@ -40,7 +40,7 @@ package "Database" {
     - PostID: str
     - CreatedAT: str
     - Content: str
-    + GetCommentInfo()
+    + GetCommentInfo(): info
     + UpdateCommentInfo()
   }
 
@@ -52,7 +52,7 @@ package "Database" {
     - CoverURL: str
     - EmbedURL: str
     - SpotifyURL: str
-    + GetSongInfo()
+    + GetSongInfo(): info
     + UpdateSongInfo()
   }
 
@@ -62,7 +62,7 @@ package "Database" {
     - Artist: str
     - CoverURL: str
     - SpotifyURL: str
-    + GetAlbumInfo()
+    + GetAlbumInfo(): info
     + UpdateAlbumInfo()
   }
 
@@ -71,7 +71,7 @@ package "Database" {
     - ArtistName: str
     - ArtistPictureURL: str
     - SpotifyURL: str
-    + GetArtistInfo()
+    + GetArtistInfo(): info
     + UpdateAlbumInfo()
   }
 
@@ -87,7 +87,7 @@ package "Database" {
     - ProfileBio: str
     - SongOTD: str
     - Posts: list
-    + GetProfileInfo()
+    + GetProfileInfo(): info
     + UpdateProfileInfo()
   }
 
@@ -103,103 +103,198 @@ package "Database" {
   Post "1" o-- "*" Artist
   User "1" *-- "*" Like
   User "1" *-- "*" Comment
-
 }
-
-package "Python"{
-
-  package "SpotifyAPI" {
+package "Backend"{
+  package "Python"{
   
-    class SpotifyAPI{
-      - ClientID: str
-      - ClientSecret: str
-      - Token: str
-      - GetToken()
-      + Search(query(str), searchtype(str))
+    package "SpotifyAPI" {
+    
+      class SpotifyAPI{
+        - ClientID: str
+        - ClientSecret: str
+        - Token: str
+        - GetToken(): Token(str)
+        + Search(query(str), searchtype(str))
+      }
+
+      class SpotifySearch{
+        - Spotify: SpotifyAPI
+        - Query: str
+        + GetTrack(): Track
+        + GetAlbum(): Album
+        + GetArtist(): Artist
+      }
+
+      class SearchRoute<<route>>{
+      }
+
+      SpotifyAPI -- SpotifySearch
+      SearchRoute -- SpotifySearch
     }
     
-    class SpotifySearch{
-      - Spotify: SpotifyAPI
-      - Query: str
-      + GetTrack()
-      + GetAlbum()
-      + GetArtist()
-    }
+    package "OAuth"{
     
-    class SearchRoute<<route>>{
-    }
-    
-    SpotifyAPI "1" *-- "*" SpotifySearch
-    SearchRoute "1" -- "*" SpotifySearch
-  }
+      class OAuth{
+        - GoogleClientId: str
+        - GoogleClientSecret: str
+        - GoogleDiscoveryURL: str
+        - UserID: str
+        - Token: str
+        - GetToken(): Token(str)
+        + RequestLogin()
+        + RedirectToGoogleLogin()
+        + AccessTokens()
+      }
   
-  package "OAuth"{
+      class LoginRoute<<route>> {
+      }
   
-    class OAuth{
-      - GoogleClientId: str
-      - GoogleClientSecret: str
-      - GoogleDiscoveryURL: str
-      - UserID: str
-      - Token: str
-      - GetToken()
-      + RequestLogin()
-      + RedirectToGoogleLogin()
-      + AccessTokens()
-    }
-
-    class LoginRoute<<route>> {
-    }
-
-    OAuth "1" *-- "*" LoginRoute
-  }
-
-  class Main<<file>>{
-    + CreateApp()
-  }
-  
-  class RegisterUser{
-  }
-}
-
-package "JavaScript"{
-  package "Profile"{
-    class Profile {
-      + render(): JSX.Element
+      OAuth -- LoginRoute
     }
     
-    class ProfileHeader {
-      - ProfilePic: str
-      - Username: str
-      - Genres: list
+    class Main<<file>>{
+      + CreateApp()
     }
     
-    class TopSongs {
-      - Songs: list
+    class RegisterUser{
     }
-    
-    class AlbumsShowcase {
-      - Albums: list
-    }
-    
-    class ArtistsShowcase {
-      - Artists: list
-    }
-    
-    class BadgesShowcase {
-      - Badges: list
-    }
-    
-    class Feed {
-      - Posts: list
-    }
-    
-    Profile "1" *-- "1" ProfileHeader
-    Profile "1" *-- "*" TopSongs
-    Profile "1" *-- "*" AlbumsShowcase
-    Profile "1" *-- "*" ArtistsShowcase
-    Profile "1" *-- "*" BadgesShowcase
-    Profile "1" *-- "*" Feed
   }
 }
 
+package "Frontend"{
+      package "JavaScript"{
+
+    package "Profile"{
+    
+      class Profile {
+        + render(): JSX.Element
+      }
+
+      class ProfileHeader {
+        - ProfilePic: str
+        - Username: str
+        - Genres: list
+        - Bio: str
+        + GetInfo(): genre, bio, username, profilepic
+      }
+
+      class TopSongs {
+        - Songs: list
+        + GetSongs(): songs
+      }
+
+      class AlbumsShowcase {
+        - Albums: list
+        + GetAlbum(): albums
+      }
+
+      class ArtistsShowcase {
+        - Artists: list
+        + GetArtists(): artists
+      }
+
+      class BadgesShowcase {
+        - Badges: list
+        + GetBadges: badges
+      }
+
+      class Feed {
+        - Posts: list
+        + GetPosts(): posts
+      }
+
+      class SongOfTheDay {
+        - Song: list
+        + GetSOTD(): sotd
+      }
+
+      Profile "1" *-- "1" ProfileHeader
+      Profile "1" *-- "*" TopSongs
+      Profile "1" *-- "*" AlbumsShowcase
+      Profile "1" *-- "*" ArtistsShowcase
+      Profile "1" *-- "*" BadgesShowcase
+      Profile "1" *-- "*" Feed
+      }
+
+      package "Home"{
+
+        class Home
+      }
+
+      package "Discover"{
+
+      }
+
+      package "ProfileCustomization"{
+
+        class ProfileHeader{
+          - Bio: str
+          - Genres: list
+          + AddGenre(genre(str)): genre
+          + RemoveGenre(genre(str)):
+          + UpdateBio(str): str
+        }
+
+        class TopSongs{
+          - Songs: list
+          + AddSong(song(str)): song
+          + RemoveSong(song(str)):
+        }
+
+        class AlbumsShowcase{
+          - Albums: list
+          + AddAlbum(album(str)): album
+          + RemoveAlbum(album(str)):
+        }
+
+        class ArtistsShowcase{
+          - Artists: list
+          + AddArtist(artist(str)): artist
+          + RemoveArtist(artist(str)):
+        }
+
+        class BadgesShowcase{
+          - Badges: list
+          + AddBadge(badge(str)): badge
+          + Removebadge(badge(str)):
+        }
+
+        class SongOfTheDay{
+          - SongOfTheDay: str
+          + SetSOTD(song(str)): song
+        }
+
+        class SaveChanges{
+          + SaveChanges():
+        }
+
+        SaveChanges -- ProfileHeader
+        SaveChanges -- TopSongs
+        SaveChanges -- AlbumsShowcase
+        SaveChanges -- ArtistsShowcase
+        SaveChanges -- BadgesShowcase
+        SaveChanges -- SongOfTheDay
+      }
+
+      package "Navbar"{
+
+        class Menu{
+          - Home: str
+          - Discover: str
+          - Profile: str
+        }
+
+        class Profile{
+          - UserID: str
+          - Username: str
+          - ProfilePicture: image
+          + GetUsername(): Username(str)
+          + GetProfilePicture(): ProfilePicture(image)
+        }
+
+        Profile -- User
+      }
+    }
+  }
+}
 @enduml

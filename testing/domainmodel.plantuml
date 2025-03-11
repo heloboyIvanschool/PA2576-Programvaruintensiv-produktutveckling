@@ -1,0 +1,77 @@
+@startuml
+class User {
+    + UserID
+    + Followers
+    + Following
+    + Username
+    + Email
+    + Password
+}
+class ProfilePage {
+    + TopSongs
+    + Showcase
+    + SongOfTheDay
+    + Bio
+    + ProfilePicture
+    + Genres
+    + ProfileID
+    + Posts
+}
+class CustomizeProfile {
+}
+class Post {
+    + Content
+    + Date
+}
+class TopSongs {
+    + Songs
+}
+class DiscoverPage {
+}
+class Showcase {
+    + AlbumContainer
+    + ArtistContainer
+    + BadgeContainer
+}
+class AlbumContainer {
+    + Albums
+}
+class ArtistContainer {
+    + Artists
+}
+class BadgeContainer {
+    + Badges
+}
+class HomePage {
+    + Updates
+}
+class SearchForUser {
+    + Users
+}
+class SaveProfile {
+}
+class SongOfTheDay {
+    + Song
+}
+User *-- ProfilePage: "has a"
+User --> ProfilePage: "views"
+User --> DiscoverPage: "navigates"
+User <--> HomePage: "navigates"
+ProfilePage *-- CustomizeProfile: "has a"
+ProfilePage *-- Post: "stores"
+User --> Post: "makes"
+CustomizeProfile *-- TopSongs
+CustomizeProfile *-- Showcase
+CustomizeProfile *-- SongOfTheDay
+Showcase *-- AlbumContainer
+Showcase *-- ArtistContainer
+Showcase *-- BadgeContainer
+DiscoverPage --> SearchForUser
+SearchForUser --> User: "finds user"
+TopSongs --> SaveProfile
+AlbumContainer --> SaveProfile
+ArtistContainer --> SaveProfile
+BadgeContainer --> SaveProfile
+SongOfTheDay --> SaveProfile
+SaveProfile --> ProfilePage
+@enduml
