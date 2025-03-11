@@ -1,110 +1,102 @@
 @startuml
 
+@startuml
+
 package "Database" {
 
   class User {
-    - UserID: str
-    - Username: str
-    - Email: str
-    - Password: str
-    - ProfilePicture: image
-    - CreatedAt: str
-    - Role: str
-    + GetUserInfo()
-    + UpdateUserInfo()
-  }
-  
-  class Post {
-    - PostID: str
-    - UserID: str
-    - ContentID: str
-    - Caption: str
-    - Likes: int
-    - CreatedAT: str
-    - Comments: list
-    + GetPostInfo()
-    + UpdatePostInfo()
-  }
-  
-  class Like {
-    - LikeID: str
-    - UserID: str
-    - PostID: str
-    + GetLikeInfo()
-    + UpdateLikeInfo()
-  }
-  
-  class Comment{
-    - CommentID: str
-    - UserID: str
-    - PostID: str
-    - CreatedAT: str
-    - Content: str
-    + GetCommentInfo()
-    + UpdateCommentInfo()
-  }
-  
-  class Song{
-    - SongID: str
-    - SongName: str
-    - Artist: str
-    - Album: str
-    - CoverURL: str
-    - EmbedURL: str
-    - SpotifyURL: str
-    + GetSongInfo()
-    + UpdateSongInfo()
-  }
-  
-  class Album{
-    - AlbumID: str
-    - AlbumName: str
-    - Artist: str
-    - CoverURL: str
-    - SpotifyURL: str
-    + GetAlbumInfo()
-    + UpdateAlbumInfo()
-  }
-  
-  class Artist{
-    - ArtistID: str
-    - ArtistName: str
-    - ArtistPictureURL: str
-    - SpotifyURL: str
-    + GetArtistInfo()
-    + UpdateAlbumInfo()
-  }
-  
-  class Profile{
-    - ProfileID: str
-    - UserID: str
-    - ProfilePicture: image
-    - FavoriteGenres: list
-    - TopSongs: list
-    - AlbumShowcase: list
-    - ArtistShowcase: list
-    - BadgeShowcase: list
-    - ProfileBio: str
-    - SongOTD: str
-    - Posts: list
-    + GetProfileInfo()
-    + UpdateProfileInfo()
+    - userId: int
+    - username: str
+    - email: str
+    - password: str
+    - profile_picture: str
+    - createdAt: datetime
+    - role: str
+    - favorite_songs: list
+    - favorite_albums: list
+    - favorite_artists: list
+    + follow(user: User)
+    + unfollow(user: User)
+    + is_following(user: User)
   }
 
-  Profile "1" o-- "1" User
-  Profile "1" *-- "*" Post
-  Profile "1" o-- "*" Album
-  Profile "1" o-- "*" Song
-  Profile "1" o-- "*" Artist
-  Post "1" *-- "*" Comment
-  Post "1" *-- "*" Like
-  Post "1" o-- "*" Song
-  Post "1" o-- "*" Album
-  Post "1" o-- "*" Artist
+  class Profile {
+    - userId: int
+    - bio: str
+    - song_of_the_day: str
+    + display_profile()
+  }
+
+  class Post {
+    - postId: int
+    - userId: int
+    - songId: str
+    - caption: str
+    - likes: int
+    - createdAt: datetime
+    + get_post_info()
+  }
+
+  class Like {
+    - likeId: int
+    - userId: int
+    - postId: int
+  }
+
+  class Comment {
+    - commentId: int
+    - userId: int
+    - postId: int
+    - content: str
+    - createdAt: datetime
+  }
+
+  class Song {
+    - songId: str
+    - title: str
+    - artist: str
+    - album: str
+    - coverUrl: str
+  }
+
+  class Album {
+    - albumId: str
+    - albumName: str
+    - artist: str
+    - coverUrl: str
+  }
+
+  class Artist {
+    - artistId: str
+    - artistName: str
+    - artistPictureUrl: str
+  }
+
+  class Followers {
+    - followerId: int
+    - followingId: int
+  }
+
+  Profile --|> User : Hämtar data från
+  User "1" *-- "*" Post
   User "1" *-- "*" Like
   User "1" *-- "*" Comment
+  User "1" *-- "*" Song
+  User "1" *-- "*" Album
+  User "1" *-- "*" Artist
+  User "1" *-- "1" Profile
+  Post "1" *-- "*" Like
+  Post "1" *-- "*" Comment
+  Post "1" *-- "1" Song
+  Post "1" *-- "1" Album
+  Post "1" *-- "1" Artist
+  User "1" *-- "*" Followers : "följare"
+  User "1" *-- "*" Followers : "följer"
 
 }
+
+@enduml
+
 
 package "Python"{
 
