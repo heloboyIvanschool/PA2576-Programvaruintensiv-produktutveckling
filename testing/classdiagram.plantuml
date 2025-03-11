@@ -90,19 +90,20 @@ package "Database" {
     + GetProfileInfo()
     + UpdateProfileInfo()
   }
-  
-  Profile "1" -- "1" User
-  Profile "1" -- "*" Post
-  Profile "1" -- "*" Album
-  Profile "1" -- "*" Song
-  Profile "1" -- "*" Artist
-  Post "1" -- "*" Comment
-  Post "1" -- "*" Like
-  Post "1" -- "*" Song
-  Post "1" -- "*" Album
-  Post "1" -- "*" Artist
-  User "1" -- "*" Like
-  User "1" -- "*" Comment
+
+  Profile "1" o-- "1" User
+  Profile "1" *-- "*" Post
+  Profile "1" o-- "*" Album
+  Profile "1" o-- "*" Song
+  Profile "1" o-- "*" Artist
+  Post "1" *-- "*" Comment
+  Post "1" *-- "*" Like
+  Post "1" o-- "*" Song
+  Post "1" o-- "*" Album
+  Post "1" o-- "*" Artist
+  User "1" *-- "*" Like
+  User "1" *-- "*" Comment
+
 }
 
 package "Python"{
@@ -128,7 +129,7 @@ package "Python"{
     class SearchRoute<<route>>{
     }
     
-    SpotifyAPI "1" -- "*" SpotifySearch
+    SpotifyAPI "1" *-- "*" SpotifySearch
     SearchRoute "1" -- "*" SpotifySearch
   }
   
@@ -149,7 +150,7 @@ package "Python"{
     class LoginRoute<<route>> {
     }
 
-    OAuth "1" -- "*" LoginRoute
+    OAuth "1" *-- "*" LoginRoute
   }
 
   class Main<<file>>{
