@@ -1,0 +1,204 @@
+@startuml
+
+package "Database" {
+
+  class User {
+    - UserID: str
+    - Username: str
+    - Email: str
+    - Password: str
+    - ProfilePicture: image
+    - CreatedAt: str
+    - Role: str
+    + GetUserInfo()
+    + UpdateUserInfo()
+  }
+  
+  class Post {
+    - PostID: str
+    - UserID: str
+    - ContentID: str
+    - Caption: str
+    - Likes: int
+    - CreatedAT: str
+    - Comments: list
+    + GetPostInfo()
+    + UpdatePostInfo()
+  }
+  
+  class Like {
+    - LikeID: str
+    - UserID: str
+    - PostID: str
+    + GetLikeInfo()
+    + UpdateLikeInfo()
+  }
+  
+  class Comment{
+    - CommentID: str
+    - UserID: str
+    - PostID: str
+    - CreatedAT: str
+    - Content: str
+    + GetCommentInfo()
+    + UpdateCommentInfo()
+  }
+  
+  class Song{
+    - SongID: str
+    - SongName: str
+    - Artist: str
+    - Album: str
+    - CoverURL: str
+    - EmbedURL: str
+    - SpotifyURL: str
+    + GetSongInfo()
+    + UpdateSongInfo()
+  }
+  
+  class Album{
+    - AlbumID: str
+    - AlbumName: str
+    - Artist: str
+    - CoverURL: str
+    - SpotifyURL: str
+    + GetAlbumInfo()
+    + UpdateAlbumInfo()
+  }
+  
+  class Artist{
+    - ArtistID: str
+    - ArtistName: str
+    - ArtistPictureURL: str
+    - SpotifyURL: str
+    + GetArtistInfo()
+    + UpdateAlbumInfo()
+  }
+  
+  class Profile{
+    - ProfileID: str
+    - UserID: str
+    - ProfilePicture: image
+    - FavoriteGenres: list
+    - TopSongs: list
+    - AlbumShowcase: list
+    - ArtistShowcase: list
+    - BadgeShowcase: list
+    - ProfileBio: str
+    - SongOTD: str
+    - Posts: list
+    + GetProfileInfo()
+    + UpdateProfileInfo()
+  }
+  
+  Profile -- User
+  Profile -- Post
+  Profile -- Album
+  Profile -- Song
+  Profile -- Artist
+  Post -- Comment
+  Post -- Like
+  Post -- Song
+  Post -- Album
+  Post -- Artist
+  User -- Like
+  User -- Comment
+}
+
+package "Python"{
+
+  package "SpotifyAPI" {
+  
+    class SpotifyAPI{
+      - ClientID: str
+      - ClientSecret: str
+      - Token: str
+      - GetToken()
+      + Search(query(str), searchtype(str))
+    }
+    
+    class SpotifySearch{
+      - Spotify: SpotifyAPI
+      - Query: str
+      + GetTrack()
+      + GetAlbum()
+      + GetArtist()
+    }
+    
+    class SearchRoute<<route>>{
+    }
+    
+    SpotifyAPI -- SpotifySearch
+    SearchRoute -- SpotifySearch
+  }
+  
+  package "OAuth"{
+  
+    class OAuth{
+      - GoogleClientId: str
+      - GoogleClientSecret: str
+      - GoogleDiscoveryURL: str
+      - UserID: str
+      - Token: str
+      - GetToken()
+      + RequestLogin()
+      + RedirectToGoogleLogin()
+      + AccessTokens()
+    }
+
+    class LoginRoute<<route>> {
+    }
+
+    OAuth -- LoginRoute
+  }
+
+  class Main<<file>>{
+    + CreateApp()
+  }
+  
+  class RegisterUser{
+  }
+}
+
+package "JavaScript"{
+  package "Profile"{
+    class Profile {
+      + render(): JSX.Element
+    }
+    
+    class ProfileHeader {
+      - ProfilePic: str
+      - Username: str
+      - Genres: list
+    }
+    
+    class TopSongs {
+      - Songs: list
+    }
+    
+    class AlbumsShowcase {
+      - Albums: list
+    }
+    
+    class ArtistsShowcase {
+      - Artists: list
+    }
+    
+    class BadgesShowcase {
+      - Badges: list
+    }
+    
+    class Feed {
+      - Posts: list
+    }
+    
+    Profile "1" *-- "1" ProfileHeader
+    Profile "1" *-- "1" FavoriteSongsShowcase
+    Profile "1" *-- "1" AlbumsShowcase
+    Profile "1" *-- "1" ArtistsShowcase
+    Profile "1" *-- "1" BadgesShowcase
+    Profile "1" *-- "1" Feed
+  }
+
+}
+@enduml
