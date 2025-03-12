@@ -1,0 +1,90 @@
+@startuml
+
+' ----- ENTITIES -----
+class User {
+    + UserID
+    + Username
+    + Email
+    + Password
+    + ProfilePicture
+}
+
+class ProfilePage {
+    + TopSongs
+    + Showcase
+    + SongOfTheDay
+    + Bio
+    + ProfilePicture
+    + Genres
+    + ProfileID
+    + Posts
+}
+
+class Post {
+    + PostID
+    + Content
+    + Date
+}
+
+class Like {
+    + LikeID
+}
+
+class Comment {
+    + CommentID
+    + Content
+    + CreatedAt
+}
+
+class Song {
+    + SongID
+    + SongName
+    + Artist
+}
+
+class Album {
+    + AlbumID
+    + AlbumName
+}
+
+class Artist {
+    + ArtistID
+    + ArtistName
+}
+
+class Showcase {
+    + AlbumContainer
+    + ArtistContainer
+
+}
+
+' ----- RELATIONSHIPS -----
+
+' Aggregation: User owns a ProfilePage
+User "1" o-- "1" ProfilePage : "has"
+
+' Aggregation: ProfilePage contains multiple Posts
+ProfilePage "1" o-- "*" Post : "stores"
+
+' User creates multiple Posts
+User "1" --> "*" Post : "creates"
+
+' Post receives Likes and Comments
+Post "1" *-- "*" Like : "receives"
+Post "1" *-- "*" Comment : "receives"
+
+' User can like and comment on posts
+User "1" --> "*" Like : "likes"
+User "1" --> "*" Comment : "comments on"
+
+' Aggregation: ProfilePage has a Showcase
+ProfilePage "1" o-- "1" Showcase : "has"
+
+' Aggregation: Showcase contains Albums and Artists
+Showcase "1" o-- "*" Album : "features"
+Showcase "1" o-- "*" Artist : "highlights"
+
+' Many-to-Many: ProfilePage can have multiple favorite Songs
+ProfilePage "1" o-- "*" Song : "features"
+
+@enduml
