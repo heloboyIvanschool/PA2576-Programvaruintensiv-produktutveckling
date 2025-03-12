@@ -9,15 +9,13 @@ class User {
     + ProfilePicture
 }
 
-class ProfilePage {
-    + TopSongs
-    + Showcase
-    + SongOfTheDay
+class Profile {
+    + ProfileID
     + Bio
     + ProfilePicture
     + Genres
-    + ProfileID
     + Posts
+    + SongOTD
 }
 
 class Post {
@@ -53,23 +51,21 @@ class Artist {
 }
 
 class Showcase {
-    + AlbumContainer
-    + ArtistContainer
-
+    + ShowcaseID
 }
 
 ' ----- RELATIONSHIPS -----
 
-' Aggregation: User owns a ProfilePage
-User "1" o-- "1" ProfilePage : "has"
+' User owns a Profile (Aggregation: Profile cannot exist without User)
+User "1" o-- "1" Profile : "has"
 
-' Aggregation: ProfilePage contains multiple Posts
-ProfilePage "1" o-- "*" Post : "stores"
+' Profile can have multiple Posts (Aggregation)
+Profile "1" o-- "*" Post : "includes"
 
-' User creates multiple Posts
+' User creates Posts (Association)
 User "1" --> "*" Post : "creates"
 
-' Post receives Likes and Comments
+' Post receives Likes and Comments (Composition: Likes and Comments cannot exist without Post)
 Post "1" *-- "*" Like : "receives"
 Post "1" *-- "*" Comment : "receives"
 
@@ -77,14 +73,14 @@ Post "1" *-- "*" Comment : "receives"
 User "1" --> "*" Like : "likes"
 User "1" --> "*" Comment : "comments on"
 
-' Aggregation: ProfilePage has a Showcase
-ProfilePage "1" o-- "1" Showcase : "has"
+' Profile has a Showcase section (Aggregation)
+Profile "1" o-- "1" Showcase : "has"
 
-' Aggregation: Showcase contains Albums and Artists
-Showcase "1" o-- "*" Album : "features"
-Showcase "1" o-- "*" Artist : "highlights"
+' Showcase contains Albums and Artists (Association)
+Showcase "1" -- "*" Album : "has"
+Showcase "1" -- "*" Artist : "has"
 
-' Many-to-Many: ProfilePage can have multiple favorite Songs
-ProfilePage "1" o-- "*" Song : "features"
+' ProfilePage can have multiple favorite Songs (Association)
+Profile "1" -- "*" Song : "picks"
 
 @enduml
