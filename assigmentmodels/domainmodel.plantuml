@@ -1,4 +1,115 @@
-@startuml
+@startuml "Version 1"
+
+class User {
+    + UserID
+    + Followers
+    + Following
+    + Username
+    + Email
+    + Password
+}
+
+class ProfilePage {
+    + TopSongs
+    + Showcase
+    + SongOfTheDay
+    + Bio
+    + ProfilePicture
+    + Genres
+    + ProfileID
+    + Posts
+}
+
+class CustomizeProfile {
+}
+
+class Post {
+    + Content
+    + Date
+}
+
+class TopSongs {
+    + Songs
+}
+
+class DiscoverPage {
+}
+
+class Showcase {
+    + AlbumContainer
+    + ArtistContainer
+    + BadgeContainer
+}
+
+class AlbumContainer {
+    + Albums
+}
+
+class ArtistContainer {
+    + Artists
+}
+
+class BadgeContainer {
+    + Badges
+}
+
+class HomePage {
+    + Updates
+}
+
+class SearchForUser {
+    + Users
+}
+
+class SaveProfile {
+}
+
+class SongOfTheDay {
+    + Song
+}
+
+' ----- AGGREGATIONER OCH KORRIGERADE RELATIONER -----
+
+' Aggregation: User has a ProfilePage
+User "1" o-- "1" ProfilePage: "has a"
+
+' Aggregation: ProfilePage contains multiple Posts
+ProfilePage "1" o-- "*" Post: "stores"
+
+' User creates multiple Posts
+User "1" --> "*" Post: "makes"
+
+' Aggregation: ProfilePage has a CustomizeProfile
+ProfilePage "1" o-- "1" CustomizeProfile: "has a"
+
+' Aggregation: CustomizeProfile contains TopSongs and Showcase
+CustomizeProfile "1" o-- "0..1" TopSongs: "includes"
+CustomizeProfile "1" o-- "0..1" Showcase: "includes"
+
+' Aggregation: Showcase contains AlbumContainer, ArtistContainer, BadgeContainer
+Showcase "1" o-- "*" AlbumContainer: "features"
+Showcase "1" o-- "*" ArtistContainer: "highlights"
+Showcase "1" o-- "*" BadgeContainer: "includes"
+
+' Many-to-One: DiscoverPage is linked to SearchForUser
+DiscoverPage "1" --> "0..*" SearchForUser: "searches"
+SearchForUser "1" --> "*" User: "finds user"
+
+' Many-to-One: SongOfTheDay and SaveProfile
+CustomizeProfile "1" o-- "0..1" SongOfTheDay: "sets"
+SongOfTheDay "1" --> "1" SaveProfile: "updates"
+
+' Many-to-One: SaveProfile updates ProfilePage
+SaveProfile "1" --> "1" ProfilePage: "updates"
+
+' Many-to-One: User navigates to DiscoverPage and HomePage
+User "1" --> "1" DiscoverPage: "navigates"
+User "1" --> "1" HomePage: "navigates"
+
+@enduml
+
+
+@startuml "version 2"
 
 ' ----- ENTITIES -----
 class User {
