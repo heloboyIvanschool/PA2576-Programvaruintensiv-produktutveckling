@@ -105,6 +105,47 @@ package "Database" {
   User "1" *-- "*" Comment
 }
 package "Backend"{
+
+  package "Controller" {
+
+    class ProfileController {
+      + getProfile(user_id: str): Profile
+      + updateProfile(user_id: str, profile_data: dict)
+    }
+
+    class ProfileCustomizationController {
+      + getCustomizationData(user_id: str): dict
+      + saveCustomizationData(user_id: str, customization_data: dict)
+    }
+
+    class PostController {
+      + getPosts(user_id: str): list
+      + createPost(user_id: str, post_data: dict)
+      + likePost(user_id: str, post_id: str)
+      + commentPost(user_id: str, post_id: str, comment_data: dict)
+    }
+
+    class MusicController {
+      + searchSong(query: str): Song
+      + searchAlbum(query: str): Album
+      + searchArtist(query: str): Artist
+    }
+
+    class DatabaseService {
+      + fetchUserData(user_id: str): dict
+      + saveProfileChanges(user_id: str, data: dict)
+      + fetchCustomizationData(user_id: str): dict
+      + saveCustomizationData(user_id: str, customization_data: dict)
+      + fetchPosts(user_id: str): list
+      + savePost(user_id: str, post_data: dict)
+    }
+
+    ProfileController -- DatabaseService
+    ProfileCustomizationController -- DatabaseService
+    PostController -- DatabaseService
+    MusicController -- DatabaseService
+  }
+
   package "Python"{
   
     package "SpotifyAPI" {
@@ -151,20 +192,13 @@ package "Backend"{
   
       OAuth -- LoginRoute
     }
-    
-    class Main<<file>>{
-      + CreateApp()
-    }
-    
-    class RegisterUser{
-    }
   }
 }
 
 package "Frontend"{
-      package "JavaScript"{
+    package "JavaScript"{
 
-    package "Profile"{
+    package "ProfilePage"{
     
       class Profile {
         + render(): JSX.Element
@@ -214,15 +248,20 @@ package "Frontend"{
       Profile "1" *-- "*" ArtistsShowcase
       Profile "1" *-- "*" BadgesShowcase
       Profile "1" *-- "*" Feed
+      Profile "1" *-- "*" SongOfTheDay
       }
 
-      package "Home"{
+      package "HomePage"{
 
-        class Home
+        class Home{
+          - Updates: str
+        }
       }
 
-      package "Discover"{
-
+      package "DiscoverPage"{
+        class SearchForUser{
+          + Search(username(str)): User
+        }
       }
 
       package "ProfileCustomization"{
@@ -281,7 +320,7 @@ package "Frontend"{
         class Menu{
           - Home: str
           - Discover: str
-          - Profile: str
+          - Profile: Profile
         }
 
         class Profile{
@@ -291,10 +330,16 @@ package "Frontend"{
           + GetUsername(): Username(str)
           + GetProfilePicture(): ProfilePicture(image)
         }
-
-        Profile -- User
+        Menu o-- Profile
       }
     }
   }
+  Python -- Controller
+  Navbar -- Controller
+  ProfilePage -- Controller
+  ProfileCustomization -- Controller
+  DiscoverPage -- Controller
+  HomePage -- Controller
+  Database -- Controller
 }
 @enduml
