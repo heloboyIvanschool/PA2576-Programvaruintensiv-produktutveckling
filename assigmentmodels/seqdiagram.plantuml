@@ -134,4 +134,3 @@ Frontend -> User: Redirect to profile/dashboard
 deactivate Frontend
 deactivate User
 @enduml
-
