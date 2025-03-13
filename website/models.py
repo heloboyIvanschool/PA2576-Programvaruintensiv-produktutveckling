@@ -2,12 +2,6 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 
-followers = db.Table(
-    'followers',
-    db.Column('followerId', db.Integer, db.ForeignKey('users.userId', ondelete="CASCADE"), primary_key=True),
-    db.Column('followingId', db.Integer, db.ForeignKey('users.userId', ondelete="CASCADE"), primary_key=True)
-)
-
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     userId = db.Column(db.Integer, primary_key=True) # ifall man ändrar typen av nyckeln så msåte detta även ske i alla andra tabeller där nycklen används
@@ -24,30 +18,15 @@ class User(db.Model, UserMixin):
     likes = db.relationship('Like', back_populates='user')
     comments = db.relationship('Comment', back_populates='user')
 
-    following = db.relationship(
-        'User', secondary=followers,
-        primaryjoin=(followers.c.followerId == userId),
-        secondaryjoin=(followers.c.followingId == userId),
-        backref=db.backref('followers', lazy='dynamic'),
-        lazy='dynamic'
-    )
-
-    def follow(self, user):
-        if not self.is_following(user):
-            self.following.append(user)
-
-    def unfollow(self, user):
-        if self.is_following(user):
-            self.following.remove(user)
-
-    def is_following(self, user):
-        return self.following.filter(followers.c.followingId == user.userId).count() > 0
-
-    favorite_songs = db.relationship('Song', secondary='user_songs', back_populates='liked_by_users', cascade="all, delete")
-    favorite_albums = db.relationship('Album', secondary='user_albums', back_populates='liked_by_users', cascade="all, delete")
-
     def __repr__(self):
         return f'<User {self.username}>'
+
+class Profiles(db.Model):
+    __tablename__ = 'profiles'
+    profileId = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.Integer, db.ForeignKey('users.userId', ondelete="CASCADE"), nullable=False)
+    bio = db.Column(db.String(500), nullable=True)
+
 
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -93,9 +72,16 @@ class Song(db.Model):
     artist = db.Column(db.String, nullable=False)
     album = db.Column(db.String, nullable=True)
     coverUrl = db.Column(db.String, nullable=True)
+    spotifyUrl = db.Column(db.String, nullable=False)
 
     #relations
     posts = db.relationship('Post', back_populates='song', cascade="all, delete-orphan")
+
+class ProfileSong(db.Model):
+    __tablename__ = 'profile_songs'
+    id = db.Column(db.Integer, primary_key=True)  # Unikt ID
+    profileId = db.Column(db.Integer, db.ForeignKey('profiles.profileId', ondelete="CASCADE"), nullable=False)  # Användarens profil
+    songId = db.Column(db.String, db.ForeignKey('songs.songId', ondelete="CASCADE"), nullable=False)  # Länk till låten i `songs`
 
 user_songs = db.Table(
     'user_songs',
@@ -103,8 +89,79 @@ user_songs = db.Table(
     db.Column('songId', db.String, db.ForeignKey('songs.songId', ondelete="CASCADE"), primary_key=True)
 )
 
+class Album(db.Model):
+    __tablename__ = 'albums'
+    albumId = db.Column(db.String, primary_key=True)
+    title = db.Column(db.String, nullable=False)
+    artist = db.Column(db.String, nullable=False)
+    coverUrl = db.Column(db.String, nullable=True)
+    spotifyUrl = db.Column(db.String, nullable=False)
+
+class ProfileAlbum(db.Model):
+    __tablename__ = 'profile_albums'
+    id = db.Column(db.Integer, primary_key=True)  # Unikt ID
+    profileId = db.Column(db.Integer, db.ForeignKey('profiles.profileId', ondelete="CASCADE"), nullable=False)  # Användarens profil
+    profileId = db.Column(db.String, db.ForeignKey('songs.songId', ondelete="CASCADE"), nullable=False)
+
 user_albums = db.Table(
-    'user_albums',
+    'profile_albums',
     db.Column('userId', db.Integer, db.ForeignKey('users.userId', ondelete="CASCADE"), primary_key=True),
     db.Column('albumId', db.String, db.ForeignKey('albums.albumId', ondelete="CASCADE"), primary_key=True)
 )
+
+class Artist(db.Model):
+    __tablename__ = 'artists'
+    name = db.Column(db.String, nullable=False)
+    coverUrl = db.Column(db.String, nullable=True)
+    spotifyUrl = db.Column(db.String, nullable=False)
+
+class ProfileArtist(db.Model):
+    __tablename__ = 'profile_artists'
+    id = db.Column(db.Integer, primary_key=True)  # Unikt ID
+    profileId = db.Column(db.Integer, db.ForeignKey('profiles.profileId', ondelete="CASCADE"), nullable=False)  # Användarens profil
+    artistId = db.Column(db.String, db.ForeignKey('songs.songId', ondelete="CASCADE"), nullable=False)
+
+
+
+
+
+
+#framtida implementationer
+def remove_favorite_song(user_id, song_id):
+    # Ta bort låten från profile_songs-tabellen
+    db.session.query(ProfileSong).filter_by(profileId=user_id, songId=song_id).delete()
+    db.session.commit()
+
+    # Kontrollera om låten fortfarande finns i profile_songs
+    song_still_used = db.session.query(ProfileSong).filter_by(songId=song_id).first()
+
+    if not song_still_used:
+        # Om ingen längre har låten som favorit, ta bort den från songs-tabellen
+        db.session.query(Song).filter_by(songId=song_id).delete()
+        db.session.commit()
+
+
+    # following = db.relationship(
+    #     'User', secondary=followers,
+    #     primaryjoin=(followers.c.followerId == userId),
+    #     secondaryjoin=(followers.c.followingId == userId),
+    #     backref=db.backref('followers', lazy='dynamic'),
+    #     lazy='dynamic'
+    # )
+
+    # def follow(self, user):
+    #     if not self.is_following(user):
+    #         self.following.append(user)
+
+    # def unfollow(self, user):
+    #     if self.is_following(user):
+    #         self.following.remove(user)
+
+    # def is_following(self, user):
+    #     return self.following.filter(followers.c.followingId == user.userId).count() > 0
+
+# followers = db.Table(
+#     'followers',
+#     db.Column('followerId', db.Integer, db.ForeignKey('users.userId', ondelete="CASCADE"), primary_key=True),
+#     db.Column('followingId', db.Integer, db.ForeignKey('users.userId', ondelete="CASCADE"), primary_key=True)
+# )
