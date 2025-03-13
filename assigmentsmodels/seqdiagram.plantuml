@@ -1,0 +1,69 @@
+@startuml "Register"
+actor User
+participant Frontend
+participant Backend
+participant Database
+
+User -> Frontend: Enters username, email, password
+activate User
+activate Frontend
+
+Frontend -> Backend: Sends registration request
+activate Backend
+
+Backend -> Database: Checks if email/username exists
+activate Database
+
+Database --> Backend: Returns result (available or taken)
+deactivate Database
+
+alt If email/username is taken
+    Backend -> Frontend: Show "Error: Email/Username Taken"
+else If email/username is available
+    Backend -> Database: Stores new user data (hashed password)
+    activate Database
+    Database --> Backend: Confirms successful storage
+    deactivate Database
+    Backend -> Frontend: Show "Registration Successful"
+    deactivate Backend
+end
+
+Frontend -> User: Displays registration result
+deactivate Frontend
+deactivate User
+@enduml
+
+@startuml "Login"
+actor User
+participant Frontend
+participant Backend
+participant Database
+
+User -> Frontend: Enters email and password
+activate User
+activate Frontend
+
+Frontend -> Backend: Sends login request
+activate Backend
+
+Backend -> Database: Retrieves user data by email
+activate Database
+
+Database --> Backend: Returns user data (including hashed password)
+deactivate Database
+
+Backend -> Backend: Compares input password with stored hash
+
+alt If password is incorrect
+    Backend -> Frontend: Show "Invalid Credentials" message
+else If password is correct
+    Backend -> Frontend: Generate session token
+    Backend -> Frontend: Return user session
+    deactivate Backend
+end
+
+Frontend -> User: Redirect to profile/dashboard
+deactivate Frontend
+deactivate User
+@enduml
+
