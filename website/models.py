@@ -1,6 +1,6 @@
 from . import db
 from flask_login import UserMixin
-from sqlalchemy.sql import func, validates
+from sqlalchemy.sql import func
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -32,6 +32,9 @@ class Profiles(db.Model):
 
     # Relationer
     user = db.relationship("User", back_populates="profile")
+    songs = db.relationship("ProfileSong", back_populates="profile", cascade="all, delete-orphan")
+    albums = db.relationship("ProfileAlbum", back_populates="profile", cascade="all, delete-orphan")
+    artists = db.relationship("ProfileArtist", back_populates="profile", cascade="all, delete-orphan")
 
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -51,17 +54,6 @@ class Post(db.Model):
     song = db.relationship('Song', back_populates='posts')
     album = db.relationship('Album', back_populates='posts')
     artist = db.relationship('Artist', back_populates='posts')
-
-    @validates('song_id', 'album_id', 'artist_id')
-    def validate_only_one_content(self, key, value):
-
-        if value not in ['song', 'album', 'artist']:
-            raise ValueError("content_type must be 'song', 'album' or 'artist'")
-
-        content_count = sum(1 for content in [self.song_id, self.album_id, self.artist_id] if content is not None)
-        if content_count > 1:
-            raise ValueError("A post can only have one type of content: Song, Album, or Artist.")
-        return value
 
 class Like(db.Model):
     __tablename__ = 'likes'
@@ -99,7 +91,7 @@ class Song(db.Model):
 
 class ProfileSong(db.Model):
     __tablename__ = 'profile_songs'
-    id = db.Column(db.Integer, primary_key=True)  # Unikt ID
+    id = db.Column(db.Integer, primary_key=True)
     profile_id = db.Column(db.Integer, db.ForeignKey('profiles.profile_id', ondelete="CASCADE"), nullable=False)  # Användarens profil
     song_id = db.Column(db.String, db.ForeignKey('songs.song_id', ondelete="CASCADE"), nullable=False)  # Länk till låten i `songs`
 
@@ -113,22 +105,22 @@ class Album(db.Model):
 
 class ProfileAlbum(db.Model):
     __tablename__ = 'profile_albums'
-    id = db.Column(db.Integer, primary_key=True)  # Unikt ID
-    profile_id = db.Column(db.Integer, db.ForeignKey('profiles.profile_id', ondelete="CASCADE"), nullable=False)  # Användarens profil
-    profile_id = db.Column(db.String, db.ForeignKey('songs.song_id', ondelete="CASCADE"), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    profile_id = db.Column(db.Integer, db.ForeignKey('profiles.profile_id', ondelete="CASCADE"), nullable=False)
+    album_id = db.Column(db.String, db.ForeignKey('albums.album_id', ondelete="CASCADE"), nullable=False)
 
 class Artist(db.Model):
     __tablename__ = 'artists'
-    id = db.Column(db.Integer, primary_key=True)  # Unikt ID
+    artist_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     cover_url = db.Column(db.String, nullable=True)
     spotify_url = db.Column(db.String, nullable=False)
 
 class ProfileArtist(db.Model):
     __tablename__ = 'profile_artists'
-    id = db.Column(db.Integer, primary_key=True)  # Unikt ID
-    profile_id = db.Column(db.Integer, db.ForeignKey('profiles.profile_id', ondelete="CASCADE"), nullable=False)  # Användarens profil
-    album_id = db.Column(db.String, db.ForeignKey('songs.song_id', ondelete="CASCADE"), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    profile_id = db.Column(db.Integer, db.ForeignKey('profiles.profile_id', ondelete="CASCADE"), nullable=False)
+    artist_id = db.Column(db.String, db.ForeignKey('artists.artist_id', ondelete="CASCADE"), nullable=False)
 
 
 
@@ -136,19 +128,6 @@ class ProfileArtist(db.Model):
 
 
 #framtida implementationer
-def remove_favorite_song(user_id, song_id):
-    # Ta bort låten från profile_songs-tabellen
-    db.session.query(ProfileSong).filter_by(profile_id=user_id, song_id=song_id).delete()
-    db.session.commit()
-
-    # Kontrollera om låten fortfarande finns i profile_songs
-    song_still_used = db.session.query(ProfileSong).filter_by(song_id=song_id).first()
-
-    if not song_still_used:
-        # Om ingen längre har låten som favorit, ta bort den från songs-tabellen
-        db.session.query(Song).filter_by(song_id=song_id).delete()
-        db.session.commit()
-
 
     # following = db.relationship(
     #     'User', secondary=followers,
@@ -174,3 +153,9 @@ def remove_favorite_song(user_id, song_id):
 #     db.Column('followerId', db.Integer, db.ForeignKey('users.user_id', ondelete="CASCADE"), primary_key=True),
 #     db.Column('followingId', db.Integer, db.ForeignKey('users.user_id', ondelete="CASCADE"), primary_key=True)
 # )
+
+
+def validate_content(self):
+    content_count = sum(1 for content in [self.song_id, self.album_id, self.artist_id] if content)
+    if content_count > 1:
+        raise ValueError("A post can only have one type of content: Song, Album, or Artist.")
