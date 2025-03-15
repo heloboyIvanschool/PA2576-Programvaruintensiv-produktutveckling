@@ -1,3 +1,4 @@
+<!-- CUSTOM MARKER: GOOGLE OAUTH IMPLEMENTATION -->
 {% extends "base.html" %}
 {% block title %}Login{% endblock %}
 {% block content %}
@@ -18,12 +19,12 @@
         
         <form method="POST">
           <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
+            <label for="username" class="form-label">Username</label>
             <input
-              type="email"
+              type="text"
               class="form-control"
-              id="email"
-              name="email"
+              id="username"
+              name="username"
               required
               autofocus
             />
@@ -45,12 +46,13 @@
           </div>
         </form>
         
-        <!-- Google OAuth Login Button -->
-        <div class="mt-4 text-center">
-          <p>Or login with:</p>
-          <!-- Make it a direct URL if needed -->
+        <!-- Google OAuth Login Button - Styled prominently -->
+        <div class="mt-4">
+          <div class="text-center mb-2">
+            <p>Or login with:</p>
+          </div>
           <a href="/login/google" class="btn btn-danger btn-lg w-100">
-            <i class="bi bi-google"></i> Login with Google
+            <i class="bi bi-google me-2"></i> Login with Google
           </a>
         </div>
         
