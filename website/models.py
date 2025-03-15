@@ -1,6 +1,7 @@
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
+from flask_dance.consumer.storage.sqla import OAuthConsumerMixin
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -15,12 +16,18 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', back_populates='user')
     likes = db.relationship('Like', back_populates='user')
     comments = db.relationship('Comment', back_populates='user')
+    oauth = db.relationship('OAuth', back_populates='user', cascade="all, delete-orphan")
 
     def get_id(self):
         return str(self.user_id)
 
     def __repr__(self):
         return f'<User {self.username}>'
+    
+class OAuth(db.Model, OAuthConsumerMixin):
+    __tablename__ = 'oauth'
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id', ondelete="CASCADE"))
+    user = db.relationship(User)
 
 class Profiles(db.Model):
     __tablename__ = 'profiles'

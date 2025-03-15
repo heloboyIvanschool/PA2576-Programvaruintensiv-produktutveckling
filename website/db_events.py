@@ -1,5 +1,6 @@
 from sqlalchemy import event
-from .models import db, ProfileSong, Song, ProfileAlbum, Album, ProfileArtist, Artist
+from .models import ProfileSong, Song, ProfileAlbum, Album, ProfileArtist, Artist
+from .__init__ import db 
 
 def remove_unused_entries(mapper, connection, target, content_type):
     """ Tar bort låtar, album eller artister från databasen om ingen längre refererar till dem. """
