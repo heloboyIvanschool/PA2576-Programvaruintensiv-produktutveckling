@@ -4,7 +4,7 @@ from os import path
 from flask_login import LoginManager
 from dotenv import load_dotenv
 import os
-from . import db_events # at inte bort
+# from . import db_events # at inte bort
 
 load_dotenv()
 

@@ -6,20 +6,22 @@ function Navbar() {
   const [profilePicture, setProfilePicture] = useState('');
 
   useEffect(() => {
-    fetch('/get-profile-picture', { credentials: 'include' }) // Inkludera cookies för autentisering
-      .then(response => response.json())
-      .then(data => {
-        setProfilePicture(data.profile_picture);
+    fetch('/profile-picture', { credentials: 'include' })  // Hämta profilbild
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.profile_picture) {
+          setProfilePicture(data.profile_picture);
+        } else {
+          setProfilePicture('default_profile_pic.jpg'); // Standardbild om ingen finns
+        }
       })
-      .catch(error => console.error('Error fetching profile picture:', error));
+      .catch((error) => console.error('Error fetching profile picture:', error));
   }, []);
 
   return (
     <nav className='navbar'>
       <div className='navbar-container'>
-        <Link to="/" className="navbar-logo">
-          Resonate
-        </Link>
+        <Link to="/" className="navbar-logo">Resonate</Link>
         <div className='navbar-menu'>
           <Link to="/" className="navbar-item">Home</Link>
           <Link to="/discovery" className="navbar-item">Discovery</Link>
