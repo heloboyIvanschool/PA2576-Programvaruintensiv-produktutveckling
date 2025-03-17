@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     role = db.Column(db.String(10), default='user')
 
     #realations
+    profile = db.relationship("Profiles", back_populates="user", uselist=False, cascade="all, delete-orphan")
     posts = db.relationship('Post', back_populates='user')
     likes = db.relationship('Like', back_populates='user')
     comments = db.relationship('Comment', back_populates='user')
@@ -53,7 +54,6 @@ class Post(db.Model):
     artist_id = db.Column(db.String, db.ForeignKey('artists.artist_id'), nullable=True)
 
     caption = db.Column(db.Text, nullable=True)
-    likes = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
 
     # Relationer
@@ -61,6 +61,8 @@ class Post(db.Model):
     song = db.relationship('Song', back_populates='posts')
     album = db.relationship('Album', back_populates='posts')
     artist = db.relationship('Artist', back_populates='posts')
+    likes = db.relationship('Like', back_populates='post', cascade="all, delete-orphan")
+    comments = db.relationship('Comment', back_populates='post', cascade="all, delete-orphan")
 
 class Like(db.Model):
     __tablename__ = 'likes'
@@ -102,6 +104,8 @@ class ProfileSong(db.Model):
     profile_id = db.Column(db.Integer, db.ForeignKey('profiles.profile_id', ondelete="CASCADE"), nullable=False)  # Användarens profil
     song_id = db.Column(db.String, db.ForeignKey('songs.song_id', ondelete="CASCADE"), nullable=False)  # Länk till låten i `songs`
 
+    profile = db.relationship("Profiles", back_populates="songs")
+
 class Album(db.Model):
     __tablename__ = 'albums'
     album_id = db.Column(db.String, primary_key=True)
@@ -110,24 +114,32 @@ class Album(db.Model):
     cover_url = db.Column(db.String, nullable=True)
     spotify_url = db.Column(db.String, nullable=False)
 
+    posts = db.relationship('Post', back_populates='album', cascade="all, delete-orphan")
+
 class ProfileAlbum(db.Model):
     __tablename__ = 'profile_albums'
     id = db.Column(db.Integer, primary_key=True)
     profile_id = db.Column(db.Integer, db.ForeignKey('profiles.profile_id', ondelete="CASCADE"), nullable=False)
     album_id = db.Column(db.String, db.ForeignKey('albums.album_id', ondelete="CASCADE"), nullable=False)
 
+    profile = db.relationship("Profiles", back_populates="albums")
+
 class Artist(db.Model):
     __tablename__ = 'artists'
-    artist_id = db.Column(db.Integer, primary_key=True)
+    artist_id = db.Column(db.String, primary_key=True)
     name = db.Column(db.String, nullable=False)
     cover_url = db.Column(db.String, nullable=True)
     spotify_url = db.Column(db.String, nullable=False)
+
+    posts = db.relationship('Post', back_populates='artist', cascade="all, delete-orphan")
 
 class ProfileArtist(db.Model):
     __tablename__ = 'profile_artists'
     id = db.Column(db.Integer, primary_key=True)
     profile_id = db.Column(db.Integer, db.ForeignKey('profiles.profile_id', ondelete="CASCADE"), nullable=False)
     artist_id = db.Column(db.String, db.ForeignKey('artists.artist_id', ondelete="CASCADE"), nullable=False)
+
+    profile = db.relationship("Profiles", back_populates="artists")
 
 
 
