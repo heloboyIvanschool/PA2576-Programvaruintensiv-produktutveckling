@@ -1,0 +1,99 @@
+@startuml
+
+entity "User" as USER {
+  * UserID : STRING
+  --
+  Username : STRING
+  Email : STRING
+  Password : STRING
+  ProfilePicture : IMAGE
+  CreatedAt : STRING
+  Role : STRING
+}
+
+entity "Profile" as PROFILE {
+  * ProfileID : STRING
+  --
+  UserID : STRING <<FK>>
+  ProfilePicture : IMAGE
+  FavoriteGenres : LIST
+  TopSongs : LIST
+  AlbumShowcase : LIST
+  ArtistShowcase : LIST
+  BadgeShowcase : LIST
+  ProfileBio : STRING
+  SongOTD : STRING
+  Posts: LIST
+}
+
+entity "Post" as POST {
+  * PostID : STRING
+  --
+  UserID : STRING <<FK>>
+  ContentID : STRING
+  Caption : STRING
+  Likes : INTEGER
+  CreatedAt : STRING
+  Comments: LIST
+}
+
+entity "Like" as LIKE {
+  * LikeID : STRING
+  --
+  UserID : STRING <<FK>>
+  PostID : STRING <<FK>>
+}
+
+entity "Comment" as COMMENT {
+  * CommentID : STRING
+  --
+  UserID : STRING <<FK>>
+  PostID : STRING <<FK>>
+  CreatedAt : STRING
+  Content : STRING
+}
+
+entity "Song" as SONG {
+  * SongID : STRING
+  --
+  SongName : STRING
+  Artist : STRING
+  Album : STRING
+  CoverURL : STRING
+  EmbedURL : STRING
+  SpotifyURL : STRING
+}
+
+entity "Album" as ALBUM {
+  * AlbumID : STRING
+  --
+  AlbumName : STRING
+  Artist : STRING
+  CoverURL : STRING
+  SpotifyURL : STRING
+}
+
+entity "Artist" as ARTIST {
+  * ArtistID : STRING
+  --
+  ArtistName : STRING
+  ArtistPictureURL : STRING
+  SpotifyURL : STRING
+}
+
+PROFILE ||--|{ USER : "belongs to"
+PROFILE ||--|{ POST : "has posts"
+PROFILE ||--|{ ALBUM : "showcases albums"
+PROFILE ||--|{ SONG : "showcases songs"
+PROFILE ||--|{ ARTIST : "showcases artists"
+
+POST ||--|{ COMMENT : "has comments"
+POST ||--|{ LIKE : "has likes"
+POST ||--|{ SONG : "contains song"
+POST ||--|{ ALBUM : "features album"
+POST ||--|{ ARTIST : "mentions artist"
+
+USER ||--|{ LIKE : "likes"
+USER ||--|{ COMMENT : "comments"
+
+@enduml

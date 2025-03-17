@@ -1,0 +1,345 @@
+@startuml
+
+package "Database" {
+
+  class User {
+    - UserID: str
+    - Username: str
+    - Email: str
+    - Password: str
+    - ProfilePicture: image
+    - CreatedAt: str
+    - Role: str
+    + GetUserInfo(): info
+    + UpdateUserInfo()
+  }
+
+  class Post {
+    - PostID: str
+    - UserID: str
+    - ContentID: str
+    - Caption: str
+    - Likes: int
+    - CreatedAT: str
+    - Comments: list
+    + GetPostInfo(): info
+    + UpdatePostInfo()
+  }
+
+  class Like {
+    - LikeID: str
+    - UserID: str
+    - PostID: str
+    + GetLikeInfo(): info
+    + UpdateLikeInfo()
+  }
+
+  class Comment{
+    - CommentID: str
+    - UserID: str
+    - PostID: str
+    - CreatedAT: str
+    - Content: str
+    + GetCommentInfo(): info
+    + UpdateCommentInfo()
+  }
+
+  class Song{
+    - SongID: str
+    - SongName: str
+    - Artist: str
+    - Album: str
+    - CoverURL: str
+    - EmbedURL: str
+    - SpotifyURL: str
+    + GetSongInfo(): info
+    + UpdateSongInfo()
+  }
+
+  class Album{
+    - AlbumID: str
+    - AlbumName: str
+    - Artist: str
+    - CoverURL: str
+    - SpotifyURL: str
+    + GetAlbumInfo(): info
+    + UpdateAlbumInfo()
+  }
+
+  class Artist{
+    - ArtistID: str
+    - ArtistName: str
+    - ArtistPictureURL: str
+    - SpotifyURL: str
+    + GetArtistInfo(): info
+    + UpdateAlbumInfo()
+  }
+
+  class Profile{
+    - ProfileID: str
+    - UserID: str
+    - ProfilePicture: image
+    - FavoriteGenres: list
+    - TopSongs: list
+    - AlbumShowcase: list
+    - ArtistShowcase: list
+    - BadgeShowcase: list
+    - ProfileBio: str
+    - SongOTD: str
+    - Posts: list
+    + GetProfileInfo(): info
+    + UpdateProfileInfo()
+  }
+
+  Profile "1" o-- "1" User
+  Profile "1" *-- "*" Post
+  Profile "1" o-- "*" Album
+  Profile "1" o-- "*" Song
+  Profile "1" o-- "*" Artist
+  Post "1" *-- "*" Comment
+  Post "1" *-- "*" Like
+  Post "1" o-- "*" Song
+  Post "1" o-- "*" Album
+  Post "1" o-- "*" Artist
+  User "1" *-- "*" Like
+  User "1" *-- "*" Comment
+}
+package "Backend"{
+
+  package "Controller" {
+
+    class ProfileController {
+      + getProfile(user_id: str): Profile
+      + updateProfile(user_id: str, profile_data: dict)
+    }
+
+    class ProfileCustomizationController {
+      + getCustomizationData(user_id: str): dict
+      + saveCustomizationData(user_id: str, customization_data: dict)
+    }
+
+    class PostController {
+      + getPosts(user_id: str): list
+      + createPost(user_id: str, post_data: dict)
+      + likePost(user_id: str, post_id: str)
+      + commentPost(user_id: str, post_id: str, comment_data: dict)
+    }
+
+    class MusicController {
+      + searchSong(query: str): Song
+      + searchAlbum(query: str): Album
+      + searchArtist(query: str): Artist
+    }
+
+    class DatabaseService {
+      + fetchUserData(user_id: str): dict
+      + saveProfileChanges(user_id: str, data: dict)
+      + fetchCustomizationData(user_id: str): dict
+      + saveCustomizationData(user_id: str, customization_data: dict)
+      + fetchPosts(user_id: str): list
+      + savePost(user_id: str, post_data: dict)
+    }
+
+    ProfileController -- DatabaseService
+    ProfileCustomizationController -- DatabaseService
+    PostController -- DatabaseService
+    MusicController -- DatabaseService
+  }
+
+  package "Python"{
+  
+    package "SpotifyAPI" {
+    
+      class SpotifyAPI{
+        - ClientID: str
+        - ClientSecret: str
+        - Token: str
+        - GetToken(): Token(str)
+        + Search(query(str), searchtype(str))
+      }
+
+      class SpotifySearch{
+        - Spotify: SpotifyAPI
+        - Query: str
+        + GetTrack(): Track
+        + GetAlbum(): Album
+        + GetArtist(): Artist
+      }
+
+      class SearchRoute<<route>>{
+      }
+
+      SpotifyAPI -- SpotifySearch
+      SearchRoute -- SpotifySearch
+    }
+    
+    package "OAuth"{
+    
+      class OAuth{
+        - GoogleClientId: str
+        - GoogleClientSecret: str
+        - GoogleDiscoveryURL: str
+        - UserID: str
+        - Token: str
+        - GetToken(): Token(str)
+        + RequestLogin()
+        + RedirectToGoogleLogin()
+        + AccessTokens()
+      }
+  
+      class LoginRoute<<route>> {
+      }
+  
+      OAuth -- LoginRoute
+    }
+  }
+}
+
+package "Frontend"{
+    package "JavaScript"{
+
+    package "ProfilePage"{
+    
+      class Profile {
+        + render(): JSX.Element
+      }
+
+      class ProfileHeader {
+        - ProfilePic: str
+        - Username: str
+        - Genres: list
+        - Bio: str
+        + GetInfo(): genre, bio, username, profilepic
+      }
+
+      class TopSongs {
+        - Songs: list
+        + GetSongs(): songs
+      }
+
+      class AlbumsShowcase {
+        - Albums: list
+        + GetAlbum(): albums
+      }
+
+      class ArtistsShowcase {
+        - Artists: list
+        + GetArtists(): artists
+      }
+
+      class BadgesShowcase {
+        - Badges: list
+        + GetBadges: badges
+      }
+
+      class Feed {
+        - Posts: list
+        + GetPosts(): posts
+      }
+
+      class SongOfTheDay {
+        - Song: list
+        + GetSOTD(): sotd
+      }
+
+      Profile "1" *-- "1" ProfileHeader
+      Profile "1" *-- "*" TopSongs
+      Profile "1" *-- "*" AlbumsShowcase
+      Profile "1" *-- "*" ArtistsShowcase
+      Profile "1" *-- "*" BadgesShowcase
+      Profile "1" *-- "*" Feed
+      Profile "1" *-- "*" SongOfTheDay
+      }
+
+      package "HomePage"{
+
+        class Home{
+          - Updates: str
+        }
+      }
+
+      package "DiscoverPage"{
+        class SearchForUser{
+          + Search(username(str)): User
+        }
+      }
+
+      package "ProfileCustomization"{
+
+        class ProfileHeader{
+          - Bio: str
+          - Genres: list
+          + AddGenre(genre(str)): genre
+          + RemoveGenre(genre(str)):
+          + UpdateBio(str): str
+        }
+
+        class TopSongs{
+          - Songs: list
+          + AddSong(song(str)): song
+          + RemoveSong(song(str)):
+        }
+
+        class AlbumsShowcase{
+          - Albums: list
+          + AddAlbum(album(str)): album
+          + RemoveAlbum(album(str)):
+        }
+
+        class ArtistsShowcase{
+          - Artists: list
+          + AddArtist(artist(str)): artist
+          + RemoveArtist(artist(str)):
+        }
+
+        class BadgesShowcase{
+          - Badges: list
+          + AddBadge(badge(str)): badge
+          + Removebadge(badge(str)):
+        }
+
+        class SongOfTheDay{
+          - SongOfTheDay: str
+          + SetSOTD(song(str)): song
+        }
+
+        class SaveChanges{
+          + SaveChanges():
+        }
+
+        SaveChanges -- ProfileHeader
+        SaveChanges -- TopSongs
+        SaveChanges -- AlbumsShowcase
+        SaveChanges -- ArtistsShowcase
+        SaveChanges -- BadgesShowcase
+        SaveChanges -- SongOfTheDay
+      }
+
+      package "Navbar"{
+
+        class Menu{
+          - Home: str
+          - Discover: str
+          - Profile: Profile
+        }
+
+        class Profile{
+          - UserID: str
+          - Username: str
+          - ProfilePicture: image
+          + GetUsername(): Username(str)
+          + GetProfilePicture(): ProfilePicture(image)
+        }
+        Menu o-- Profile
+      }
+    }
+  }
+  Python -- Controller
+  Navbar -- Controller
+  ProfilePage -- Controller
+  ProfileCustomization -- Controller
+  DiscoverPage -- Controller
+  HomePage -- Controller
+  Database -- Controller
+}
+@enduml

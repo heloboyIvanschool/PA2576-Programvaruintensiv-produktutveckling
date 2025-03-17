@@ -4,6 +4,7 @@ from os import path
 from flask_login import LoginManager
 from dotenv import load_dotenv
 import os
+from . import db_events # at inte bort
 
 load_dotenv()
 
@@ -19,10 +20,18 @@ def create_app():
 
     from .views import views
     from .auth import auth
-    from .models import User
+
+    from .models import User, OAuth
+    
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
+
+    from .google_auth import google_bp, oauth_routes
+    app.register_blueprint(google_bp, url_prefix='/login')
+    app.register_blueprint(oauth_routes, url_prefix='/')
+
+    from . import db_events
 
 
     with app.app_context():

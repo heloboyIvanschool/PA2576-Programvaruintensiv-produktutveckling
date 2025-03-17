@@ -1,0 +1,199 @@
+@startuml "Version 1"
+
+class User {
+    + UserID
+    + Followers
+    + Following
+    + Username
+    + Email
+    + Password
+}
+
+class ProfilePage {
+    + TopSongs
+    + Showcase
+    + SongOfTheDay
+    + Bio
+    + ProfilePicture
+    + Genres
+    + ProfileID
+    + Posts
+}
+
+class CustomizeProfile {
+}
+
+class Post {
+    + Content
+    + Date
+}
+
+class TopSongs {
+    + Songs
+}
+
+class DiscoverPage {
+}
+
+class Showcase {
+    + AlbumContainer
+    + ArtistContainer
+    + BadgeContainer
+}
+
+class AlbumContainer {
+    + Albums
+}
+
+class ArtistContainer {
+    + Artists
+}
+
+class BadgeContainer {
+    + Badges
+}
+
+class HomePage {
+    + Updates
+}
+
+class SearchForUser {
+    + Users
+}
+
+class SaveProfile {
+}
+
+class SongOfTheDay {
+    + Song
+}
+
+
+' Aggregation: User has a ProfilePage
+User "1" o-- "1" ProfilePage: "has a"
+
+' Aggregation: ProfilePage contains multiple Posts
+ProfilePage "1" o-- "*" Post: "stores"
+
+' User creates multiple Posts
+User "1" --> "*" Post: "makes"
+
+' Aggregation: ProfilePage has a CustomizeProfile (Exakt en)
+ProfilePage "1" o-- "1" CustomizeProfile: "has a"
+
+' Aggregation: CustomizeProfile innehåller Showcase (obligatoriskt) och TopSongs (valfritt)
+CustomizeProfile "1" o-- "1" Showcase: "includes"
+CustomizeProfile "1" o-- "0..1" TopSongs: "includes"
+
+' Aggregation: Showcase innehåller AlbumContainer, ArtistContainer, BadgeContainer (minst en måste finnas)
+Showcase "1" o-- "1..*" AlbumContainer: "features"
+Showcase "1" o-- "1..*" ArtistContainer: "highlights"
+Showcase "1" o-- "1..*" BadgeContainer: "includes"
+
+' Many-to-One: DiscoverPage är kopplat till SearchForUser
+DiscoverPage "1" --> "0..*" SearchForUser: "searches"
+SearchForUser "1" --> "*" User: "finds user"
+
+' Many-to-One: SongOfTheDay och SaveProfile
+CustomizeProfile "1" o-- "0..1" SongOfTheDay: "sets"
+SongOfTheDay "1" --> "1" SaveProfile
+
+' Many-to-One: SaveProfile uppdaterar ProfilePage (inte bara SongOfTheDay)
+SaveProfile "1" --> "1" ProfilePage: "updates"
+AlbumContainer "1" --> "1" SaveProfile
+ArtistContainer "1" --> "1" SaveProfile
+BadgeContainer "1" --> "1" SaveProfile
+TopSongs "*" --> "1" SaveProfile
+
+' Many-to-One: User navigates till DiscoverPage och HomePage
+User "1" --> "1" DiscoverPage: "navigates"
+User "1" --> "1" HomePage: "navigates"
+
+@enduml
+
+@startuml "version 2"
+
+' ----- ENTITIES -----
+class User {
+    + UserID
+    + Username
+    + Email
+    + Password
+    + ProfilePicture
+}
+
+class Profile {
+    + ProfileID
+    + Bio
+    + ProfilePicture
+    + Genres
+    + Posts
+    + SongOTD
+}
+
+class Post {
+    + PostID
+    + Content
+    + Date
+}
+
+class Like {
+    + LikeID
+}
+
+class Comment {
+    + CommentID
+    + Content
+    + CreatedAt
+}
+
+class Song {
+    + SongID
+    + SongName
+    + Artist
+}
+
+class Album {
+    + AlbumID
+    + AlbumName
+}
+
+class Artist {
+    + ArtistID
+    + ArtistName
+}
+
+class Showcase {
+    + ShowcaseID
+}
+
+' ----- RELATIONSHIPS -----
+
+' User owns a Profile (Aggregation: Profile cannot exist without User)
+User "1" o-- "1" Profile : "has"
+
+' Profile can have multiple Posts (Aggregation)
+Profile "1" o-- "*" Post : "includes"
+
+' User creates Posts (Association)
+User "1" --> "*" Post : "creates"
+
+' Post receives Likes and Comments (Composition: Likes and Comments cannot exist without Post)
+Post "1" *-- "*" Like : "receives"
+Post "1" *-- "*" Comment : "receives"
+
+' User can like and comment on posts
+User "1" --> "*" Like : "likes"
+User "1" --> "*" Comment : "comments on"
+
+' Profile has a Showcase section (Aggregation)
+Profile "1" o-- "1" Showcase : "has"
+
+' Showcase contains Albums and Artists (Association)
+Showcase "1" -- "*" Album : "has"
+Showcase "1" -- "*" Artist : "has"
+
+' ProfilePage can have multiple favorite Songs (Association)
+Profile "1" -- "*" Song : "picks"
+
+@enduml

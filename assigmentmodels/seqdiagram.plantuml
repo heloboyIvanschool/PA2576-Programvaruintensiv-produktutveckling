@@ -1,0 +1,136 @@
+@startuml "Update Album/Artist/Badge"
+actor User
+participant Profilepage
+participant ProfileCustomization
+participant Backend
+participant Database
+
+Activate User
+User -> Profilepage: Goes to profilepage
+Activate Profilepage
+Profilepage -> ProfileCustomization: Presses edit profile
+Activate ProfileCustomization
+ProfileCustomization -> ProfileCustomization: Presses add "Album, Artist or Badge"
+User -> Backend: Search for "Album, Artist or Badge"
+Deactivate ProfileCustomization
+Activate Backend
+Backend -> Database: UpdateProfileInfo()
+Activate Database
+Database --> Profilepage: Show the updated "Album, Artist or Badge"
+Deactivate Database
+Deactivate Backend
+Deactivate Profilepage
+Deactivate User
+@enduml
+
+@startuml "Spotify fetching"
+participant "SpotifySearch"
+participant "SpotifyAPI"
+participant "Spotify"
+Activate SpotifySearch
+SpotifySearch -> SpotifyAPI: GetContent(contentname)
+Activate SpotifyAPI
+SpotifyAPI -> SpotifyAPI: Fetches ClientID & ClientSECRET
+SpotifyAPI -> Spotify: GetToken()
+Activate Spotify
+Spotify -> SpotifyAPI: Returns token
+SpotifyAPI -> Spotify: Search(query, contentname)
+Spotify -> SpotifySearch: Returns json file
+Deactivate Spotify
+Deactivate SpotifyAPI
+Deactivate SpotifySearch
+@enduml
+
+@startuml "Uptde SongOTD"
+actor User
+participant Profilepage
+participant ProfileCustomization
+participant Backend
+participant Database
+activate User
+
+User -> Profilepage: Goes to profilepage
+activate Profilepage
+Profilepage -> ProfileCustomization: Presses edit profile
+activate ProfileCustomization
+ProfileCustomization -> ProfileCustomization: Presses add song of the day
+User -> Backend: Search for song
+deactivate ProfileCustomization
+activate Backend
+Backend -> Database: UpdateProfileInfo()
+activate Database
+Database --> Profilepage: Show the updated song
+deactivate Database
+deactivate Backend
+deactivate Profilepage
+deactivate User
+@enduml
+
+@startuml "Register"
+actor User
+participant Frontend
+participant Backend
+participant Database
+
+User -> Frontend: Enters username, email, password
+activate User
+activate Frontend
+
+Frontend -> Backend: Sends registration request
+activate Backend
+
+Backend -> Database: Checks if email/username exists
+activate Database
+
+Database --> Backend: Returns result (available or taken)
+deactivate Database
+
+alt If email/username is taken
+    Backend -> Frontend: Show "Error: Email/Username Taken"
+else If email/username is available
+    Backend -> Database: Stores new user data (hashed password)
+    activate Database
+    Database --> Backend: Confirms successful storage
+    deactivate Database
+    Backend -> Frontend: Show "Registration Successful"
+    deactivate Backend
+end
+
+Frontend -> User: Displays registration result
+deactivate Frontend
+deactivate User
+@enduml
+
+@startuml "Login"
+actor User
+participant Frontend
+participant Backend
+participant Database
+
+User -> Frontend: Enters email and password
+activate User
+activate Frontend
+
+Frontend -> Backend: Sends login request
+activate Backend
+
+Backend -> Database: Retrieves user data by email
+activate Database
+
+Database --> Backend: Returns user data (including hashed password)
+deactivate Database
+
+Backend -> Backend: Compares input password with stored hash
+
+alt If password is incorrect
+    Backend -> Frontend: Show "Invalid Credentials" message
+else If password is correct
+    Backend -> Frontend: Generate session token
+    Backend -> Frontend: Return user session
+    deactivate Backend
+end
+
+Frontend -> User: Redirect to profile/dashboard
+deactivate Frontend
+deactivate User
+@enduml
