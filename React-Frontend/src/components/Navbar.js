@@ -29,7 +29,15 @@ function Navbar() {
         </div>
         <div className='navbar-profile'>
           <span className='navbar-username'>Noclip</span>
+<<<<<<< HEAD
           <img src={profilePicture} alt='Profile' className='navbar-profile-pic' />
+=======
+          <img
+            src={profilePicture || 'https://i1.sndcdn.com/avatars-000339644685-3ctegw-t500x500.jpg'}
+            alt='Profile'
+            className='navbar-profile-pic'
+          />
+>>>>>>> 5fa2c0ba5bd57c07191a96de659464aeb83035af
         </div>  
       </div>
     </nav>
