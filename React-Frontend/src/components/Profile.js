@@ -51,7 +51,7 @@ function Profile() {
               <div className='showcase-section'>
                 
                 <div className="albums-container">
-                  <h2>Albumssss</h2>
+                  <h2>Albums</h2>
                   <div className="showcase-items">
                     <a href="https://open.spotify.com/album/0u7sgzvlLmPLvujXxy9EeY" target="_blank">
                       <img src="https://i.scdn.co/image/ab67616d0000b273042dbf8721e37f11843bfeac" alt="Album 1" className="showcase-item" />
