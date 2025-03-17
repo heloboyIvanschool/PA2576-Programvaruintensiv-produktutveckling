@@ -1,23 +1,36 @@
-.profile-page{
-  display:flex;
+/* Allmän bakgrundsfärg för sidan */
+body {
+  background-color: #181818;  /* Mörk bakgrund för hela sidan */
+  color: #e0e0e0;  /* Ljus textfärg för kontrast */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-.left-column{
-  width:70%;
+/* Profil sidan */
+.profile-page {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem;
 }
 
-.profile-group{
+.left-column {
+  width: 70%;
+}
+
+.profile-group {
   display: flex;
   flex-direction: column;
 }
 
 .profile-container {
-  flex:1;
-  width: 90%;
+  flex: 1;
+  width: 1195px;
   margin: 0px;
-  margin-top: 0px;
   padding: 1rem;
-  background-color: #ffffff;
+  background-color: #232323; /* Mörkare bakgrund för sektionen */
+  border-radius: 12px; /* Rundade hörn på profilboxen */
+  margin-bottom: 1rem; /* Mellanrum mellan boxarna */
 }
 
 .profile-header {
@@ -36,12 +49,12 @@
   width: 200px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #000000;
+  border: 3px solid #ffffff;  /* Ljus kant runt profilbilden */
 }
 
 .profile-username {
   font-size: 2rem;
-  color: #333;
+  color: #ffffff;  /* Ljus textfärg för användarnamn */
 }
 
 .favorite-genres {
@@ -52,7 +65,7 @@
 }
 
 .genre {
-  background-color: #000;
+  background-color: #444;  /* Dämpad mörk färg för genrer */
   color: #fff;
   padding: 0.3rem 0.8rem;
   border-radius: 15px;
@@ -69,28 +82,10 @@
 }
 
 .profile-section {
-  background-color: #fff;
+  background-color: #232323;  /* Enhetlig mörk bakgrund för alla sektioner */
   padding: 1rem;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
-.favorite-genres {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.genre {
-  background-color: #000;
-  color: #fff;
-  padding: 0.3rem 0.8rem;
-  border-radius: 15px;
-  font-size: 0.7rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  display: inline-block;
+  border-radius: 12px;  /* Rundade hörn */
+  margin-bottom: 1rem; /* Mellanrum mellan sektionerna */
 }
 
 .favorite-songs {
@@ -101,34 +96,33 @@
 .favorite-songs li {
   margin-bottom: 0.5rem;
   font-size: 1rem;
-  color: #2b2929;
+  color: #e0e0e0;  /* Ljus färg på texten */
 }
 
 .favorite-songs-container {
   margin: 0%;
-  background-color: #fff;
+  background-color: #232323; /* Samma bakgrund som övriga sektioner */
   padding: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ddd;
-  border-radius: 8px;
   display: inline-block;
   vertical-align: top;
   width: 20.5%;
   text-align: center;
   align-items: center;
+  border-radius: 12px; /* Rundade hörn */
+  margin-bottom: 1rem; /* Mellanrum mellan boxarna */
 }
 
-
+/* Showcase sektion */
 .showcase {
-  background-color: #fff;
+  background-color: #232323;  /* Samma bakgrund som övriga sektioner */
   padding: 1rem;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0);
   display: inline-block;
   vertical-align: top;
   width: 70%;
   margin-left: 1%;
-  margin:1%;
   margin-right: 1%;
+  border-radius: 12px; /* Rundade hörn */
+  margin-bottom: 1rem; /* Mellanrum mellan boxarna */
 }
 
 .showcase-section {
@@ -136,42 +130,21 @@
   padding: 0;
 }
 
-.showcase-section h2{
-  margin-bottom: 0;
+.showcase-section h2 {
+  margin-bottom: 0.3rem;
   padding-bottom: 0;
+  color: #e0e0e0;  /* Ljus färg på rubriker */
 }
 
-.albums-container {
-  padding: 0.5rem;
-  padding-bottom: 5px;
-  padding-top: 0px;
-  margin-bottom: 3px;
-  background-color: #f0f0f0;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.artists-container {
-  padding: 0.5rem;
-  padding-bottom: 5px;
-  padding-top: 0px;
-  margin-bottom: 3px;
-  background-color: #f0f0f0;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
+.albums-container,
+.artists-container,
 .badges-container {
   padding: 0.5rem;
-  padding-bottom: 5px;
-  padding-top: 0px;
+  padding-top: 0.3rem;
   margin-bottom: 3px;
-  background-color: #f0f0f0;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #232323;  /* Enhetlig mörk bakgrund för dessa sektioner */
+  border-radius: 12px;  /* Rundade hörn */
+  margin-bottom: 1rem; /* Mellanrum mellan boxarna */
 }
 
 .showcase-items {
@@ -184,20 +157,21 @@
   width: 100px;
   height: 100px;
   border-radius: 5px;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
 }
 
+/* Feed och Posts */
 .feed {
   flex: 1;
   margin-top: 1%;
   padding: 1rem;
-  background-color: #f0f0f0;
+  background-color: transparent;
 }
 
 .post {
-  background-color: #fff;
+  background-color: #232323;  /* Samma bakgrund som övriga sektioner */
   padding: 1rem;
-  border-radius: 5px;
+  border-radius: 12px; /* Rundade hörn */
   margin-bottom: 1rem;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
 }
