@@ -28,7 +28,7 @@ function Navbar() {
         <div className='navbar-profile'>
           <span className='navbar-username'>Noclip</span>
           <img
-            src={profilePicture || 'default_profile_pic.jpg'}
+            src={profilePicture || 'https://i1.sndcdn.com/avatars-000339644685-3ctegw-t500x500.jpg'}
             alt='Profile'
             className='navbar-profile-pic'
           />
