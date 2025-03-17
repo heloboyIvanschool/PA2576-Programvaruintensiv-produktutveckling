@@ -76,11 +76,6 @@ def update_profile_content():
 @profile.route('/profile-picture', methods=['GET', 'POST'])
 @login_required
 def profile_picture():
-    """
-    Hanterar profilbilden:
-    - GET: Hämtar användarens aktuella profilbild.
-    - POST: Uppdaterar användarens profilbild.
-    """
 
     profile = Profiles.query.filter_by(user_id=current_user.user_id).first()
 
@@ -107,46 +102,64 @@ def profile_picture():
             "profile_picture": profile.profile_picture
         }), 200
 
-@profile.route('/update-profile-bio', methods=['POST'])
+@profile.route('/profile-bio', methods=['GET', 'POST'])
 @login_required
-def update_profile_bio():
-    """ Hanterar uppdatering eller tilläg av användarens bio. """
-
-    data = request.json  # Tar emot JSON-data från frontend
-    new_bio = data.get("bio")  # Hämtar den nya biotexten
-
-    if not new_bio:
-        return jsonify({"error": "Bio text is required"}), 400
+def profile_bio():
+    """
+    Hanterar biografi:
+    - GET: Hämtar användarens bio.
+    - POST: Uppdaterar användarens bio.
+    """
 
     profile = Profiles.query.filter_by(user_id=current_user.user_id).first()
-
     if not profile:
         return jsonify({"error": "Profile not found"}), 404
 
-    # Uppdatera biotexten i databasen
-    profile.bio = new_bio
-    db.session.commit()
+    if request.method == 'GET':
+        return jsonify({"bio": profile.bio}), 200
 
-    return jsonify({"message": "Bio updated successfully"}), 200
+    elif request.method == 'POST':
+        data = request.json
+        new_bio = data.get("bio")
 
-@profile.route('/update-profile-genres', methods=['POST'])
+        if not new_bio:
+            return jsonify({"error": "Bio text is required"}), 400
+
+        profile.bio = new_bio
+        db.session.commit()
+
+        return jsonify({
+            "message": "Bio updated successfully",
+            "bio": profile.bio
+        }), 200
+
+@profile.route('/profile-genres', methods=['GET', 'POST'])
 @login_required
-def update_profile_genres():
-    """ Hanterar uppdatering eller tillägg av favoritgenrer i profilen. """
-
-    data = request.json  # Tar emot JSON-data från frontend
-    genres = data.get("genres")  # Lista med genrer
-
-    if not genres or not isinstance(genres, list):
-        return jsonify({"error": "Genres must be a list"}), 400
+def profile_genres():
+    """
+    Hanterar favoritgenrer:
+    - GET: Hämtar användarens favoritgenrer.
+    - POST: Uppdaterar eller lägger till nya favoritgenrer.
+    """
 
     profile = Profiles.query.filter_by(user_id=current_user.user_id).first()
-
     if not profile:
         return jsonify({"error": "Profile not found"}), 404
 
-    # Uppdatera genrer i databasen
-    profile.favorite_genres = genres
-    db.session.commit()
+    if request.method == 'GET':
+        return jsonify({"favorite_genres": profile.favorite_genres or []}), 200
 
-    return jsonify({"message": "Genres updated successfully"}), 200
+    elif request.method == 'POST':
+        data = request.json
+        genres = data.get("genres")
+
+        if not genres or not isinstance(genres, list):
+            return jsonify({"error": "Genres must be a list"}), 400
+
+        profile.favorite_genres = genres
+        db.session.commit()
+
+        return jsonify({
+            "message": "Genres updated successfully",
+            "favorite_genres": profile.favorite_genres
+        }), 200
