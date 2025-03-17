@@ -73,26 +73,40 @@ def update_profile_content():
     db.session.commit()
     return jsonify({"message": f"{content_type.capitalize()} updated successfully"}), 200
 
-@profile.route('/update-profile-picture', methods=['POST'])
+@profile.route('/profile-picture', methods=['GET', 'POST'])
 @login_required
-def update_profile_picture():
-    """ Uppdaterar profilbilden elelr lägger till för en användare """
-    data = request.json
-    profile_picture_url = data.get("profile_picture")
-
-    if not profile_picture_url:
-        return jsonify({"error": "No profile picture URL provided"}), 400
+def profile_picture():
+    """
+    Hanterar profilbilden:
+    - GET: Hämtar användarens aktuella profilbild.
+    - POST: Uppdaterar användarens profilbild.
+    """
 
     profile = Profiles.query.filter_by(user_id=current_user.user_id).first()
 
     if not profile:
         return jsonify({"error": "Profile not found"}), 404
 
-    # Uppdatera profilbilden
-    profile.profile_picture = profile_picture_url
-    db.session.commit()
+    if request.method == 'GET':
+        # Returnerar nuvarande profilbild
+        return jsonify({"profile_picture": profile.profile_picture}), 200
 
-    return jsonify({"message": "Profile picture updated successfully"}), 200
+    elif request.method == 'POST':
+        data = request.json
+        profile_picture_url = data.get("profile_picture")
+
+        if not profile_picture_url:
+            return jsonify({"error": "No profile picture URL provided"}), 400
+
+        # Uppdaterar profilbilden i databasen
+        profile.profile_picture = profile_picture_url
+        db.session.commit()
+
+        return jsonify({
+            "message": "Profile picture updated successfully",
+            "profile_picture": profile.profile_picture
+        }), 200
+
 
 @profile.route('/update-profile-bio', methods=['POST'])
 @login_required
