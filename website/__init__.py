@@ -4,6 +4,7 @@ from os import path
 from flask_login import LoginManager
 from dotenv import load_dotenv
 import os
+from flask_cors import CORS
 # from . import db_events # at inte bort
 
 load_dotenv()
@@ -18,11 +19,12 @@ def create_app():
 
     db.init_app(app)
 
+    CORS(app, supports_credentials=True)
+
     from .views import views
     from .auth import auth
 
     from .models import User, OAuth
-    
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
