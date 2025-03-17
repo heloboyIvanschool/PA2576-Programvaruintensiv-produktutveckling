@@ -3,6 +3,7 @@ import './ProfileCustomization.css'; // Assuming you have a CSS file for styling
 import { Link, useNavigate } from 'react-router-dom';
 
 function ProfileCustomization() {
+  const navigate = useNavigate();
   const [Album1, setAlbum1] = useState('https://open.spotify.com/album/0u7sgzvlLmPLvujXxy9EeY');
   const [Album2, setAlbum2] = useState('https://open.spotify.com/album/0NGM3Ftwjw0dLNpAowmz3x');
   const [Album3, setAlbum3] = useState('https://open.spotify.com/album/1zcm3UvHNHpseYOUfd0pna');
