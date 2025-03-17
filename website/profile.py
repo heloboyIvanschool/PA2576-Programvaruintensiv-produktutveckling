@@ -107,7 +107,6 @@ def profile_picture():
             "profile_picture": profile.profile_picture
         }), 200
 
-
 @profile.route('/update-profile-bio', methods=['POST'])
 @login_required
 def update_profile_bio():
