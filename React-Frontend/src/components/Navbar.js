@@ -34,7 +34,7 @@ function Navbar() {
             alt='Profile'
             className='navbar-profile-pic'
           />
-        </div>  
+        </div>
       </div>
     </nav>
   );
