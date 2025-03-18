@@ -183,7 +183,7 @@ function Profile() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/profile-showcase") // Hämta profildata från Flask API
+    fetch("/api/profile")
       .then((res) => res.json())
       .then((data) => {
         setProfile(data);
