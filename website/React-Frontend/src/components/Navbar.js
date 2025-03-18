@@ -6,13 +6,13 @@ function Navbar() {
   const [profilePicture, setProfilePicture] = useState('');
 
   useEffect(() => {
-    fetch('/profile-picture', { credentials: 'include' })  // Hämta profilbild
+    fetch('/profile-picture', { credentials: 'include' })  // funkar inte just nu (/profile-picture)
       .then((response) => response.json())
       .then((data) => {
         if (data.profile_picture) {
           setProfilePicture(data.profile_picture);
         } else {
-          setProfilePicture('default_profile_pic.jpg'); // Standardbild om ingen finns
+          setProfilePicture('https://i1.sndcdn.com/avatars-000339644685-3ctegw-t500x500.jpg'); // Standardbild om ingen finns
         }
       })
       .catch((error) => console.error('Error fetching profile picture:', error));

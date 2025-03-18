@@ -39,7 +39,6 @@ function Profile() {
                     width="270"
                     height="80"
                     frameBorder="0"
-                    allowTransparency="true"
                     allow="encrypted-media"
                   ></iframe>
                   <iframe
@@ -47,7 +46,6 @@ function Profile() {
                     width="270"
                     height="80"
                     frameBorder="0"
-                    allowTransparency="true"
                     allow="encrypted-media"
                   ></iframe>
                   <iframe
@@ -55,7 +53,6 @@ function Profile() {
                     width="270"
                     height="80"
                     frameBorder="0"
-                    allowTransparency="true"
                     allow="encrypted-media"
                   ></iframe>
                   <iframe
@@ -63,7 +60,6 @@ function Profile() {
                     width="270"
                     height="80"
                     frameBorder="0"
-                    allowTransparency="true"
                     allow="encrypted-media"
                   ></iframe>
                   <iframe
@@ -71,7 +67,6 @@ function Profile() {
                     width="270"
                     height="80"
                     frameBorder="0"
-                    allowTransparency="true"
                     allow="encrypted-media"
                   ></iframe>
                   <iframe
@@ -79,7 +74,6 @@ function Profile() {
                     width="270"
                     height="80"
                     frameBorder="0"
-                    allowTransparency="true"
                     allow="encrypted-media"
                   ></iframe>
                 </ul>
@@ -236,11 +230,10 @@ function Profile() {
                   profile.songs.map((song) => (
                     <iframe
                       key={song.song_id}
-                      src={song.spotify_url}
+                      src={song.embed_url}
                       width="270"
                       height="80"
                       frameBorder="0"
-                      allowTransparency="true"
                       allow="encrypted-media"
                     ></iframe>
                   ))

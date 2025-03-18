@@ -6,8 +6,6 @@ from flask_login import LoginManager
 from dotenv import load_dotenv
 import os
 
-
-
 load_dotenv()
 
 db = SQLAlchemy()
@@ -48,6 +46,7 @@ def create_app():
         db.create_all()
         from .mock_data import add_mock_data
         add_mock_data()
+
 
     # Flask-Login konfiguration
     login_manager = LoginManager()

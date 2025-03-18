@@ -11,12 +11,11 @@ show_profile = Blueprint('profile', __name__)
 def get_full_profile():
     """Hämtar all profilinfo i ett anrop"""
 
-    if request.method == 'OPTIONS':  # Hantera preflight-request
-        return '', 200  # Skickar tomt svar med HTTP 200 OK
-
-    #mock data
     user = User.query.first()
     login_user(user)
+
+    if request.method == 'OPTIONS':  # Hantera preflight-request
+        return '', 200  # Skickar tomt svar med HTTP 200 OK
 
     profile = Profiles.query.filter_by(user_id=current_user.user_id).first() #
     if not profile:
@@ -24,7 +23,7 @@ def get_full_profile():
         # return jsonify({"message": "Profile not found", "profile": mock_profile}), 404
 
     songs = [
-        {"song_id": entry.song_id, "title": entry.song.title, "artist": entry.song.artist, "cover_url": entry.song.cover_url, "spotify_url": entry.song.spotify_url}
+        {"song_id": entry.song_id, "title": entry.song.title, "artist": entry.song.artist, "cover_url": entry.song.cover_url, "spotify_url": entry.song.spotify_url, "embed_url": entry.song.embed_url}
         for entry in ProfileSong.query.filter_by(profile_id=profile.profile_id).join(Song).all()
     ]
     albums = [
