@@ -6,14 +6,17 @@ from .models import ProfileSong, ProfileAlbum, ProfileArtist, Song, Album, Artis
 profile = Blueprint('profile', __name__)
 
 # hämtar just nu all data, måste då uppdatera resterande kod om vi ska göra såhär
-@profile.route('/api/profile', methods=['GET'])
-@login_required
+@profile.route('/profile', methods=['GET'])
+# @login_required
 def get_full_profile():
     """Hämtar all profilinfo i ett anrop"""
-    profile = Profiles.query.filter_by(user_id=current_user.user_id).first()
+    # profile = Profiles.query.filter_by(user_id=current_user.user_id).first()
+    profile = Profiles(user_id=1, profile_picture="https://example.com/pic.jpg", bio="Test bio", favorite_genres="Rock")
+    db.session.add(profile)
+    db.session.commit()
     if not profile:
         # return jsonify({"error": "Profile not found"}), 404
-        return jsonify({mock_profile}), 404
+        return jsonify(mock_profile), 404
 
     songs = [
         {"song_id": entry.song_id, "title": entry.song.title, "artist": entry.song.artist, "cover_url": entry.song.cover_url, "spotify_url": entry.song.spotify_url}
@@ -215,15 +218,15 @@ mock_profile = {
             "song_id": "1",
             "title": "Test Song 1",
             "artist": "Test Artist",
-            "cover_url": "https://via.placeholder.com/100",
-            "spotify_url": "https://open.spotify.com/embed/track/xyz"
+            "cover_url": "https://i.scdn.co/image/ab67616d0000b273042dbf8721e37f11843bfeac",
+            "spotify_url": "https://open.spotify.com/album/0u7sgzvlLmPLvujXxy9EeY"
         },
         {
             "song_id": "2",
             "title": "Test Song 2",
             "artist": "Another Artist",
-            "cover_url": "https://via.placeholder.com/100",
-            "spotify_url": "https://open.spotify.com/embed/track/abc"
+            "cover_url": "https://i.scdn.co/image/ab67616d0000b273042dbf8721e37f11843bfeac",
+            "spotify_url": "https://open.spotify.com/album/0u7sgzvlLmPLvujXxy9EeY"
         }
     ],
     "albums": [
@@ -231,16 +234,16 @@ mock_profile = {
             "album_id": "1",
             "title": "Test Album",
             "artist": "Test Artist",
-            "cover_url": "https://via.placeholder.com/100",
-            "spotify_url": "https://open.spotify.com/album/xyz"
+            "cover_url": "https://i.scdn.co/image/ab67616d0000b273042dbf8721e37f11843bfeac",
+            "spotify_url": "https://open.spotify.com/album/0u7sgzvlLmPLvujXxy9EeY"
         }
     ],
     "artists": [
         {
             "artist_id": "1",
             "name": "Test Artist",
-            "cover_url": "https://via.placeholder.com/100",
-            "spotify_url": "https://open.spotify.com/artist/xyz"
+            "cover_url": "https://i.scdn.co/image/ab67616d0000b273042dbf8721e37f11843bfeac",
+            "spotify_url": "https://open.spotify.com/album/0u7sgzvlLmPLvujXxy9EeY"
         }
     ]
 }

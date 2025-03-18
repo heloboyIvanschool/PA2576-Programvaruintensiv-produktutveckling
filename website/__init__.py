@@ -23,7 +23,7 @@ def create_app():
     db.init_app(app)
 
     # Tillåter React frontend att göra API-anrop till Flask
-    CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
+    CORS(app, origins=["http://localhost:3000"])
 
     # Importera och registrera Blueprints
     from .views import views
