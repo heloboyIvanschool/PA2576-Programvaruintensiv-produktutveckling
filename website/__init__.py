@@ -23,7 +23,7 @@ def create_app():
     db.init_app(app)
 
     # Tillåter React frontend att göra API-anrop till Flask
-    CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
+    CORS(app, supports_credentials=True)
 
     # Importera och registrera Blueprints
     from .views import views
@@ -53,14 +53,16 @@ def create_app():
             return None
         return User.query.get(int(user_id))
 
-    # Hantera GET-förfrågningar till / och serva Reacts index.html från build-mappen
-    @app.route('/')
-    def serve_react():
-        return send_from_directory(REACT_BUILD_DIR, 'index.html')
-
-    # För alla andra statiska filer i build-mappen (CSS, JS, bilder, etc.)
+    @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>')
-    def serve_static(path):
-        return send_from_directory(REACT_BUILD_DIR, path)
+    def serve_react(path):
+        full_path = os.path.join(REACT_BUILD_DIR, path)
+
+        # Om filen finns, serva den
+        if os.path.exists(full_path):
+            return send_from_directory(REACT_BUILD_DIR, path)
+
+        # Annars returnera index.html (för att stödja React Router)
+        return send_from_directory(REACT_BUILD_DIR, 'index.html')
 
     return app
