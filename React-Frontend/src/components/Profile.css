@@ -64,12 +64,12 @@ body {
   width: 200px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #7e23f4; /* Dark purple border around profile picture */
+  border: 3px solid #181818; /* Dark purple border around profile picture */
 }
 
 .profile-username {
   font-size: 2rem;
-  color: #7e23f4;  /* Light text color for username */
+  color: #ffffff;  /* Light text color for username */
 }
 
 .favorite-genres {
