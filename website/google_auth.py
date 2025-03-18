@@ -23,18 +23,15 @@ google_bp = make_google_blueprint(
 oauth_routes = Blueprint("oauth", __name__)
 
 #Här kollar jag om användaren redan är inloggad
-# Om den är inloggad går den till home annars till Google login 
+# Om den är inloggad går den till home annars till Google login
 @oauth_routes.route("/login/google")
 def google_login():
     if current_user.is_authenticated:
         return redirect(url_for("views.home"))
-        
     return redirect(url_for("google.login"))
 
 # Detta är en sk call-back, dvs när vi återgår från Google
 # Parametern token är vad google ger oss, om den inte finns har inloggningen misslyckats
-
-
 @oauth_authorized.connect_via(google_bp)
 def google_logged_in(token):
     if not token:
@@ -46,15 +43,15 @@ def google_logged_in(token):
     if not resp.ok:
         flash("Failed to fetch user info from Google.", category="error")
         return False
-    
+
 #Om det finns info laddas det ner i en json-fil och vi plockar ut email från den infon
     user_info = resp.json()
     email = user_info["email"]
-    
+
     #kollar om emailen är en användare
     user = User.query.filter_by(email=email).first()
     if not user:
-        
+
         #om inte skapar vi en, här får vi lägga till saker
         username = user_info.get("name", email.split("@")[0])
         user = User(
@@ -64,10 +61,10 @@ def google_logged_in(token):
         )
         db.session.add(user)
         db.session.commit()
-        
+
     # Log in the user
     login_user(user)
     flash(f"Successfully signed in with Google as {user.username}.", category="success")
-    
+
     # Returnerar false annars skapas en ny token
     return False
