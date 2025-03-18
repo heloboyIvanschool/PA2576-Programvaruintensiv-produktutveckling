@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS  # Importera CORS
 from os import path
@@ -10,8 +10,11 @@ load_dotenv()
 
 db = SQLAlchemy()
 
+# Sätt sökvägen till React build-mappen
+REACT_BUILD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../frontend/build")
+
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder=REACT_BUILD_DIR, static_url_path="/")
 
     # Flask-konfiguration
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
@@ -49,5 +52,15 @@ def create_app():
         if user_id is None:
             return None
         return User.query.get(int(user_id))
+
+    # Hantera GET-förfrågningar till / och serva Reacts index.html från build-mappen
+    @app.route('/')
+    def serve_react():
+        return send_from_directory(REACT_BUILD_DIR, 'index.html')
+
+    # För alla andra statiska filer i build-mappen (CSS, JS, bilder, etc.)
+    @app.route('/<path:path>')
+    def serve_static(path):
+        return send_from_directory(REACT_BUILD_DIR, path)
 
     return app
