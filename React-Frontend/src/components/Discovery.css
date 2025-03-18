@@ -29,4 +29,14 @@
     padding: 10px 20px;
     font-size: 1em;
     cursor: pointer;
+    background-color: #7e23f4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .search-button:hover {
+    background-color: #a45dff; /* Slightly lighter purple */
+    box-shadow: 0 0 10px #d8b2ff; /* Light purple glow */
   }
