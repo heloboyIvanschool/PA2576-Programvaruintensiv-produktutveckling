@@ -38,7 +38,7 @@ profile = Blueprint('profile', __name__)
 #     }), 200
 
 @profile.route('/api/profile', methods=['GET'])
-@login_required
+# @login_required
 def get_full_profile():
     """Hämtar hela profilinformationen"""
     profile = Profiles.query.filter_by(user_id=current_user.user_id).first()
