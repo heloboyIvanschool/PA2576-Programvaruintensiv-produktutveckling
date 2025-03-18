@@ -34,6 +34,20 @@ body {
   margin-bottom: 1rem;
 }
 
+/* Style for the Edit Profile link */
+.profile-container a {
+  color: #7e23f4;  /* Set the link color (dark purple in this case) */
+  text-decoration: none;  /* Remove underline */
+  font-weight: bold;  /* Make the text bold */
+  font-size: 1.1rem;  /* Adjust font size */
+  transition: color 0.3s ease;  /* Smooth transition for color change */
+}
+
+/* Hover effect for the Edit Profile link */
+.profile-container a:hover {
+  color: #c4a8d6;  /* Change color when hovering (lighter purple) */
+}
+
 .profile-header {
   display: flex;
   align-items: center;
@@ -50,12 +64,12 @@ body {
   width: 200px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #c4a8d6; /* Dark purple border around profile picture */
+  border: 3px solid #7e23f4; /* Dark purple border around profile picture */
 }
 
 .profile-username {
   font-size: 2rem;
-  color: #e0e0e0;  /* Light text color for username */
+  color: #7e23f4;  /* Light text color for username */
 }
 
 .favorite-genres {
@@ -67,7 +81,7 @@ body {
 }
 
 .genre {
-  background-color: #6a4fbb;  /* Dark purple background for genres */
+  background-color: #7e23f4;  /* Dark purple background for genres */
   color: #fff;
   padding: 0.3rem 0.8rem;
   border-radius: 15px;
