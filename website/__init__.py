@@ -6,6 +6,8 @@ from flask_login import LoginManager
 from dotenv import load_dotenv
 import os
 
+
+
 load_dotenv()
 
 db = SQLAlchemy()
@@ -23,7 +25,7 @@ def create_app():
     db.init_app(app)
 
     # Tillåter React frontend att göra API-anrop till Flask
-    CORS(app, origins=["http://localhost:3000"])
+    CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 
     # Importera och registrera Blueprints
     from .views import views
@@ -35,8 +37,8 @@ def create_app():
     app.register_blueprint(google_bp, url_prefix='/login')
     app.register_blueprint(oauth_routes, url_prefix='/')
 
-    from .profile import profile
-    app.register_blueprint(profile, url_prefix='/api')
+    from .profile import show_profile
+    app.register_blueprint(show_profile, url_prefix='/')
 
     from .models import User
     from . import db_events
@@ -44,6 +46,8 @@ def create_app():
     with app.app_context():
         db.drop_all()
         db.create_all()
+        from .mock_data import add_mock_data
+        add_mock_data()
 
     # Flask-Login konfiguration
     login_manager = LoginManager()

@@ -94,6 +94,7 @@ class Song(db.Model):
     album = db.Column(db.String, nullable=True)
     cover_url = db.Column(db.String, nullable=True)
     spotify_url = db.Column(db.String, nullable=False)
+    embed_url = db.Column(db.String, nullable=False)
 
     #relations
     posts = db.relationship('Post', back_populates='song', cascade="all, delete-orphan")
@@ -105,6 +106,7 @@ class ProfileSong(db.Model):
     song_id = db.Column(db.String, db.ForeignKey('songs.song_id', ondelete="CASCADE"), nullable=False)  # Länk till låten i `songs`
 
     profile = db.relationship("Profiles", back_populates="songs")
+    song = db.relationship("Song", backref="profile_songs")
 
 class Album(db.Model):
     __tablename__ = 'albums'
@@ -123,6 +125,7 @@ class ProfileAlbum(db.Model):
     album_id = db.Column(db.String, db.ForeignKey('albums.album_id', ondelete="CASCADE"), nullable=False)
 
     profile = db.relationship("Profiles", back_populates="albums")
+    album = db.relationship("Album", backref="profile_songs")
 
 class Artist(db.Model):
     __tablename__ = 'artists'
@@ -140,6 +143,7 @@ class ProfileArtist(db.Model):
     artist_id = db.Column(db.String, db.ForeignKey('artists.artist_id', ondelete="CASCADE"), nullable=False)
 
     profile = db.relationship("Profiles", back_populates="artists")
+    artist = db.relationship("Artist", backref="profile_songs")
 
 
 

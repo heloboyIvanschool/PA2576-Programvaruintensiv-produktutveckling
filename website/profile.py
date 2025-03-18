@@ -1,22 +1,27 @@
 from flask import Blueprint, request, jsonify
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, login_user
 from . import db
-from .models import ProfileSong, ProfileAlbum, ProfileArtist, Song, Album, Artist, Profiles
+from .models import User, ProfileSong, ProfileAlbum, ProfileArtist, Song, Album, Artist, Profiles
 
-profile = Blueprint('profile', __name__)
+show_profile = Blueprint('profile', __name__)
 
 # hämtar just nu all data, måste då uppdatera resterande kod om vi ska göra såhär
-@profile.route('/profile', methods=['GET'])
+@show_profile.route('/profile', methods=['GET' , 'OPTIONS'])
 # @login_required
 def get_full_profile():
     """Hämtar all profilinfo i ett anrop"""
-    # profile = Profiles.query.filter_by(user_id=current_user.user_id).first()
-    profile = Profiles(user_id=1, profile_picture="https://example.com/pic.jpg", bio="Test bio", favorite_genres="Rock")
-    db.session.add(profile)
-    db.session.commit()
+
+    if request.method == 'OPTIONS':  # Hantera preflight-request
+        return '', 200  # Skickar tomt svar med HTTP 200 OK
+
+    #mock data
+    user = User.query.first()
+    login_user(user)
+
+    profile = Profiles.query.filter_by(user_id=current_user.user_id).first() #
     if not profile:
-        # return jsonify({"error": "Profile not found"}), 404
-        return jsonify({"message": "Profile not found", "profile": mock_profile}), 404
+        return jsonify({"error": "Profile not found"}), 404
+        # return jsonify({"message": "Profile not found", "profile": mock_profile}), 404
 
     songs = [
         {"song_id": entry.song_id, "title": entry.song.title, "artist": entry.song.artist, "cover_url": entry.song.cover_url, "spotify_url": entry.song.spotify_url}
@@ -42,7 +47,7 @@ def get_full_profile():
     }), 200
 
 
-@profile.route('/api/profile-showcase', methods=['GET', 'POST'])
+@show_profile.route('/api/profile-showcase', methods=['GET', 'POST'])
 @login_required
 def profile_content():
     """ Hanterar showcase-innehåll: Hämtar, lägger till och tar bort låtar, album och artister. """
@@ -127,7 +132,7 @@ def profile_content():
         db.session.commit()
         return jsonify({"message": f"{content_type.capitalize()} updated successfully"}), 200
 
-@profile.route('/api/profile-picture', methods=['GET', 'POST'])
+@show_profile.route('/api/profile-picture', methods=['GET', 'POST'])
 @login_required
 def profile_picture():
     """ Hanterar profilbild: Hämtar eller uppdaterar. """
@@ -153,7 +158,7 @@ def profile_picture():
             "profile_picture": profile.profile_picture
         }), 200
 
-@profile.route('/api/profile-bio', methods=['GET', 'POST'])
+@show_profile.route('/api/profile-bio', methods=['GET', 'POST'])
 @login_required
 def profile_bio():
     """ Hanterar användarens biografi. """
@@ -179,7 +184,7 @@ def profile_bio():
             "bio": profile.bio
         }), 200
 
-@profile.route('/api/profile-genres', methods=['GET', 'POST'])
+@show_profile.route('/api/profile-genres', methods=['GET', 'POST'])
 @login_required
 def profile_genres():
     """ Hanterar favoritgenrer. """
