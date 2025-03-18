@@ -24,7 +24,7 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f'<User {self.username}>'
-    
+
 class OAuth(db.Model, OAuthConsumerMixin):
     __tablename__ = 'oauth'
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id', ondelete="CASCADE"))
@@ -35,7 +35,7 @@ class Profiles(db.Model):
     profile_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id', ondelete="CASCADE"), unique=True, nullable=False)
     bio = db.Column(db.String(500), nullable=True)
-    profile_picture = db.Column(db.String, nullable=True)
+    profile_picture = db.Column(db.String, nullable=True, default="https://i1.sndcdn.com/avatars-000339644685-3ctegw-t500x500.jpg")
     favorite_genres = db.Column(db.JSON, nullable=True)
 
     # Relationer

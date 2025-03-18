@@ -119,7 +119,7 @@ def profile_picture():
             return jsonify({"error": "No profile picture URL provided"}), 400
 
         # Uppdaterar profilbilden i databasen
-        profile.profile_picture = profile_picture_url
+        profile.profile_picture = profile_picture_url or "https://i1.sndcdn.com/avatars-000339644685-3ctegw-t500x500.jpg"
         db.session.commit()
 
         return jsonify({
