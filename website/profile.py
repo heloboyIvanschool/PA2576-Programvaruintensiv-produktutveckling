@@ -34,9 +34,10 @@ def profile_content():
         ]
 
         return jsonify({
-            "songs": songs,
-            "albums": albums,
-            "artists": artists
+            "message": "Showcase retrieved successfully",
+            "songs": songs if songs else "No songs in showcase",
+            "albums": albums if albums else "No albums in showcase",
+            "artists": artists if artists else "No artists in showcase"
         }), 200
 
     elif request.method == 'POST':
@@ -173,6 +174,9 @@ def profile_genres():
 
     if request.method == 'GET':
         return jsonify({"favorite_genres": profile.favorite_genres or []}), 200
+
+    if not all(isinstance(genre, str) for genre in genres):
+        return jsonify({"error": "All genres must be strings"}), 400
 
     elif request.method == 'POST':
         data = request.json
