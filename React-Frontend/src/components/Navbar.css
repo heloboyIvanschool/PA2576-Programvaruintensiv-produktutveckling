@@ -24,7 +24,7 @@
 /* Logo Text Styling */
 .navbar-logo {
   color: #7e23f4;  /* Light color for the text */
-  font-size: 1.5rem;
+  font-size: 2rem;
   text-decoration: none;
   transition: all 0.3s ease;  /* Smooth transition for hover effect */
   display: inline-block;
@@ -49,7 +49,7 @@
 .navbar-item {
   color: #7e23f4;  /* Light color for the text */
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1.5rem;
   transition: all 0.3s ease;  /* Smooth transition for hover effect */
   padding: 0.5rem 1rem;  /* Ensure the padding doesn’t interfere */
   display: inline-block;  /* Prevent layout shift */
