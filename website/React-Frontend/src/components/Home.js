@@ -28,6 +28,7 @@ const Home = () => {
             {loading && <p>Loading...</p>}
             {error && <p style={{ color: "red" }}>{error}</p>}
             {data && <p>Hello, {data.user}!</p>}
+            <h2>kill your self</h2>
         </div>
     );
 };
