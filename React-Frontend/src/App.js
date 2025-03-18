@@ -5,6 +5,7 @@ import Home from './components/Home'; // Import the Home component
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import ProfileCustomization from './components/ProfileCustomization';
+import Discovery from './components/Discovery';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/discovery' element={<Discovery />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/profile-customization' element={<ProfileCustomization />} />
         </Routes>

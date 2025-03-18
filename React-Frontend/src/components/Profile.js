@@ -34,6 +34,7 @@ function Profile() {
                 <h2>Top Songs</h2>
                 <ul className="favorite-songs">
                   <iframe
+                    title="Top Song 1"
                     src="https://open.spotify.com/embed/track/3rwd5wW9Ew5H6YlyZk9wtH"
                     width="270"
                     height="80"
@@ -42,6 +43,7 @@ function Profile() {
                     allow="encrypted-media"
                   ></iframe>
                   <iframe
+                    title="Top Song 2"
                     src="https://open.spotify.com/embed/track/70LcF31zb1H0PyJoS1Sx1r"
                     width="270"
                     height="80"
@@ -50,6 +52,7 @@ function Profile() {
                     allow="encrypted-media"
                   ></iframe>
                   <iframe
+                    title="Top Song 3"
                     src="https://open.spotify.com/embed/track/6SXy02aTZU3ysoGUixYCz0"
                     width="270"
                     height="80"
@@ -58,6 +61,7 @@ function Profile() {
                     allow="encrypted-media"
                   ></iframe>
                   <iframe
+                    title="Top Song 4"
                     src="https://open.spotify.com/embed/track/0fMqi9V3pulDGq1S62Y0WL"
                     width="270"
                     height="80"
@@ -66,6 +70,7 @@ function Profile() {
                     allow="encrypted-media"
                   ></iframe>
                   <iframe
+                    title="Top Song 5"
                     src="https://open.spotify.com/embed/track/5UuikgHTxSRFRnC0zXx10i"
                     width="270"
                     height="80"
@@ -74,6 +79,7 @@ function Profile() {
                     allow="encrypted-media"
                   ></iframe>
                   <iframe
+                    title="Top Song 6"
                     src="https://open.spotify.com/embed/track/03sEzk1VyrUZSgyhoQR0LZ"
                     width="270"
                     height="80"
@@ -89,21 +95,21 @@ function Profile() {
                   <div className="showcase-section-content">
                     <h2>Albums</h2>
                     <div className="showcase-items">
-                      <a href="https://open.spotify.com/album/0u7sgzvlLmPLvujXxy9EeY" target="_blank">
+                      <a href="https://open.spotify.com/album/0u7sgzvlLmPLvujXxy9EeY" target="_blank" rel="noopener noreferrer">
                         <img
                           src="https://i.scdn.co/image/ab67616d0000b273042dbf8721e37f11843bfeac"
                           alt="Album 1"
                           className="showcase-item"
                         />
                       </a>
-                      <a href="https://open.spotify.com/album/0NGM3Ftwjw0dLNpAowmz3x" target="_blank">
+                      <a href="https://open.spotify.com/album/0NGM3Ftwjw0dLNpAowmz3x" target="_blank" rel="noopener noreferrer">
                         <img
                           src="https://i.scdn.co/image/ab67616d0000b273be6e758fe8300a72eceddb8f"
                           alt="Album 2"
                           className="showcase-item"
                         />
                       </a>
-                      <a href="https://open.spotify.com/album/1zcm3UvHNHpseYOUfd0pna" target="_blank">
+                      <a href="https://open.spotify.com/album/1zcm3UvHNHpseYOUfd0pna" target="_blank" rel="noopener noreferrer">
                         <img
                           src="https://i.scdn.co/image/ab67616d0000b2735405ef9e393f5f1e53b4b42e"
                           alt="Album 3"
@@ -118,21 +124,21 @@ function Profile() {
                   <div className="showcase-section-content">
                     <h2>Artists</h2>
                     <div className="showcase-items">
-                      <a href="https://open.spotify.com/artist/4KXp3xtaz1wWXnu5u34eVX" target="_blank">
+                      <a href="https://open.spotify.com/artist/4KXp3xtaz1wWXnu5u34eVX" target="_blank" rel="noopener noreferrer">
                         <img
                           src="https://i.scdn.co/image/38129832f70d5798de2618faa55182407135842c"
                           alt="Artist 1"
                           className="showcase-item"
                         />
                       </a>
-                      <a href="https://open.spotify.com/artist/4bthk9UfsYUYdcFyqxmSUU" target="_blank">
+                      <a href="https://open.spotify.com/artist/4bthk9UfsYUYdcFyqxmSUU" target="_blank" rel="noopener noreferrer">
                         <img
                           src="https://i.scdn.co/image/ab6761610000e5eb1e63dea1bded4ae1d53b5c9a"
                           alt="Artist 2"
                           className="showcase-item"
                         />
                       </a>
-                      <a href="https://open.spotify.com/artist/0PFtn5NtBbbUNbU9EAmIWF" target="_blank">
+                      <a href="https://open.spotify.com/artist/0PFtn5NtBbbUNbU9EAmIWF" target="_blank" rel="noopener noreferrer">
                         <img
                           src="https://i.scdn.co/image/ab6761610000e5eba59a5bcab211f964fe9bfb06"
                           alt="Artist 3"

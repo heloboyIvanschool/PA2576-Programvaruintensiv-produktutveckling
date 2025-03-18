@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './ProfileCustomization.css'; // Assuming you have a CSS file for styling
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function ProfileCustomization() {
   const navigate = useNavigate();
@@ -9,8 +9,6 @@ function ProfileCustomization() {
   const [Album3, setAlbum3] = useState('https://open.spotify.com/album/1zcm3UvHNHpseYOUfd0pna');
 
   const [Song1, setSong1] = useState('https://open.spotify.com/embed/track/3rwd5wW9Ew5H6YlyZk9wtH');
-  const [Song2, setSong2] = useState('https://open.spotify.com/embed/track/70LcF31zb1H0PyJoS1Sx1r');
-  const [Song3, setSong3] = useState('https://open.spotify.com/embed/track/6SXy02aTZU3ysoGUixYCz0');
 
   const [Artist1, setArtist1] = useState('https://open.spotify.com/artist/4KXp3xtaz1wWXnu5u34eVX');
   const [Artist2, setArtist2] = useState('https://open.spotify.com/artist/4bthk9UfsYUYdcFyqxmSUU');
@@ -53,12 +51,12 @@ function ProfileCustomization() {
                     <h2>Top Songs</h2>
                     <ul className="favorite-songs">
                     <input type="text" value={Song1} onChange={(e) => setSong1(e.target.value)} placeholder="Enter Song URL" />
-                      <iframe src="https://open.spotify.com/embed/track/3rwd5wW9Ew5H6YlyZk9wtH" width="270" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-                      <iframe src="https://open.spotify.com/embed/track/70LcF31zb1H0PyJoS1Sx1r" width="270" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-                      <iframe src="https://open.spotify.com/embed/track/6SXy02aTZU3ysoGUixYCz0" width="270" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-                      <iframe src="https://open.spotify.com/embed/track/0fMqi9V3pulDGq1S62Y0WL" width="270" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-                      <iframe src="https://open.spotify.com/embed/track/5UuikgHTxSRFRnC0zXx10i" width="270" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-                      <iframe src="https://open.spotify.com/embed/track/03sEzk1VyrUZSgyhoQR0LZ" width="270" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                      <iframe title="Song 1" src="https://open.spotify.com/embed/track/3rwd5wW9Ew5H6YlyZk9wtH" width="270" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                      <iframe title="Song 2" src="https://open.spotify.com/embed/track/70LcF31zb1H0PyJoS1Sx1r" width="270" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                      <iframe title="Song 3" src="https://open.spotify.com/embed/track/6SXy02aTZU3ysoGUixYCz0" width="270" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                      <iframe title="Song 4" src="https://open.spotify.com/embed/track/0fMqi9V3pulDGq1S62Y0WL" width="270" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                      <iframe title="Song 5" src="https://open.spotify.com/embed/track/5UuikgHTxSRFRnC0zXx10i" width="270" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                      <iframe title="Song 6" src="https://open.spotify.com/embed/track/03sEzk1VyrUZSgyhoQR0LZ" width="270" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                     </ul>
                   </div>
               
