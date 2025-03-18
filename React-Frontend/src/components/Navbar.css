@@ -1,63 +1,80 @@
+/* Navigation bar */
 .navbar {
-    background-color: #fff; /* White background for the navbar */
-    padding: 1rem;
-    border-bottom: 1px solid #ccc; /* Horizontal line at the bottom of the navbar */
-    position: relative; /* Ensure the pseudo-elements are positioned correctly */
-  }
-  
-  .navbar-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative; /* Ensure the pseudo-elements are positioned correctly */
-  }
-  
-  .navbar-logo, .navbar-menu, .navbar-profile {
-    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-  }
-  
-  .navbar-logo {
-    color: #333; /* Dark text color for better contrast on white background */
-    font-size: 1.5rem;
-    text-decoration: none;
-    border-right: none; /* Remove border from the logo */
-  }
-  
-  .navbar-menu {
-    display: flex;
-    gap: 2rem;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    border-right: none; /* Remove border from the menu */
-  }
-  
-  .navbar-item {
-    color: #333; /* Dark text color for better contrast on white background */
-    text-decoration: none;
-    font-size: 1rem;
-  }
-  
-  .navbar-item:hover {
-    text-decoration: underline;
-  }
-  
-  .navbar-profile {
-    display: flex;
-    align-items: flex-start; /* Align username at the top of the profile picture */
-    gap: 0.5rem;
-  }
-  
-  .navbar-username {
-    color: #333; /* Dark text color for better contrast on white background */
-    font-size: 1rem;
-    align-self: flex-start; /* Align username at the top */
-  }
-  
-  .navbar-profile-pic {
-    width: 40px;
-    height: 40px;
-    border-radius: 0; /* Square profile picture */
-  }
+  background-color: #050505; /* Almost black background for the navbar */
+  padding: 1rem;
+  border-bottom: 1px solid #080808; /* Very dark border at the bottom of the navbar */
+  position: relative;
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.navbar-logo, .navbar-menu, .navbar-profile {
+  color: #e0e0e0; /* Light grey text color */
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+}
+
+/* Logo Text Styling */
+.navbar-logo {
+  color: #e0e0e0;  /* Light color for the text */
+  font-size: 1.5rem;
+  text-decoration: none;
+  transition: all 0.3s ease;  /* Smooth transition for hover effect */
+  display: inline-block;
+}
+
+/* Logo Hover Effect */
+.navbar-logo:hover {
+  color: #a45dff;  /* Purple color on hover */
+  transform: scale(1.1);  /* Slight scale effect to emphasize the hover */
+  text-shadow: 0 0 8px rgba(164, 93, 255, 0.7), 0 0 16px rgba(164, 93, 255, 0.7); /* Glowing text effect */
+}
+
+.navbar-menu {
+  display: flex;
+  gap: 2rem;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Navbar Item Styling */
+.navbar-item {
+  color: #e0e0e0;  /* Light color for the text */
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.3s ease;  /* Smooth transition for hover effect */
+  padding: 0.5rem 1rem;  /* Ensure the padding doesn’t interfere */
+  display: inline-block;  /* Prevent layout shift */
+}
+
+/* Navbar Item Hover Effect */
+.navbar-item:hover {
+  color: #a45dff;  /* Purple color on hover */
+  transform: scale(1.1);  /* Slight scale effect to emphasize the hover */
+  text-shadow: 0 0 8px rgba(164, 93, 255, 0.7), 0 0 16px rgba(164, 93, 255, 0.7); /* Glowing text effect */
+}
+
+.navbar-profile {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.navbar-username {
+  color: #e0e0e0; /* Light grey text color for the username */
+  font-size: 1rem;
+  align-self: flex-start;
+}
+
+.navbar-profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Rounded profile picture */
+  border: 2px solid #a45dff; /* Subtle dark purple border around the profile picture */
+}
