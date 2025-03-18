@@ -6,14 +6,86 @@ from .models import ProfileSong, ProfileAlbum, ProfileArtist, Song, Album, Artis
 profile = Blueprint('profile', __name__)
 
 # hämtar just nu all data, måste då uppdatera resterande kod om vi ska göra såhär
+# @profile.route('/api/profile', methods=['GET'])
+# @login_required
+# def get_full_profile():
+#     """Hämtar all profilinfo i ett anrop"""
+#     profile = Profiles.query.filter_by(user_id=current_user.user_id).first()
+#     if not profile:
+#         return jsonify({"error": "Profile not found"}), 404
+
+#     songs = [
+#         {"song_id": entry.song_id, "title": entry.song.title, "artist": entry.song.artist, "cover_url": entry.song.cover_url, "spotify_url": entry.song.spotify_url}
+#         for entry in ProfileSong.query.filter_by(profile_id=profile.profile_id).join(Song).all()
+#     ]
+#     albums = [
+#         {"album_id": entry.album_id, "title": entry.album.title, "artist": entry.album.artist, "cover_url": entry.album.cover_url, "spotify_url": entry.album.spotify_url}
+#         for entry in ProfileAlbum.query.filter_by(profile_id=profile.profile_id).join(Album).all()
+#     ]
+#     artists = [
+#         {"artist_id": entry.artist_id, "name": entry.artist.name, "cover_url": entry.artist.cover_url, "spotify_url": entry.artist.spotify_url}
+#         for entry in ProfileArtist.query.filter_by(profile_id=profile.profile_id).join(Artist).all()
+#     ]
+
+#     return jsonify({
+#         "username": current_user.username,
+#         "profile_picture": profile.profile_picture or "https://i1.sndcdn.com/avatars-000339644685-3ctegw-t500x500.jpg",
+#         "bio": profile.bio or "",
+#         "favorite_genres": profile.favorite_genres or [],
+#         "songs": songs,
+#         "albums": albums,
+#         "artists": artists
+#     }), 200
+
 @profile.route('/api/profile', methods=['GET'])
 @login_required
 def get_full_profile():
-    """Hämtar all profilinfo i ett anrop"""
+    """Hämtar hela profilinformationen"""
     profile = Profiles.query.filter_by(user_id=current_user.user_id).first()
-    if not profile:
-        return jsonify({"error": "Profile not found"}), 404
 
+    if not profile:
+        # Mock-profil för testning
+        return jsonify({
+            "username": current_user.username or "TestUser",
+            "profile_picture": "https://i1.sndcdn.com/avatars-000339644685-3ctegw-t500x500.jpg",
+            "bio": "This is a test bio",
+            "favorite_genres": ["Rock", "Hip-Hop", "Electronic"],
+            "songs": [
+                {
+                    "song_id": "1",
+                    "title": "Test Song 1",
+                    "artist": "Test Artist",
+                    "cover_url": "https://via.placeholder.com/100",
+                    "spotify_url": "https://open.spotify.com/embed/track/xyz"
+                },
+                {
+                    "song_id": "2",
+                    "title": "Test Song 2",
+                    "artist": "Another Artist",
+                    "cover_url": "https://via.placeholder.com/100",
+                    "spotify_url": "https://open.spotify.com/embed/track/abc"
+                }
+            ],
+            "albums": [
+                {
+                    "album_id": "1",
+                    "title": "Test Album",
+                    "artist": "Test Artist",
+                    "cover_url": "https://via.placeholder.com/100",
+                    "spotify_url": "https://open.spotify.com/album/xyz"
+                }
+            ],
+            "artists": [
+                {
+                    "artist_id": "1",
+                    "name": "Test Artist",
+                    "cover_url": "https://via.placeholder.com/100",
+                    "spotify_url": "https://open.spotify.com/artist/xyz"
+                }
+            ]
+        }), 200
+
+    # Om profilen finns, returnera riktig data
     songs = [
         {"song_id": entry.song_id, "title": entry.song.title, "artist": entry.song.artist, "cover_url": entry.song.cover_url, "spotify_url": entry.song.spotify_url}
         for entry in ProfileSong.query.filter_by(profile_id=profile.profile_id).join(Song).all()
@@ -29,13 +101,14 @@ def get_full_profile():
 
     return jsonify({
         "username": current_user.username,
-        "profile_picture": profile.profile_picture or "https://i1.sndcdn.com/avatars-000339644685-3ctegw-t500x500.jpg",
-        "bio": profile.bio or "",
-        "favorite_genres": profile.favorite_genres or [],
+        "profile_picture": profile.profile_picture,
+        "bio": profile.bio,
+        "favorite_genres": profile.favorite_genres,
         "songs": songs,
         "albums": albums,
         "artists": artists
     }), 200
+
 
 @profile.route('/api/profile-showcase', methods=['GET', 'POST'])
 @login_required

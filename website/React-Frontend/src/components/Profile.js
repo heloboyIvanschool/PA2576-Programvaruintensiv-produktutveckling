@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Profile.css';
 import { Link } from 'react-router-dom';
-import { fetchProfile } from "./api";
+// import { fetchProfile } from "./api";
 
 /*
 function Profile() {
@@ -173,10 +173,6 @@ export default Profile;
 
 
 // test
-
-import React, { useEffect, useState } from "react";
-import "./Profile.css";
-import { Link } from "react-router-dom";
 
 function Profile() {
   const [profile, setProfile] = useState(null);
