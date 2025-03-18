@@ -1,6 +1,6 @@
 /* Allmän bakgrundsfärg för sidan */
 body {
-  background-color: #181818;  /* Mörk bakgrund för hela sidan */
+  background-color: #0d0d0d;  /* Mycket mörk bakgrund för hela sidan */
   color: #e0e0e0;  /* Ljus textfärg för kontrast */
   font-family: Arial, sans-serif;
   margin: 0;
@@ -28,7 +28,7 @@ body {
   width: 92.8%;
   margin: 0px;
   padding: 1rem;
-  background-color: #232323; /* Mörkare bakgrund för sektionen */
+  background-color: #1a1a1a; /* Mörkare bakgrund för sektionen */
   border-radius: 12px; /* Rundade hörn på profilboxen */
   margin-bottom: 1rem; /* Mellanrum mellan boxarna */
 }
@@ -65,7 +65,7 @@ body {
 }
 
 .genre {
-  background-color: #444;  /* Dämpad mörk färg för genrer */
+  background-color: #222;  /* Mörkare dämpad färg för genrer */
   color: #fff;
   padding: 0.3rem 0.8rem;
   border-radius: 15px;
@@ -82,7 +82,7 @@ body {
 }
 
 .profile-section {
-  background-color: #232323;  /* Enhetlig mörk bakgrund för alla sektioner */
+  background-color: #1a1a1a;  /* Enhetlig mörk bakgrund för alla sektioner */
   padding: 1rem;
   border-radius: 12px;  /* Rundade hörn */
   margin-bottom: 1rem; /* Mellanrum mellan sektionerna */
@@ -101,7 +101,7 @@ body {
 
 .favorite-songs-container {
   margin: 0%;
-  background-color: #232323; /* Samma bakgrund som övriga sektioner */
+  background-color: #1a1a1a; /* Samma bakgrund som övriga sektioner */
   padding: 0.5rem;
   display: inline-block;
   vertical-align: top;
@@ -114,7 +114,7 @@ body {
 
 /* Showcase sektion */
 .showcase {
-  background-color: #232323;  /* Samma bakgrund som övriga sektioner */
+  background-color: #1a1a1a;  /* Samma bakgrund som övriga sektioner */
   padding: 1rem;
   display: inline-block;
   vertical-align: top;
@@ -141,7 +141,7 @@ body {
 .artists-container,
 .badges-container {
   padding: 1rem;
-  background-color: #232323;
+  background-color: #1a1a1a;
   border-radius: 12px;
   margin-bottom: 0.5rem; /* Minskar mellanrummet mellan sektionerna */
 }
@@ -159,7 +159,7 @@ body {
   width: 100px;
   height: 100px;
   border-radius: 5px;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.4); /* Mycket mörkare skugga */
 }
 
 /* Feed och Posts */
@@ -171,11 +171,11 @@ body {
 }
 
 .post {
-  background-color: #232323;  /* Samma bakgrund som övriga sektioner */
+  background-color: #1a1a1a;  /* Samma bakgrund som övriga sektioner */
   padding: 1rem;
   border-radius: 12px; /* Rundade hörn */
   margin-bottom: 1rem;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.4); /* Mycket mörkare skugga */
 }
 
 .favorite-songs-showcase {
