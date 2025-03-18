@@ -35,6 +35,9 @@ def create_app():
     app.register_blueprint(google_bp, url_prefix='/login')
     app.register_blueprint(oauth_routes, url_prefix='/')
 
+    from .profile import profile
+    app.register_blueprint(profile, url_prefix='/api')
+
     from .models import User
     from . import db_events
 

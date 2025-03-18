@@ -16,7 +16,7 @@ def get_full_profile():
     db.session.commit()
     if not profile:
         # return jsonify({"error": "Profile not found"}), 404
-        return jsonify(mock_profile), 404
+        return jsonify({"message": "Profile not found", "profile": mock_profile}), 404
 
     songs = [
         {"song_id": entry.song_id, "title": entry.song.title, "artist": entry.song.artist, "cover_url": entry.song.cover_url, "spotify_url": entry.song.spotify_url}

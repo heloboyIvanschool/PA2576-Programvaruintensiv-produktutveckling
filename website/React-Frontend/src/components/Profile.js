@@ -179,7 +179,7 @@ function Profile() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/api/profile") // bara när vi kör lokalt
+    fetch("http://127.0.0.1:5000/profile") // bara när vi kör lokalt
       .then((res) => res.json())
       .then((data) => {
         setProfile(data);
