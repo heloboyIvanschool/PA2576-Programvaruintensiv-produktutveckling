@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, request, jsonify, session, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from .models import User
@@ -6,30 +6,43 @@ from . import db
 
 auth = Blueprint('auth', __name__)
 
-@auth.route('/login', methods=['POST'])
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
-    """ Hanterar inloggning av användare. """
+    if request.method == 'GET':
 
-    data = request.json  # Tar emot JSON-data från frontend
-    email = data.get('email')
-    password = data.get('password')
+        if current_user.is_authenticated:
+            return redirect('/profile')
 
-    user = User.query.filter_by(email=email).first()
+        return jsonify({"message": "Please log in"})
 
-    if not user or not check_password_hash(user.password, password):
-        return jsonify({"error": "Invalid email or password"}), 401
+    elif request.method == 'POST':
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
 
-    login_user(user, remember=True)
-    session['user_id'] = user.user_id  # Spara användarens ID i sessionen
+        user = User.query.filter_by(email=email).first()
 
-    return jsonify({
-        "message": "Logged in successfully",
-        "user": {
-            "user_id": user.user_id,
-            "username": user.username,
-            "email": user.email
-        }
-    }), 200
+        if not user:
+            return jsonify({"error": "Invalid email or password"}), 401
+
+        # if not user or not check_password_hash(user.password, password):
+        #     return jsonify({"error": "Invalid email or password"}), 401
+
+        login_user(user, remember=True)
+
+        next_url = request.args.get('next')
+        return redirect('/profile')
+        # if next_url:
+        #     return redirect(next_url)  # Omdirigera användaren till nästa sida efter inloggning
+        # else:
+        #     return jsonify({
+        #         "message": "Logged in successfully",
+        #         "user": {
+        #             "user_id": user.user_id,
+        #             "username": user.username,
+        #             "email": user.email
+        #         }
+        #     }), 200
 
 @auth.route('/logout', methods=['POST'])
 @login_required
@@ -39,7 +52,7 @@ def logout():
     session.pop('user_id', None)  # Ta bort användarens session
     return jsonify({"message": "Logged out successfully"}), 200
 
-@auth.route('/sign-up', methods=['POST'])
+@auth.route('/signup', methods=['POST'])
 def sign_up():
     """ Hanterar registrering av en ny användare. """
 
@@ -79,6 +92,7 @@ def sign_up():
         }
     }), 201
 
+
 @auth.route('/auth-status', methods=['GET'])
 def auth_status():
     """ Kollar om en användare är inloggad och returnerar deras data. """
@@ -91,4 +105,8 @@ def auth_status():
                 "email": current_user.email
             }
         }), 200
-    return jsonify({"logged_in": False}), 200
+    else:
+        return jsonify({
+            "logged_in": False,
+            "user": None
+        }), 200

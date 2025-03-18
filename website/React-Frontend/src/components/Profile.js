@@ -171,22 +171,34 @@ export default Profile;
 function Profile() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);  // För att hantera eventuella fel
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/profile") // bara när vi kör lokalt
-      .then((res) => res.json())
+    fetch("http://127.0.0.1:5000/profile", { credentials: 'include' }) // Lägg till credentials för att skicka cookies
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to fetch profile data'); // Om svaret inte är 200, kasta ett fel
+        }
+        return res.json();
+      })
       .then((data) => {
+        console.log('Fetched profile data:', data);  // Logga datan för att säkerställa att vi får det vi förväntar oss
         setProfile(data);
         setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching profile data:", error);
+        setError(error.message);  // Sätt felmeddelande
         setLoading(false);
       });
   }, []);
 
   if (loading) {
     return <div>Loading profile...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;  // Om ett fel inträffade, visa det
   }
 
   if (!profile) {

@@ -53,7 +53,7 @@ function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    fetch('/api/profile-picture', { credentials: 'include' })
+    fetch('/profile-picture', { credentials: 'include' })
       .then((response) => response.json())
       .then((data) => {
         if (data.profile_picture) {
@@ -83,7 +83,7 @@ function Navbar() {
           )}
         </div>
         {isLoggedIn && (
-          <Link to="/profile" className="navbar-profile"> {/* Lägger till länk */}
+          <Link to="/profile" className="navbar-profile">
             <img
               src={profilePicture}
               alt='Profile'

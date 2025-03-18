@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, redirect, session, url_for
 from flask_login import login_required, current_user, login_user
 from . import db
 from .models import User, ProfileSong, ProfileAlbum, ProfileArtist, Song, Album, Artist, Profiles
@@ -7,9 +7,12 @@ show_profile = Blueprint('profile', __name__)
 
 # hämtar just nu all data, måste då uppdatera resterande kod om vi ska göra såhär
 @show_profile.route('/profile', methods=['GET' , 'OPTIONS'])
-# @login_required
+@login_required
 def get_full_profile():
     """Hämtar all profilinfo i ett anrop"""
+
+    if 'user_id' not in session:  # Kontrollera om användaren är inloggad
+        return redirect(url_for('auth.login', next=request.url))
 
     if request.method == 'OPTIONS':  # Hantera preflight-request
         return '', 200  # Skickar tomt svar med HTTP 200 OK
@@ -128,8 +131,8 @@ def profile_content():
         db.session.commit()
         return jsonify({"message": f"{content_type.capitalize()} updated successfully"}), 200
 
-@show_profile.route('/api/profile-picture', methods=['GET', 'POST'])
-# @login_required
+@show_profile.route('/profile-picture', methods=['GET', 'POST'])
+@login_required
 def profile_picture():
     """ Hanterar profilbild: Hämtar eller uppdaterar. """
     profile = Profiles.query.filter_by(user_id=current_user.user_id).first()
