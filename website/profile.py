@@ -5,7 +5,7 @@ from .models import ProfileSong, ProfileAlbum, ProfileArtist, Song, Album, Artis
 
 profile = Blueprint('profile', __name__)
 
-@profile.route('/profile-content', methods=['GET', 'POST'])
+@profile.route('/api/profile-content', methods=['GET', 'POST'])
 @login_required
 def profile_content():
     """ Hanterar showcase-innehåll: Hämtar, lägger till och tar bort låtar, album och artister. """
@@ -90,7 +90,7 @@ def profile_content():
         db.session.commit()
         return jsonify({"message": f"{content_type.capitalize()} updated successfully"}), 200
 
-@profile.route('/profile-picture', methods=['GET', 'POST'])
+@profile.route('/api/profile-picture', methods=['GET', 'POST'])
 @login_required
 def profile_picture():
     """ Hanterar profilbild: Hämtar eller uppdaterar. """
@@ -116,7 +116,7 @@ def profile_picture():
             "profile_picture": profile.profile_picture
         }), 200
 
-@profile.route('/profile-bio', methods=['GET', 'POST'])
+@profile.route('/api/profile-bio', methods=['GET', 'POST'])
 @login_required
 def profile_bio():
     """ Hanterar användarens biografi. """
@@ -142,7 +142,7 @@ def profile_bio():
             "bio": profile.bio
         }), 200
 
-@profile.route('/profile-genres', methods=['GET', 'POST'])
+@profile.route('/api/profile-genres', methods=['GET', 'POST'])
 @login_required
 def profile_genres():
     """ Hanterar favoritgenrer. """
