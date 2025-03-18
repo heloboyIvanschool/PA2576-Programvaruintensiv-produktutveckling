@@ -11,12 +11,12 @@ function Profile() {
             <div className="profile-container">
               <div className="profile-header">
                 <img
-                  src="https://i.scdn.co/image/ab6761610000e5eba7874efb5aa08fc40af59c10"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5o1utJETuL1kN1AhTi1law_hEC7O1FO6bYQ&s"
                   alt="Profile"
                   className="profile-pic-large"
                 />
                 <div className="profile-info">
-                  <h1 className="profile-username">Sean Banan</h1>
+                  <h1 className="profile-username">ResonateLover1337</h1>
                   <div className="favorite-genres">
                     <span className="genre">Rock</span>
                     <span className="genre">Jazz</span>
