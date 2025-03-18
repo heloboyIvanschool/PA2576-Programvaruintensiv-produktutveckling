@@ -1,8 +1,8 @@
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS  # Importera CORS
 from os import path
-from flask_login import LoginManager
+from flask_login import LoginManager, login_user
 from dotenv import load_dotenv
 import os
 
@@ -46,7 +46,6 @@ def create_app():
         db.create_all()
         from .mock_data import add_mock_data
         add_mock_data()
-
 
     # Flask-Login konfiguration
     login_manager = LoginManager()

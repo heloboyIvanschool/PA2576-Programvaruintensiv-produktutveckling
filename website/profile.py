@@ -11,9 +11,6 @@ show_profile = Blueprint('profile', __name__)
 def get_full_profile():
     """Hämtar all profilinfo i ett anrop"""
 
-    user = User.query.first()
-    login_user(user)
-
     if request.method == 'OPTIONS':  # Hantera preflight-request
         return '', 200  # Skickar tomt svar med HTTP 200 OK
 
@@ -132,7 +129,7 @@ def profile_content():
         return jsonify({"message": f"{content_type.capitalize()} updated successfully"}), 200
 
 @show_profile.route('/api/profile-picture', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def profile_picture():
     """ Hanterar profilbild: Hämtar eller uppdaterar. """
     profile = Profiles.query.filter_by(user_id=current_user.user_id).first()

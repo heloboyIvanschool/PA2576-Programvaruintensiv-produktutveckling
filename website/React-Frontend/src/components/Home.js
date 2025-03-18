@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "./Home.css"; // Se till att Home.css är korrekt länkad
+import "./Home.css";
 
 const Home = () => {
     const [data, setData] = useState(null);
