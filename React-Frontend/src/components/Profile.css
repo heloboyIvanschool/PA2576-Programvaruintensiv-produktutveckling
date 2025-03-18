@@ -25,7 +25,7 @@ body {
 
 .profile-container {
   flex: 1;
-  width: 92.8%;
+  width: 95%;
   margin: 0px;
   padding: 1rem;
   background-color: #232323; /* Dark background */
@@ -63,6 +63,7 @@ body {
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 0.5rem;
+  width: 60%;
 }
 
 .genre {
@@ -114,7 +115,7 @@ body {
   padding: 0.5rem;
   display: inline-block;
   vertical-align: top;
-  width: 20.5%;
+  width: 40.5%;
   text-align: center;
   align-items: center;
   border-radius: 12px; /* Rounded corners */

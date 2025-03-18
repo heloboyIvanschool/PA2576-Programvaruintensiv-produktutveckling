@@ -19,7 +19,8 @@ function Profile() {
                   <h1 className="profile-username">Sean Banan</h1>
                   <div className="favorite-genres">
                     <span className="genre">Rock</span>
-                    <span className="genre">Progressive-Rock</span>
+                    <span className="genre">Jazz</span>
+                    <span className="genre">Soul</span>
                     <span className="genre">House</span>
                     <span className="genre">EDM</span>
                   </div>
