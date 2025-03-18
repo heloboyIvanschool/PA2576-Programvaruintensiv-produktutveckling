@@ -136,21 +136,23 @@ body {
   color: #e0e0e0;  /* Ljus färg på rubriker */
 }
 
+/* Justerar avståndet mellan rubrik och bilder */
 .albums-container,
 .artists-container,
 .badges-container {
-  padding: 0.5rem;
-  padding-top: 0.3rem;
-  margin-bottom: 3px;
-  background-color: #232323;  /* Enhetlig mörk bakgrund för dessa sektioner */
-  border-radius: 12px;  /* Rundade hörn */
-  margin-bottom: 1rem; /* Mellanrum mellan boxarna */
+  padding: 1rem;
+  background-color: #232323;
+  border-radius: 12px;
+  margin-bottom: 0.5rem; /* Minskar mellanrummet mellan sektionerna */
 }
 
+/* Ser till att bilderna är i linje */
 .showcase-items {
   display: flex;
-  gap: 0.2rem;
-  margin-bottom: 0px;
+  gap: 0.2%;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center; /* Säkerställer att de vertikalt ligger rätt */
 }
 
 .showcase-item {
