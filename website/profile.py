@@ -5,7 +5,7 @@ from .models import ProfileSong, ProfileAlbum, ProfileArtist, Song, Album, Artis
 
 profile = Blueprint('profile', __name__)
 
-@profile.route('/api/profile-content', methods=['GET', 'POST'])
+@profile.route('/api/profile-showcase', methods=['GET', 'POST'])
 @login_required
 def profile_content():
     """ Hanterar showcase-innehåll: Hämtar, lägger till och tar bort låtar, album och artister. """

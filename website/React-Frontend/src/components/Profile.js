@@ -3,6 +3,7 @@ import './Profile.css';
 import { Link } from 'react-router-dom';
 import { fetchProfile } from "./api";
 
+/*
 function Profile() {
   return (
     <>
@@ -164,6 +165,144 @@ function Profile() {
         </div>
       </div>
     </>
+  );
+}
+
+export default Profile;
+*/
+
+
+// test
+
+import React, { useEffect, useState } from "react";
+import "./Profile.css";
+import { Link } from "react-router-dom";
+
+function Profile() {
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/profile-showcase") // Hämta profildata från Flask API
+      .then((res) => res.json())
+      .then((data) => {
+        setProfile(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching profile data:", error);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <div>Loading profile...</div>;
+  }
+
+  if (!profile) {
+    return <div>Profile not found</div>;
+  }
+
+  return (
+    <div className="profile-page">
+      <div className="left-column">
+        <div className="profile-group">
+          <div className="profile-container">
+            <div className="profile-header">
+              <img
+                src={profile.profile_picture || "https://i1.sndcdn.com/avatars-000339644685-3ctegw-t500x500.jpg"}
+                alt="Profile"
+                className="profile-pic-large"
+              />
+              <div className="profile-info">
+                <h1 className="profile-username">{profile.username || "Unknown User"}</h1>
+                <div className="favorite-genres">
+                  {profile.favorite_genres && profile.favorite_genres.length > 0 ? (
+                    profile.favorite_genres.map((genre, index) => (
+                      <span key={index} className="genre">
+                        {genre}
+                      </span>
+                    ))
+                  ) : (
+                    <span>No favorite genres</span>
+                  )}
+                </div>
+              </div>
+            </div>
+            <Link to="/profile-customization">Edit Profile</Link>
+          </div>
+
+          <div className="favorite-songs-showcase">
+            <div className="favorite-songs-container">
+              <h2>Top Songs</h2>
+              <ul className="favorite-songs">
+                {profile.songs && profile.songs.length > 0 ? (
+                  profile.songs.map((song) => (
+                    <iframe
+                      key={song.song_id}
+                      src={song.spotify_url}
+                      width="270"
+                      height="80"
+                      frameBorder="0"
+                      allowTransparency="true"
+                      allow="encrypted-media"
+                    ></iframe>
+                  ))
+                ) : (
+                  <p>No songs added</p>
+                )}
+              </ul>
+            </div>
+
+            <div className="showcase">
+              <div className="showcase-section">
+                <h2>Albums</h2>
+                <div className="showcase-items">
+                  {profile.albums && profile.albums.length > 0 ? (
+                    profile.albums.map((album) => (
+                      <a key={album.album_id} href={album.spotify_url} target="_blank" rel="noopener noreferrer">
+                        <img src={album.cover_url} alt={album.title} className="showcase-item" />
+                      </a>
+                    ))
+                  ) : (
+                    <p>No albums added</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="showcase-section">
+                <h2>Artists</h2>
+                <div className="showcase-items">
+                  {profile.artists && profile.artists.length > 0 ? (
+                    profile.artists.map((artist) => (
+                      <a key={artist.artist_id} href={artist.spotify_url} target="_blank" rel="noopener noreferrer">
+                        <img src={artist.cover_url} alt={artist.name} className="showcase-item" />
+                      </a>
+                    ))
+                  ) : (
+                    <p>No artists added</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="showcase-section">
+                <h2>Badges</h2>
+                <div className="showcase-items">
+                  <p>Coming soon...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="feed">
+        <h2>Posts</h2>
+        <div className="post">Post 1</div>
+        <div className="post">Post 2</div>
+        <div className="post">Post 3</div>
+      </div>
+    </div>
   );
 }
 
