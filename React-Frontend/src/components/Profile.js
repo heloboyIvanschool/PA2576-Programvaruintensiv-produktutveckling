@@ -150,11 +150,9 @@ function Profile() {
                 </div>
 
                 <div className="showcase-section">
-                  <h2>Badges</h2>
+                  <h2>Badges coming soon...</h2>
                   <div className="showcase-items">
-                    <img src="https://i.scdn.co/image/38129832f70d5798de2618faa55182407135842c" alt="Badge 1" className="showcase-item" />
-                    <img src="https://i.scdn.co/image/ab67616d0000b273042dbf8721e37f11843bfeac" alt="Badge 2" className="showcase-item" />
-                    <img src="https://i.scdn.co/image/ab67616d0000b2730cd942c1a864afa4e92d04f2" alt="Badge 3" className="showcase-item" />
+                    
                   </div>
                 </div>
               </div>
