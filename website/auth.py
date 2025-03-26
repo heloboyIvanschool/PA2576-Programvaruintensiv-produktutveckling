@@ -5,6 +5,7 @@ from . import db
 
 auth = Blueprint('auth', __name__)
 
+#test
 
 @auth.route('/login', methods=['POST'])
 def login():
