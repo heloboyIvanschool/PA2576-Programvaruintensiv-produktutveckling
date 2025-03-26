@@ -11,8 +11,8 @@ class User(db.Model, UserMixin):
     __tablename__ = 'users'
     user_id = db.Column(db.String(32), primary_key=True, uniqe=True, default=get_uuid)
     username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(345), unique=True, nullable=False)
+    password = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     role = db.Column(db.String(10), default='user')
 
