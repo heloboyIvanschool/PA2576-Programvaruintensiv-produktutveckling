@@ -81,6 +81,7 @@ profile_default/
 ipython_config.py
 
 # Environments (virtuella Python-miljöer)
+**/venv/
 .venv
 env/
 venv/
@@ -101,7 +102,7 @@ cython_debug/
 # 📌 React & JavaScript
 .DS_Store
 .DS_*
-node_modules/
+**/node_modules/
 bower_components/
 logs/
 npm-debug.log*
@@ -126,6 +127,7 @@ pnpm-debug.log*
 *.log
 
 # Miljöfiler (kan innehålla API-nycklar och känslig info)
+**/env/
 .env
 .env.local
 .env.development.local
