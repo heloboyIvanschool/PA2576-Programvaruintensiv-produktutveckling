@@ -2,10 +2,14 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 from flask_dance.consumer.storage.sqla import OAuthConsumerMixin
+from uuid import uuid4
+
+def get_uuid():
+    return uuid4().hex
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
-    user_id = db.Column(db.Integer, primary_key=True) # ifall man ändrar typen av nyckeln så msåte detta även ske i alla andra tabeller där nycklen används
+    user_id = db.Column(db.String(32), primary_key=True, uniqe=True, default=get_uuid)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
@@ -27,13 +31,13 @@ class User(db.Model, UserMixin):
 
 class OAuth(db.Model, OAuthConsumerMixin):
     __tablename__ = 'oauth'
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id', ondelete="CASCADE"))
+    user_id = db.Column(db.String, db.ForeignKey('users.user_id', ondelete="CASCADE"))
     user = db.relationship(User)
 
 class Profiles(db.Model):
     __tablename__ = 'profiles'
     profile_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id', ondelete="CASCADE"), unique=True, nullable=False)
+    user_id = db.Column(db.String, db.ForeignKey('users.user_id', ondelete="CASCADE"), unique=True, nullable=False)
     bio = db.Column(db.String(500), nullable=True)
     profile_picture = db.Column(db.String, nullable=True, default="https://i1.sndcdn.com/avatars-000339644685-3ctegw-t500x500.jpg")
     favorite_genres = db.Column(db.JSON, nullable=True)
@@ -47,7 +51,7 @@ class Profiles(db.Model):
 class Post(db.Model):
     __tablename__ = 'posts'
     post_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    user_id = db.Column(db.String, db.ForeignKey('users.user_id'), nullable=False)
 
     song_id = db.Column(db.String, db.ForeignKey('songs.song_id'), nullable=True)
     album_id = db.Column(db.String, db.ForeignKey('albums.album_id'), nullable=True)
@@ -67,7 +71,7 @@ class Post(db.Model):
 class Like(db.Model):
     __tablename__ = 'likes'
     like_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    user_id = db.Column(db.String, db.ForeignKey('users.user_id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.post_id'), nullable=False)
 
     #relations
@@ -77,7 +81,7 @@ class Like(db.Model):
 class Comment(db.Model):
     __tablename__ = 'comments'
     comment_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    user_id = db.Column(db.String, db.ForeignKey('users.user_id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.post_id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
