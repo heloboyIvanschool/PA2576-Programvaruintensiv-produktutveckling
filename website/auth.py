@@ -1,87 +1,62 @@
-from flask import Blueprint, request, jsonify, session, redirect
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import Blueprint, request, jsonify
 from flask_login import login_user, login_required, logout_user, current_user
 from .models import User
 from . import db
 
 auth = Blueprint('auth', __name__)
 
-@auth.route('/login', methods=['GET', 'POST'])
+
+@auth.route('/login', methods=['POST'])
 def login():
-    if request.method == 'GET':
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
 
-        if current_user.is_authenticated:
-            return redirect('/profile')
+    user = User.query.filter_by(email=email).first()
 
-        return jsonify({"message": "Please log in"})
+    if not user:
+        return jsonify({"error": "Email not found"}), 401
 
-    elif request.method == 'POST':
-        data = request.json
-        email = data.get('email')
-        password = data.get('password')
+    if not user.check_password(password):
+        return jsonify({"error": "Incorrect password"}), 401
 
-        user = User.query.filter_by(email=email).first()
+    login_user(user, remember=True)
 
-        if not user:
-            return jsonify({"error": "Invalid email or password"}), 401
-
-        # if not user or not check_password_hash(user.password, password):
-        #     return jsonify({"error": "Invalid email or password"}), 401
-
-        login_user(user, remember=True)
-
-        next_url = request.args.get('next')
-        return redirect('/profile')
-        # if next_url:
-        #     return redirect(next_url)  # Omdirigera användaren till nästa sida efter inloggning
-        # else:
-        #     return jsonify({
-        #         "message": "Logged in successfully",
-        #         "user": {
-        #             "user_id": user.user_id,
-        #             "username": user.username,
-        #             "email": user.email
-        #         }
-        #     }), 200
+    return jsonify({"message": "Logged in successfully"}), 200
 
 @auth.route('/logout', methods=['POST'])
 @login_required
 def logout():
-    """ Hanterar utloggning av användare. """
     logout_user()
-    session.pop('user_id', None)  # Ta bort användarens session
     return jsonify({"message": "Logged out successfully"}), 200
 
 @auth.route('/signup', methods=['POST'])
-def sign_up():
+def register():
     """ Hanterar registrering av en ny användare. """
 
     data = request.json
-    username = data.get('username')
-    email = data.get('email')
-    password = data.get('password')
-    password_confirm = data.get('password_confirm')
+    username = data.get('username').strip()
+    email = data.get('email').strip().lower()
+    password = data.get('password').strip()
+    password_confirm = data.get('password_confirm').strip()
 
     if not username or not email or not password or not password_confirm:
         return jsonify({"error": "Missing required fields"}), 400
 
+    if User.query.filter_by(email=email).first() is not None:
+        return jsonify({"error": "Email already exists"}), 409
+
+    if User.query.filter_by(username=username).first() is not None:
+        return jsonify({"error": "Username already exists"}), 409
+
     if password != password_confirm:
         return jsonify({"error": "Passwords do not match"}), 400
 
-    if User.query.filter_by(email=email).first():
-        return jsonify({"error": "Email already exists"}), 409
-
-    if User.query.filter_by(username=username).first():
-        return jsonify({"error": "Username already exists"}), 409
-
-    hashed_password = generate_password_hash(password)
-
-    new_user = User(username=username, email=email, password=hashed_password)
+    new_user = User(username=username, email=email, password=password)
     db.session.add(new_user)
     db.session.commit()
 
     login_user(new_user, remember=True)
-    session['user_id'] = new_user.user_id  # Spara användaren i sessionen
 
     return jsonify({
         "message": "Account created successfully",
@@ -93,6 +68,11 @@ def sign_up():
     }), 201
 
 
+@auth.route('/test', methods=['GET'])
+def test():
+    return "Server is running!", 200
+
+# onödig atm
 @auth.route('/auth-status', methods=['GET'])
 def auth_status():
     """ Kollar om en användare är inloggad och returnerar deras data. """

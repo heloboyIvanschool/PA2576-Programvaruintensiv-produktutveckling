@@ -6,29 +6,45 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // Lägger till loading state
   const navigate = useNavigate();
 
   // useEffect för att kontrollera om användaren redan är inloggad
   useEffect(() => {
     const checkLoginStatus = async () => {
-      const response = await fetch('http://127.0.0.1:5000/auth-status', {
-        method: 'GET',
-        credentials: 'include', // Skicka sessionen/cookies med
-      });
+      try {
+        setLoading(true); // Börja ladda när vi gör förfrågan
+        const response = await fetch('http://127.0.0.1:5000/auth-status', {
+          method: 'GET',
+          credentials: 'include', // Skicka sessionen/cookies med
+        });
 
-      const data = await response.json();
+        // Kontrollera om servern svarar korrekt
+        if (!response.ok) {
+          throw new Error('Failed to fetch login status');
+        }
 
-      if (data.logged_in) {
-        navigate('/profile');  // Om användaren är inloggad, navigera till profile
+        const data = await response.json();
+
+        if (data.logged_in) {
+          navigate('/profile');  // Om användaren är inloggad, navigera till profile
+        } else {
+          setLoading(false); // Sluta ladda om användaren inte är inloggad
+        }
+      } catch (error) {
+        console.error('Error checking login status:', error);
+        setError('Could not check login status. Please try again later.');
+        setLoading(false); // Sluta ladda om det sker ett fel
       }
     };
 
     checkLoginStatus(); // Kör funktionen vid sidladdning
-  }, [navigate]); // Dependency array, kör bara när navigate förändras (vid inladdning)
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true); // Börja ladda när användaren försöker logga in
 
     try {
       const response = await fetch('http://127.0.0.1:5000/login', {
@@ -43,10 +59,12 @@ function Login() {
         throw new Error(data.error || 'Invalid credentials');
       }
 
-      navigate('/profile');
+      navigate('/profile'); // Navigera till profil om inloggningen är lyckad
     } catch (error) {
       console.error("Error in fetching:", error);  // Loggar mer detaljer om felet
       setError(error.message || 'An error occurred');
+    } finally {
+      setLoading(false); // Sluta ladda när förfrågan är klar
     }
   };
 
@@ -55,6 +73,7 @@ function Login() {
       <div className="login-box">
         <h2>Log in</h2>
         {error && <p className="login-error">{error}</p>} {/* Visa felmeddelande om det finns */}
+
         <form onSubmit={handleLogin}>
           <input
             type="email"
@@ -70,13 +89,17 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button type="submit">Log in</button>
+
+          <button type="submit" disabled={loading}>Log in</button> {/* Disablerar knappen om vi laddar */}
         </form>
+
+        {loading && <p>Loading...</p>} {/* Laddningsindikator när vi väntar på svar */}
 
         <div className="google-login">
           <p>Or log in with Google:</p>
           <a href="#">Login with Google (Coming Soon)</a>
         </div>
+
         <Link to="/signup" className="login-footer">Sign up</Link>
       </div>
     </div>

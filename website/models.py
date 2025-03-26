@@ -3,18 +3,24 @@ from flask_login import UserMixin
 from sqlalchemy.sql import func
 from flask_dance.consumer.storage.sqla import OAuthConsumerMixin
 from uuid import uuid4
+from werkzeug.security import generate_password_hash, check_password_hash
 
 def get_uuid():
     return uuid4().hex
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
-    user_id = db.Column(db.String(32), primary_key=True, uniqe=True, default=get_uuid)
+    user_id = db.Column(db.String(32), primary_key=True, unique=True, default=get_uuid)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(345), unique=True, nullable=False)
     password = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     role = db.Column(db.String(10), default='user')
+
+    def __init__(self, username, email, password):
+        self.username = username
+        self.email = email
+        self.password = generate_password_hash(password)
 
     #realations
     profile = db.relationship("Profiles", back_populates="user", uselist=False, cascade="all, delete-orphan")
@@ -23,7 +29,10 @@ class User(db.Model, UserMixin):
     comments = db.relationship('Comment', back_populates='user')
     oauth = db.relationship('OAuth', back_populates='user', cascade="all, delete-orphan")
 
-    def get_id(self):
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
+    def get_id(self): # behövs för att session handeling ska fungera
         return str(self.user_id)
 
     def __repr__(self):

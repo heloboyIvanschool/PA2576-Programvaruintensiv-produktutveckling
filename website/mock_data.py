@@ -6,7 +6,7 @@ def add_mock_data():
     # Skapa en användare om den inte finns
     user = User.query.filter_by(user_id=1).first()
     if not user:
-        user = User(user_id=1, username="q", email="q@q", password="q")
+        user = User(username="q", email="q@q", password="q")
         db.session.add(user)
         db.session.commit()
 
