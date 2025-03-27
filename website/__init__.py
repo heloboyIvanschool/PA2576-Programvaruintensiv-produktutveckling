@@ -1,14 +1,16 @@
 from flask import Flask, send_from_directory, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS  # Importera CORS
+from flask_cors import CORS
 from os import path
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
 db = SQLAlchemy()
+
+login_manager = LoginManager()
 
 # Sätt sökvägen till React build-mappen
 REACT_BUILD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../frontend/build")
@@ -22,14 +24,16 @@ def create_app():
 
     db.init_app(app)
 
+    # Flask-Login konfiguration
+    login_manager.init_app(app)
+    login_manager.login_view = 'auth.login'
+
     # Tillåter React frontend att göra API-anrop till Flask
     CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 
     # Importera och registrera Blueprints
     from .views import views
-    from .auth import auth
     app.register_blueprint(views, url_prefix='/')
-    app.register_blueprint(auth, url_prefix='/')
 
     from .google_auth import google_bp, oauth_routes
     app.register_blueprint(google_bp, url_prefix='/login')
@@ -47,16 +51,14 @@ def create_app():
         from .mock_data import add_mock_data
         add_mock_data()
 
-    # Flask-Login konfiguration
-    login_manager = LoginManager()
-    login_manager.login_view = 'auth.login'
-    login_manager.init_app(app)
+    from .auth import auth
+    app.register_blueprint(auth, url_prefix='/')
 
-    @login_manager.user_loader
-    def load_user(user_id):
-        if user_id is None:
-            return None
-        return User.query.get(int(user_id))
+    # @login_manager.user_loader
+    # def load_user(user_id):
+    #     if user_id is None:
+    #         return None
+    #     return User.query.get(int(user_id))
 
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>')
@@ -71,3 +73,8 @@ def create_app():
         return send_from_directory(REACT_BUILD_DIR, 'index.html')
 
     return app
+
+# @login_manager.user_loader
+# def load_user(user_id):
+#     from .models import User
+#     return User.query.get(int(user_id))

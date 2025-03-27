@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import './Login.css';
 
 function Login() {
@@ -8,6 +8,7 @@ function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false); // Lägger till loading state
   const navigate = useNavigate();
+  const location = useLocation();  // To handle the 'next' URL in the query params
 
   // useEffect för att kontrollera om användaren redan är inloggad
   useEffect(() => {
@@ -51,15 +52,18 @@ function Login() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
-        credentials: 'include',
+        credentials: 'include', // Include credentials (cookies)
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const data = await response.json();
         throw new Error(data.error || 'Invalid credentials');
       }
 
-      navigate('/profile'); // Navigera till profil om inloggningen är lyckad
+      // After successful login, check if there's a 'next' URL to redirect to
+      const nextUrl = data.next || '/profile'; // Default to '/profile' if no 'next' is provided
+      navigate(nextUrl);  // Navigate to the 'next' URL or the default profile page
     } catch (error) {
       console.error("Error in fetching:", error);  // Loggar mer detaljer om felet
       setError(error.message || 'An error occurred');
@@ -91,6 +95,7 @@ function Login() {
           />
 
           <button type="submit" disabled={loading}>Log in</button> {/* Disablerar knappen om vi laddar */}
+
         </form>
 
         {loading && <p>Loading...</p>} {/* Laddningsindikator när vi väntar på svar */}

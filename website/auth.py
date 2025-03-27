@@ -2,10 +2,13 @@ from flask import Blueprint, request, jsonify
 from flask_login import login_user, login_required, logout_user, current_user
 from .models import User
 from . import db
+from . import login_manager
 
 auth = Blueprint('auth', __name__)
 
-#test
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 @auth.route('/login', methods=['POST'])
 def login():
@@ -21,9 +24,14 @@ def login():
     if not user.check_password(password):
         return jsonify({"error": "Incorrect password"}), 401
 
-    login_user(user, remember=True)
+    login_user(user, remember=True) # remember??
 
-    return jsonify({"message": "Logged in successfully"}), 200
+    next_url = request.args.get('next')
+
+    if next_url:
+        return jsonify({"message": "Logged in successfully", "next": next_url}), 200
+    else:
+        return jsonify({"message": "Logged in successfully", "next": "/profile"}), 200
 
 @auth.route('/logout', methods=['POST'])
 @login_required
@@ -78,16 +86,6 @@ def test():
 def auth_status():
     """ Kollar om en användare är inloggad och returnerar deras data. """
     if current_user.is_authenticated:
-        return jsonify({
-            "logged_in": True,
-            "user": {
-                "user_id": current_user.user_id,
-                "username": current_user.username,
-                "email": current_user.email
-            }
-        }), 200
+        return jsonify({"logged_in": True, "username": current_user.username}), 200
     else:
-        return jsonify({
-            "logged_in": False,
-            "user": None
-        }), 200
+        return jsonify({"logged_in": False}), 200
