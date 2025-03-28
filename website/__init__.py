@@ -23,7 +23,7 @@ def create_app():
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 
-    Session(app)
+    Session(app) #### här är problemet måste håll apå med redis
 
     db.init_app(app)
 
