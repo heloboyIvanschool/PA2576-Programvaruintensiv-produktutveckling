@@ -10,8 +10,11 @@ auth = Blueprint('auth', __name__)
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-@auth.route('/login', methods=['POST'])
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'GET':
+        return jsonify({"error": "Login required"}), 401
+
     data = request.json
     email = data.get('email')
     password = data.get('password')

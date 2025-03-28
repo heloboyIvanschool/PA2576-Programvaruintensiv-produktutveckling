@@ -174,21 +174,24 @@ function Profile() {
   const [error, setError] = useState(null);  // För att hantera eventuella fel
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/profile", { credentials: 'include' }) // Lägg till credentials för att skicka cookies
+    fetch("http://127.0.0.1:5000/profile", { credentials: 'include' }) // Skickar cookies/session
       .then((res) => {
         if (!res.ok) {
-          throw new Error('Failed to fetch profile data'); // Om svaret inte är 200, kasta ett fel
+          return res.json().then((data) => {
+            throw new Error(data.error || `Server error: ${res.status} ${res.statusText}`);
+          });
         }
         return res.json();
       })
       .then((data) => {
-        console.log('Fetched profile data:', data);  // Logga datan för att säkerställa att vi får det vi förväntar oss
+        console.log("Fetched profile data:", data); // Logga för debugging
         setProfile(data);
-        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching profile data:", error);
-        setError(error.message);  // Sätt felmeddelande
+        setError(error.message || "Failed to load profile data.");
+      })
+      .finally(() => {
         setLoading(false);
       });
   }, []);

@@ -1,4 +1,5 @@
 from flask import Flask, send_from_directory, redirect, url_for
+from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from os import path
@@ -21,6 +22,8 @@ def create_app():
     # Flask-konfiguration
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+
+    Session(app)
 
     db.init_app(app)
 
