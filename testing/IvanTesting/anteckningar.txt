@@ -25,101 +25,6 @@ cd C:\Users\Greattech\Documents\GitHub\PA2576-Programvaruintensiv-produktutveckl
 │── README.md           # Projektbeskrivning
 
 
-1️⃣ users (Användare)
-Motivering: Lagrar grundläggande information om varje användare.
-Kolumner:
-userId (PK)
-username
-email
-password
-profile_picture
-created_at
-2️⃣ profiles (Användarprofil)
-Motivering: Separat tabell för användares musikpreferenser.
-Kolumner:
-profileId (PK)
-userId (FK → users.userId)
-bio
-favorite_genres
-song_of_the_day (FK → songs.songId)
-Relationer:
-1:1 mellan users och profiles (en användare har en profil).
-Många-till-många relationer till favoritalbum, artister och låtar (se nästa tabeller).
-3️⃣ songs (Låtar)
-Motivering: Lagrar låtar som användare kan gilla eller diskutera.
-Kolumner:
-songId (PK)
-title
-artistId (FK → artists.artistId)
-albumId (FK → albums.albumId)
-cover_url
-spotify_url
-Relationer:
-1:M mellan albums och songs (ett album har många låtar).
-4️⃣ albums (Album)
-Motivering: Samlar album som användare kan framhäva.
-Kolumner:
-albumId (PK)
-title
-artistId (FK → artists.artistId)
-cover_url
-spotify_url
-Relationer:
-1:M mellan artists och albums (en artist har många album).
-5️⃣ artists (Artister)
-Motivering: Lagrar artister som användare kan framhäva eller diskutera.
-Kolumner:
-artistId (PK)
-name
-picture_url
-spotify_url
-6️⃣ user_songs (Användarens favoritsånger)
-Motivering: Hanterar många-till-många relationen mellan användare och favoritlåtar.
-Kolumner:
-userId (FK → users.userId)
-songId (FK → songs.songId)
-7️⃣ user_albums (Användarens favorit-album)
-Motivering: Hanterar många-till-många relationen mellan användare och favorit-album.
-Kolumner:
-userId (FK → users.userId)
-albumId (FK → albums.albumId)
-8️⃣ user_artists (Användarens favorit-artister)
-Motivering: Hanterar många-till-många relationen mellan användare och favorit-artister.
-Kolumner:
-userId (FK → users.userId)
-artistId (FK → artists.artistId)
-9️⃣ posts (Inlägg)
-Motivering: Lagrar inlägg där användare diskuterar låtar, album eller artister.
-Kolumner:
-postId (PK)
-userId (FK → users.userId)
-songId (FK → songs.songId, nullable)
-albumId (FK → albums.albumId, nullable)
-artistId (FK → artists.artistId, nullable)
-content
-created_at
-Relationer:
-En post kan vara kopplad till en låt, ett album eller en artist.
-🔟 likes (Gilla-markeringar)
-Motivering: Användare kan gilla inlägg.
-Kolumner:
-likeId (PK)
-userId (FK → users.userId)
-postId (FK → posts.postId)
-1️⃣1️⃣ comments (Kommentarer)
-Motivering: Användare kan kommentera inlägg.
-Kolumner:
-commentId (PK)
-userId (FK → users.userId)
-postId (FK → posts.postId)
-content
-created_at
-1️⃣2️⃣ followers (Följare)
-Motivering: Hanterar vilka användare som följer varandra.
-Kolumner:
-followerId (FK → users.userId)
-followingId (FK → users.userId)
-
 
 Look up http methods******
 GET req = retrivning inforamtion
@@ -147,4 +52,4 @@ Ifall vi vill lägga upp detta på en server
 session hantering / cookies
 CSRF-tokens i HTML formulär
 
-
+"proxy": "http://localhost:5000",
