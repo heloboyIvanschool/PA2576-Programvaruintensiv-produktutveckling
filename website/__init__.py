@@ -27,6 +27,7 @@ def create_app():
     app.config['SESSION_TYPE'] = 'filesystem'
     app.config['SESSION_PERMANENT'] = False
 
+    # Oklart vad denna koden gör, session directory typ
     session_dir = os.path.join(os.getcwd(), 'flask_session')
     os.makedirs(session_dir, exist_ok=True)
     app.config['SESSION_FILE_DIR'] = session_dir
