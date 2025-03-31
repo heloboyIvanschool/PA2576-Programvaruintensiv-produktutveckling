@@ -6,21 +6,20 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false); // Lägger till loading state
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();  // To handle the 'next' URL in the query params
+  const location = useLocation();
 
-  // useEffect för att kontrollera om användaren redan är inloggad
+  // useEffect for checking if user is already logged in
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        setLoading(true); // Börja ladda när vi gör förfrågan
+        setLoading(true);
         const response = await fetch('http://127.0.0.1:5000/auth-status', {
           method: 'GET',
-          credentials: 'include', // Skicka sessionen/cookies med
+          credentials: 'include',
         });
 
-        // Kontrollera om servern svarar korrekt
         if (!response.ok) {
           throw new Error('Failed to fetch login status');
         }
@@ -28,47 +27,52 @@ function Login() {
         const data = await response.json();
 
         if (data.logged_in) {
-          navigate('/profile');  // Om användaren är inloggad, navigera till profile
+          navigate('/profile');
         } else {
-          setLoading(false); // Sluta ladda om användaren inte är inloggad
+          setLoading(false);
         }
       } catch (error) {
         console.error('Error checking login status:', error);
         setError('Could not check login status. Please try again later.');
-        setLoading(false); // Sluta ladda om det sker ett fel
+        setLoading(false);
       }
     };
 
-    checkLoginStatus(); // Kör funktionen vid sidladdning
-  }, []);
+    checkLoginStatus();
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true); // Börja ladda när användaren försöker logga in
+    setLoading(true);
+    
+    console.log("Attempting login with:", { email, password });
 
     try {
+      console.log("Sending login request to server...");
       const response = await fetch('http://127.0.0.1:5000/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
-        credentials: 'include', // Include credentials (cookies)
+        credentials: 'include',
       });
-
+      
+      console.log("Login response status:", response.status);
+      
       const data = await response.json();
+      console.log("Login response data:", data);
 
       if (!response.ok) {
         throw new Error(data.error || 'Invalid credentials');
       }
 
-      // After successful login, check if there's a 'next' URL to redirect to
-      const nextUrl = data.next || '/profile'; // Default to '/profile' if no 'next' is provided
-      navigate(nextUrl);  // Navigate to the 'next' URL or the default profile page
+      console.log("Login successful, redirecting to:", data.next || '/profile');
+      navigate(data.next || '/profile');
     } catch (error) {
-      console.error("Error in fetching:", error);  // Loggar mer detaljer om felet
+      console.error("Error in login process:", error);
       setError(error.message || 'An error occurred');
     } finally {
-      setLoading(false); // Sluta ladda när förfrågan är klar
+      setLoading(false);
     }
   };
 
@@ -76,7 +80,7 @@ function Login() {
     <div className="login-container">
       <div className="login-box">
         <h2>Log in</h2>
-        {error && <p className="login-error">{error}</p>} {/* Visa felmeddelande om det finns */}
+        {error && <p className="login-error">{error}</p>}
 
         <form onSubmit={handleLogin}>
           <input
@@ -94,11 +98,10 @@ function Login() {
             required
           />
 
-          <button type="submit" disabled={loading}>Log in</button> {/* Disablerar knappen om vi laddar */}
-
+          <button type="submit" disabled={loading}>Log in</button>
         </form>
 
-        {loading && <p>Loading...</p>} {/* Laddningsindikator när vi väntar på svar */}
+        {loading && <p>Loading...</p>}
 
         <div className="google-login">
           <p>Or log in with Google:</p>

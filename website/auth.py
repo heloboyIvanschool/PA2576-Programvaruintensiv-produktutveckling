@@ -16,20 +16,29 @@ def login():
         return jsonify({"error": "Login required"}), 401
 
     data = request.json
+    print("Login attempt with data:", data)  # Add this line to see the login data
     email = data.get('email')
     password = data.get('password')
+
+    print(f"Attempting login with email: {email}")  # Add this logging
 
     user = User.query.filter_by(email=email).first()
 
     if not user:
+        print(f"No user found with email: {email}")  # Log if user not found
         return jsonify({"error": "Email not found"}), 401
 
+    print(f"User found: {user.username}, verifying password")  # Log user found
+
     if not user.check_password(password):
+        print("Password verification failed")  # Log password failure
         return jsonify({"error": "Incorrect password"}), 401
 
-    login_user(user, remember=True) # remember??
+    print("Password verified, logging in user")  # Log successful verification
+    login_user(user, remember=True)
 
     next_url = request.args.get('next')
+    print(f"Login successful for {user.username}, redirecting to: {next_url or '/profile'}")
 
     if next_url:
         return jsonify({"message": "Logged in successfully", "next": next_url}), 200
@@ -92,3 +101,4 @@ def auth_status():
         return jsonify({"logged_in": True, "username": current_user.username}), 200
     else:
         return jsonify({"logged_in": False}), 200
+

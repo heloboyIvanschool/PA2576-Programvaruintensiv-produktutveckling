@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory, redirect, url_for
+from flask import Flask, send_from_directory, redirect, url_for, session
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -23,6 +23,15 @@ def create_app():
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 
+    # För att ha sessions, där använderen stannar kvar i systemet
+    app.config['SESSION_TYPE'] = 'filesystem'
+    app.config['SESSION_PERMANENT'] = False
+
+    session_dir = os.path.join(os.getcwd(), 'flask_session')
+    os.makedirs(session_dir, exist_ok=True)
+    app.config['SESSION_FILE_DIR'] = session_dir
+
+
     Session(app) #### här är problemet måste håll apå med redis
 
     db.init_app(app)
@@ -32,7 +41,11 @@ def create_app():
     login_manager.login_view = 'auth.login'
 
     # Tillåter React frontend att göra API-anrop till Flask
-    CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
+    CORS(app,
+     resources={r"/*": {"origins": ["http://localhost:3000", "http://127.0.0.1:3000"]}},
+     supports_credentials=True,
+     expose_headers=["Set-Cookie"],
+     allow_headers=["Content-Type", "Authorization"])
 
     # Importera och registrera Blueprints
     from .views import views
