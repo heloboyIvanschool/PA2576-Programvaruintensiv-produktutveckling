@@ -37,7 +37,7 @@ def create_app():
     app.config['SESSION_FILE_DIR'] = session_dir
 
 
-    Session(app) #### här är problemet måste håll apå med redis
+    Session(app)
 
     db.init_app(app)
 
