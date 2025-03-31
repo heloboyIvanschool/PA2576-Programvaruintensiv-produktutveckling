@@ -36,7 +36,6 @@ def create_app():
     os.makedirs(session_dir, exist_ok=True)
     app.config['SESSION_FILE_DIR'] = session_dir
 
-
     Session(app)
 
     db.init_app(app)
