@@ -152,3 +152,5 @@ firebase.json
 # MacOS-specifika filer
 .DS_Store
 Thumbs.db
+
+flask_session/
