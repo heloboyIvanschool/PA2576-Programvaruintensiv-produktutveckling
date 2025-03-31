@@ -1,16 +1,14 @@
-from flask import Flask, send_from_directory, redirect, url_for
+from flask import Flask, send_from_directory
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from os import path
+import os
 from flask_login import LoginManager
 from dotenv import load_dotenv
-import os
 
 load_dotenv()
 
 db = SQLAlchemy()
-
 login_manager = LoginManager()
 
 # Sätt sökvägen till React build-mappen
@@ -22,6 +20,12 @@ def create_app():
     # Flask-konfiguration
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    app.config["SESSION_TYPE"] = "filesystem"
+    app.config["SESSION_FILE_DIR"] = os.path.join(os.getcwd(), "sessions")  # Spara sessioner här
+    app.config["SESSION_PERMANENT"] = False  # Sessionen försvinner när webbläsaren stängs
+    app.config["SESSION_USE_SIGNER"] = True
 
     Session(app) #### här är problemet måste håll apå med redis
 
@@ -32,7 +36,7 @@ def create_app():
     login_manager.login_view = 'auth.login'
 
     # Tillåter React frontend att göra API-anrop till Flask
-    CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
+    CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "http://127.0.0.1:3000"]}}, supports_credentials=True)
 
     # Importera och registrera Blueprints
     from .views import views

@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 from flask_login import login_user, login_required, logout_user, current_user
 from .models import User
 from . import db
@@ -27,7 +27,8 @@ def login():
     if not user.check_password(password):
         return jsonify({"error": "Incorrect password"}), 401
 
-    login_user(user, remember=True) # remember??
+    login_user(user, remember=True)
+    session["user_id"] = user.user_id
 
     next_url = request.args.get('next')
 
