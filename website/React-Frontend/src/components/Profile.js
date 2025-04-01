@@ -176,10 +176,15 @@ function Profile() {
   useEffect(() => {
     fetch("http://127.0.0.1:5000/profile", { credentials: 'include' }) // Skickar cookies/session
       .then((res) => {
-        if (!res.ok) {
-          return res.json().then((data) => {
-            throw new Error(data.error || `Server error: ${res.status} ${res.statusText}`);
-          });
+        // if (!res.ok) {
+        //   return res.json().then((data) => {
+        //     throw new Error(data.error || `Server error: ${res.status} ${res.statusText}`);
+        //   });
+        // }
+        // return res.json()
+        if (res.status === 401) {
+          navigate("/login");  // Skicka till login om användaren inte är inloggad
+          return null;
         }
         return res.json();
       })

@@ -23,20 +23,21 @@ def create_app():
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     app.config["SESSION_TYPE"] = "filesystem"
-    app.config["SESSION_FILE_DIR"] = os.path.join(os.getcwd(), "sessions")  # Spara sessioner här
-    app.config["SESSION_PERMANENT"] = False  # Sessionen försvinner när webbläsaren stängs
+    app.config["SESSION_FILE_DIR"] = os.path.join(os.getcwd(), "flask_sessions")  # Spara sessioner här
+    app.config["SESSION_PERMANENT"] = False
     app.config["SESSION_USE_SIGNER"] = True
+    app.config["SESSION_COOKIE_HTTPONLY"] = True  # För säkerhet
+    app.config["SESSION_COOKIE_SAMESITE"] = "None"  # Tillåt cookies över domäner
+    app.config["SESSION_COOKIE_SECURE"] = False  # Måste vara False om du testar lokalt
 
-    # För att ha sessions, där använderen stannar kvar i systemet
-    app.config['SESSION_TYPE'] = 'filesystem'
-    app.config['SESSION_PERMANENT'] = False
+    Session(app)
 
     # Oklart vad denna koden gör, session directory typ
     session_dir = os.path.join(os.getcwd(), 'flask_session')
     os.makedirs(session_dir, exist_ok=True)
     app.config['SESSION_FILE_DIR'] = session_dir
 
-    Session(app)
+
 
     db.init_app(app)
 
@@ -46,10 +47,11 @@ def create_app():
 
     # Tillåter React frontend att göra API-anrop till Flask
     CORS(app,
-     resources={r"/*": {"origins": ["http://localhost:3000", "http://127.0.0.1:3000"]}},
-     supports_credentials=True,
-     expose_headers=["Set-Cookie"],
-     allow_headers=["Content-Type", "Authorization"])
+    resources={r"/*": {"origins": ["http://localhost:3000"]}},
+    supports_credentials=True,
+    expose_headers=["Set-Cookie"],
+    allow_headers=["Content-Type", "Authorization"]
+    )
 
     # Importera och registrera Blueprints
     from .views import views

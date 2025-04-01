@@ -63,7 +63,8 @@ function Login() {
       console.log("Login response data:", data);
 
       if (!response.ok) {
-        throw new Error(data.error || 'Invalid credentials');
+        setError(data.error || 'Invalid credentials');
+        return;
       }
 
       console.log("Login successful, redirecting to:", data.next || '/profile');

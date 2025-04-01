@@ -37,6 +37,10 @@ def login():
     print("Password verified, logging in user")  # Log successful verification
     login_user(user, remember=True)
 
+    # Spara användardata i Flask-sessionen
+    session["user_id"] = user.user_id
+    session["username"] = user.username
+
     next_url = request.args.get('next')
     print(f"Login successful for {user.username}, redirecting to: {next_url or '/profile'}")
 
@@ -96,9 +100,14 @@ def test():
 # onödig atm
 @auth.route('/auth-status', methods=['GET'])
 def auth_status():
-    """ Kollar om en användare är inloggad och returnerar deras data. """
-    if current_user.is_authenticated:
-        return jsonify({"logged_in": True, "username": current_user.username}), 200
+    if "user_id" in session:
+        return jsonify({
+            "logged_in": True,
+            "user": {
+                "user_id": session["user_id"],
+                "username": session["username"]
+            }
+        }), 200
     else:
-        return jsonify({"logged_in": False}), 200
+        return jsonify({"logged_in": False}), 401
 

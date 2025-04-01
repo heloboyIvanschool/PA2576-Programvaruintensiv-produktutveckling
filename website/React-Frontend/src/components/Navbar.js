@@ -54,10 +54,10 @@ function Navbar() {
 
   useEffect(() => {
     fetch('/profile-picture', { credentials: 'include' })
-      .then((response) => response.json())
+      .then((res) => res.json())
       .then((data) => {
-        if (data.profile_picture) {
-          setProfilePicture(data.profile_picture);
+        if (data.logged_in) {
+          setProfilePicture(data.profile_picture || "default_profile_pic.jpg");
           setIsLoggedIn(true);
         } else {
           setIsLoggedIn(false);
