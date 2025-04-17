@@ -102,5 +102,5 @@ def add_mock_data():
             profile_artist = ProfileArtist(profile_id=profile.profile_id, artist_id=artist.artist_id)
             db.session.add(profile_artist)
 
-    db.session.commit()
+    # db.session.commit()
     print("Mock-data inlagd i databasen!")
