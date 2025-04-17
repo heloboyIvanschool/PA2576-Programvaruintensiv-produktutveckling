@@ -41,6 +41,9 @@ def login():
     session["user_id"] = user.user_id
     session["username"] = user.username
 
+    if 'username' in session:
+        print(session['username'])
+
     next_url = request.args.get('next')
     print(f"Login successful for {user.username}, redirecting to: {next_url or '/profile'}")
 

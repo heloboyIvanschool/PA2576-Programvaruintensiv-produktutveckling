@@ -12,26 +12,27 @@ def get_full_profile():
     """Hämtar all profilinfo i ett anrop"""
     print(f"Profile route accessed. Session data: {dict(session)}")
     print(f"Current user authenticated: {current_user.is_authenticated}")
-    
+
+    # session["user_id"] = user.user_id
+    # session["username"] = user.username
+
     if request.method == 'OPTIONS':
         print("OPTIONS request received")
         return '', 200
 
     elif request.method == 'GET':
         print(f"GET request received. User ID in session: {session.get('user_id')}")
-        
+
         # For testing purposes, temporarily return mock data if not authenticated
         if not current_user.is_authenticated:
             print("User not authenticated, returning mock data for testing")
             return jsonify(mock_profile), 200
-        
+
         print(f"User authenticated as: {current_user.username}")
         profile = Profiles.query.filter_by(user_id=current_user.user_id).first()
         if not profile:
             print(f"No profile found for user ID: {current_user.user_id}")
             return jsonify({"error": "Profile not found"}), 404
-
-        # Rest of your existing code...
 
         songs = [
             {"song_id": entry.song_id, "title": entry.song.title, "artist": entry.song.artist, "cover_url": entry.song.cover_url, "spotify_url": entry.song.spotify_url, "embed_url": entry.song.embed_url}

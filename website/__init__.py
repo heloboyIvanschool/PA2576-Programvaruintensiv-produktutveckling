@@ -37,8 +37,6 @@ def create_app():
     os.makedirs(session_dir, exist_ok=True)
     app.config['SESSION_FILE_DIR'] = session_dir
 
-
-
     db.init_app(app)
 
     # Flask-Login konfiguration
@@ -95,8 +93,3 @@ def create_app():
         return send_from_directory(REACT_BUILD_DIR, 'index.html')
 
     return app
-
-# @login_manager.user_loader
-# def load_user(user_id):
-#     from .models import User
-#     return User.query.get(int(user_id))
