@@ -4,6 +4,7 @@ from .models import User
 from . import db
 from . import login_manager
 
+#Vi skapar en ny blueprint med routes som har med autentisering att göra
 auth = Blueprint('auth', __name__)
 
 @login_manager.user_loader
@@ -16,25 +17,25 @@ def login():
         return jsonify({"error": "Login required"}), 401
 
     data = request.json
-    print("Login attempt with data:", data)  # Add this line to see the login data
+    print("Login attempt with data:", data)  # Vi printar inloggningsförsöket för att kunna felsöka
     email = data.get('email')
     password = data.get('password')
 
-    print(f"Attempting login with email: {email}")  # Add this logging
+    print(f"Attempting login with email: {email}")  
 
     user = User.query.filter_by(email=email).first()
 
     if not user:
-        print(f"No user found with email: {email}")  # Log if user not found
+        print(f"No user found with email: {email}")  # För att felsöka
         return jsonify({"error": "Email not found"}), 401
 
-    print(f"User found: {user.username}, verifying password")  # Log user found
+    print(f"User found: {user.username}, verifying password")  # Också felsökning
 
     if not user.check_password(password):
-        print("Password verification failed")  # Log password failure
+        print("Password verification failed")  
         return jsonify({"error": "Incorrect password"}), 401
 
-    print("Password verified, logging in user")  # Log successful verification
+    print("Password verified, logging in user")  # För att se lyckad inloggning
     login_user(user, remember=True)
 
     # Spara användardata i Flask-sessionen
@@ -51,7 +52,7 @@ def login():
         return jsonify({"message": "Logged in successfully", "next": next_url}), 200
     else:
         return jsonify({"message": "Logged in successfully", "next": "/profile"}), 200
-
+# Här hanterar vi när användaren ska logga ut, kräver att man redan är inloggad.
 @auth.route('/logout', methods=['POST'])
 @login_required
 def logout():
@@ -68,18 +69,20 @@ def register():
     password = data.get('password').strip()
     password_confirm = data.get('password_confirm').strip()
 
+    #Validerar att alla nödvändiga fält finns
     if not username or not email or not password or not password_confirm:
         return jsonify({"error": "Missing required fields"}), 400
-
+    #Kontrollerar om emailen redan finns
     if User.query.filter_by(email=email).first() is not None:
         return jsonify({"error": "Email already exists"}), 409
-
+    #Kontrollerar om användarnamnet redan finns
     if User.query.filter_by(username=username).first() is not None:
         return jsonify({"error": "Username already exists"}), 409
-
+    #Kollar så lösenordet passar
     if password != password_confirm:
         return jsonify({"error": "Passwords do not match"}), 400
 
+    # Här skapar vi en ny användare
     new_user = User(username=username, email=email, password=password)
     db.session.add(new_user)
     db.session.commit()
@@ -95,12 +98,12 @@ def register():
         }
     }), 201
 
-
+# Här testade vi så att verifiera att servern funkade 
 @auth.route('/test', methods=['GET'])
 def test():
     return "Server is running!", 200
 
-# onödig atm
+# Här kollar vi statusen på användaren, skapades när vi testade sessions.
 @auth.route('/auth-status', methods=['GET'])
 def auth_status():
     if "user_id" in session:

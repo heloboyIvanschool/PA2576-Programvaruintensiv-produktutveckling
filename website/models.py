@@ -5,9 +5,13 @@ from flask_dance.consumer.storage.sqla import OAuthConsumerMixin
 from uuid import uuid4
 from werkzeug.security import generate_password_hash, check_password_hash
 
+# Denna filen är för databasen
+
+#uuid är för att skapa ett unikt användar_id
 def get_uuid():
     return uuid4().hex
 
+#data_tabellen user, som innehåller user_id, username osv..
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     user_id = db.Column(db.String(32), primary_key=True, unique=True, default=get_uuid)
@@ -17,12 +21,13 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     role = db.Column(db.String(10), default='user')
 
+    #initialiserar en ny användare
     def __init__(self, username, email, password):
         self.username = username
         self.email = email
         self.password = generate_password_hash(password)
 
-    #realations
+    #relations i databasen
     profile = db.relationship("Profiles", back_populates="user", uselist=False, cascade="all, delete-orphan")
     posts = db.relationship('Post', back_populates='user')
     likes = db.relationship('Like', back_populates='user')
@@ -37,6 +42,8 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f'<User {self.username}>'
+
+#Nedan har vi ett antal data_tabeller för olika saker så som profilen, posts osv.
 
 class OAuth(db.Model, OAuthConsumerMixin):
     __tablename__ = 'oauth'
@@ -95,7 +102,7 @@ class Comment(db.Model):
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
 
-    #realtions
+    #relations
     user = db.relationship('User', back_populates='comments')
     post = db.relationship('Post', back_populates='comments')
 
@@ -163,7 +170,7 @@ class ProfileArtist(db.Model):
 
 
 
-#framtida implementationer
+#framtida implementationer som vi jobbar på
 
     # following = db.relationship(
     #     'User', secondary=followers,
@@ -190,7 +197,7 @@ class ProfileArtist(db.Model):
 #     db.Column('followingId', db.Integer, db.ForeignKey('users.user_id', ondelete="CASCADE"), primary_key=True)
 # )
 
-
+# Här validerar vi att content bara har en typ av uppladdning, dvs man kan inte blanda typer av innehåll ännu (låtar, album osv)
 def validate_content(self):
     content_count = sum(1 for content in [self.song_id, self.album_id, self.artist_id] if content)
     if content_count > 1:

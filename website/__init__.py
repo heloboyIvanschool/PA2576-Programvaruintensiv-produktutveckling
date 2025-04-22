@@ -32,7 +32,7 @@ def create_app():
 
     Session(app)
 
-    # Oklart vad denna koden gör, session directory typ
+    # Session directory initialiseras, håller koll på användarens inloggningsstatus
     session_dir = os.path.join(os.getcwd(), 'flask_session')
     os.makedirs(session_dir, exist_ok=True)
     app.config['SESSION_FILE_DIR'] = session_dir
