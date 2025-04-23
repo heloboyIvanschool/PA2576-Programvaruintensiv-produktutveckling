@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './ProfileCustomization.css'; // Assuming you have a CSS file for styling
+import './ProfileCustomization.css'; // CSS fil för styling
 import { Link, useNavigate } from 'react-router-dom';
 
 function ProfileCustomization() {
@@ -21,7 +21,7 @@ function ProfileCustomization() {
     navigate('/profile');
   };
   
-
+  //Här sker customisering av profilsidan
   return (
     <div className="profile-customization-page">
       <h1>Profile Customization</h1>
@@ -29,13 +29,13 @@ function ProfileCustomization() {
       <div className="profile-group">
       
                 <div className="profile-container">
-      
+                  {/*Här uppdateras profilinforamtion som ligger i den övre containern, profilbild, genre, username...*/}
                   <div className="profile-header">
                   <img src="https://i.scdn.co/image/ab6761610000e5eba7874efb5aa08fc40af59c10" alt="Profile" className="profile-pic-large" />
                     
                     <div className="profile-info">
                       <h1 className="profile-username">Sean Banan </h1>
-      
+                      
                       <div className="favorite-genres">
                         <span className="genre">Rock</span>
                         <span className="genre">Progressive-Rock</span>
@@ -47,8 +47,9 @@ function ProfileCustomization() {
                 </div>
                 
                 
-                
+              
                 <div className="favorite-songs-showcase">
+                  {/*Här uppdateras sånglistan till vänster på profilsidan, det är embed-länkar som tillåter användare lyssna på musiken på hemsidan*/}
                   <div className="favorite-songs-container">
                     <h2>Top Songs</h2>
                     <ul className="favorite-songs">
@@ -64,7 +65,7 @@ function ProfileCustomization() {
               
               
                   <div className='showcase'>
-
+                    {/*Showcase items ändras här(Album, Låtar, Artiser, Badges*/}
                     <div className='showcase-section'>
                       <h2>Albums</h2>
                       <div className="showcase-items">
