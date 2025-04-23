@@ -2,18 +2,25 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
 
+// En komponent för att registrera nya användare
+
 function Register() {
+  // Detta är saker som användaren ska lägga in 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  
 
+  //Hanterar processen efter inmatning
   const handleRegister = async (e) => {
     e.preventDefault();
+    //Återställer gamla felmeddelanden
     setError("");
 
+    //Skickar inmatningsdatan via API till servern
     const response = await fetch("http://127.0.0.1:5000/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -21,8 +28,10 @@ function Register() {
       credentials: "include",
     });
 
+    // Tolkar API-svaret som en json fil
     const data = await response.json();
 
+    // Om inloggningen lyckas så skickas den till profilsidan
     if (response.ok) {
       navigate("/profile"); // Skicka användaren till profil-sidan efter lyckad registrering
     } else {
@@ -30,7 +39,9 @@ function Register() {
     }
   };
 
+  // Renderar registreringsformuläret
   return (
+    // Alla inputs som behövs, vad som är placeholder namn osv..
     <div className="register-container">
       <div className="register-box">
         <h2>Sign Up</h2>
