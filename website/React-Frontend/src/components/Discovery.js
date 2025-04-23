@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import './Discovery.css';
 
+// Denna sidan är under utveckling..
 const Discovery = () => {
+  // Låter söktermen vara tom som initialt värde
   const [searchQuery, setSearchQuery] = useState('');
-
+// Vi skapar möjligheten att söka efter användare genom textinmatning
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -13,7 +15,9 @@ const Discovery = () => {
     // Implement search functionality here
     console.log('Search query:', searchQuery);
   };
+  // Här under ska vi ha mer funktionalitet
 
+  // Renderar komponenten 
   return (
     <div className="discovery-container">
       <h1>Discover Users</h1>
