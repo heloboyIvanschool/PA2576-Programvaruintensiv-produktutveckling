@@ -46,7 +46,7 @@ class search():
         return result
     
 
-#Search for track
+#Söker efter låt
 
 
 class search_for_track():
@@ -99,7 +99,7 @@ class search_for_track():
         return track_data["id"] if track_data else None
     
 
-#Search for Album
+#Söker efter album
 
 
 class search_for_album():
@@ -132,7 +132,7 @@ class search_for_album():
         return album_data["images"][0]["url"] if album_data else None
     
 
-#Search for artist
+#Söker efter artister
 
 
 class search_for_artist():
