@@ -1,4 +1,4 @@
-// import React, { useState, useEffect } from 'react';
+// import React, { useState, useEffect } from 'react';    Gammal kod som vi inte vill bli av med
 // import { Link } from 'react-router-dom';
 // import './Navbar.css';
 
@@ -40,7 +40,7 @@
 //   );
 // }
 
-// export default Navbar;
+// export default Navbar;   Gammal kod som vi inte vill bli av med
 
 
 
@@ -49,39 +49,41 @@ import { Link } from 'react-router-dom';
 import './Navbar.css';
 
 function Navbar() {
-  const [profilePicture, setProfilePicture] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [profilePicture, setProfilePicture] = useState(null);   // Spara profilbilden i state
+  const [isLoggedIn, setIsLoggedIn] = useState(false);    // Håller koll på om användaren är inloggad
 
-  useEffect(() => {
-    fetch('/profile-picture', { credentials: 'include' })
+  useEffect(() => {   // useEffect körs när komponenten laddas
+    fetch('/profile-picture', { credentials: 'include' })   // Hämta profilbild och inloggningsstatus från servern
       .then((res) => res.json())
       .then((data) => {
-        if (data.logged_in) {
-          setProfilePicture(data.profile_picture || "default_profile_pic.jpg");
+        if (data.logged_in) {   // Om användaren är inloggad, spara profilbild och uppdatera inloggningsstatus
+          setProfilePicture(data.profile_picture || "default_profile_pic.jpg");   // Använd en standardbild om ingen finns
           setIsLoggedIn(true);
         } else {
           setIsLoggedIn(false);
         }
       })
-      .catch((error) => {
+      .catch((error) => {   // Om något går fel, logga felet och sätt inloggning till false
         console.error('Error fetching profile picture:', error);
         setIsLoggedIn(false);
       });
   }, []);
 
-  return (
+  return (    // Navigationsfältet
     <nav className='navbar'>
       <div className='navbar-container'>
-        <Link to="/" className="navbar-logo">Resonate</Link>
-        <div className='navbar-menu'>
+        <Link to="/" className="navbar-logo">Resonate</Link>    {/* Logotyp som leder till startsidan */}
+        <div className='navbar-menu'>   {/* Meny med länkar */}
           <Link to="/" className="navbar-item">Home</Link>
           <Link to="/discovery" className="navbar-item">Discovery</Link>
-          {isLoggedIn ? (
+          {/* Visa olika länkar beroende på om användaren är inloggad */}
+          {isLoggedIn ? (   
             <Link to="/profile" className="navbar-item">Profile</Link>
           ) : (
             <Link to="/login" className="navbar-item">Log in</Link>
           )}
         </div>
+        {/* Om användaren är inloggad, visa profilbilden som en länk till profilen */}
         {isLoggedIn && (
           <Link to="/profile" className="navbar-profile">
             <img
