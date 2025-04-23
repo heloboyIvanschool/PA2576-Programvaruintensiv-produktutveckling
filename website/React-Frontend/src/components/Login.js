@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import './Login.css';
+import './Login.css'; //CSS fil för styling
 
 function Login() {
+  // State-variabler för att hantera formulärdata, felmeddelanden och laddningsstatus
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -10,7 +11,7 @@ function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // useEffect for checking if user is already logged in
+  // useEffect som körs när komponenten mountas – kollar om användaren redan är inloggad
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
@@ -27,6 +28,7 @@ function Login() {
         const data = await response.json();
 
         if (data.logged_in) {
+          // Om användaren redan är inloggad, skicka dem till profilsidan
           navigate('/profile');
         } else {
           setLoading(false);
@@ -40,7 +42,7 @@ function Login() {
 
     checkLoginStatus();
   }, [navigate]);
-
+  // Funktion som körs när användaren skickar in login-formuläret
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
@@ -66,7 +68,7 @@ function Login() {
         setError(data.error || 'Invalid credentials');
         return;
       }
-
+      // Vid lyckad inloggning, navigera till profil eller annan angiven sida
       console.log("Login successful, redirecting to:", data.next || '/profile');
       navigate(data.next || '/profile');
     } catch (error) {
