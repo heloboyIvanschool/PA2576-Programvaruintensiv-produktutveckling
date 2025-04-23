@@ -5,18 +5,25 @@ import requests
 from flask import Flask, request, jsonify, Blueprint
 from dotenv import load_dotenv
 
+# Skapar en Blueprint för Spotify-hantering
 SpotifyHandler = Blueprint('SpotifyHandler', __name__)
 
+# Laddar miljövariabler från .env-filen
 load_dotenv()
 
 class SpotifyAPI:
+    """
+    Hanterar autentisering och anrop till Spotifys API.
+    """
     def __init__(self):
         self.client_id = os.getenv("CLIENT_ID")
         self.client_secret = os.getenv("CLIENT_SECRET")
         self.token = self.get_token()
 
     def get_token(self):
-        """Hämtar en åtkomsttoken från Spotify API"""
+        """
+        Hämtar en åtkomsttoken från Spotify via client credentials-flödet.
+        """
         auth_string = f"{self.client_id}:{self.client_secret}"
         auth_bytes = auth_string.encode("utf-8")
         auth_base64 = base64.b64encode(auth_bytes).decode("utf-8")
@@ -36,7 +43,16 @@ class SpotifyAPI:
         return response.json().get("access_token")
 
     def search(self, query, search_type):
-        """Generisk sökfunktion för låtar, album och artister"""
+        """
+        Utför en sökning på Spotify för angiven typ (track, album, artist).
+
+        Args:
+            query (str): Sökterm.
+            search_type (str): Typ av sökning – 'track', 'album' eller 'artist'.
+
+        Returns:
+            dict | None: Första sökresultatet eller None.
+        """
         url = "https://api.spotify.com/v1/search"
         headers = {"Authorization": f"Bearer {self.token}"}
         params = {"q": query, "type": search_type, "limit": 1}
@@ -50,12 +66,17 @@ class SpotifyAPI:
 
 
 class SpotifySearch:
+    """
+    Wrapper-klass som förenklar hämtning av olika typer av Spotify-data.
+    """
     def __init__(self, query):
         self.spotify = SpotifyAPI()
         self.query = query
 
     def get_track(self):
-        """Hämtar låtinformation"""
+        """
+        Hämtar låtinformation från Spotify.
+        """
         track_data = self.spotify.search(self.query, "track")
         if not track_data:
             return None
@@ -69,7 +90,9 @@ class SpotifySearch:
         }
 
     def get_album(self):
-        """Hämtar albuminformation"""
+        """
+        Hämtar albuminformation från Spotify.
+        """
         album_data = self.spotify.search(self.query, "album")
         if not album_data:
             return None
@@ -83,7 +106,9 @@ class SpotifySearch:
         }
 
     def get_artist(self):
-        """Hämtar artistinformation"""
+        """
+        Hämtar artistinformation från Spotify.
+        """
         artist_data = self.spotify.search(self.query, "artist")
         if not artist_data:
             return None
@@ -98,9 +123,19 @@ class SpotifySearch:
         }
 
 
-# Flask-routes för att söka låtar, album och artister
+# Route för att söka efter låtar, album eller artister via API:et
 @SpotifyHandler.route('/search', methods=['GET'])
 def search():
+    """
+    API-endpoint för att söka efter en låt, ett album eller en artist.
+
+    Förväntar sig query-parametrar:
+    - query: söksträngen
+    - type: 'track', 'album' eller 'artist'
+
+    Returns:
+        JSON-resultat med relevant data eller felmeddelande.
+    """
     query = request.args.get('query')
     search_type = request.args.get('type')
 

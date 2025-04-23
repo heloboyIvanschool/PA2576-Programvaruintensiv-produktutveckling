@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 // import { fetchProfile } from "./api";
 
 /*
-function Profile() {
+function Profile() {    Gammal kod som vi inte vill bi av med
   return (
     <>
       <div className="profile-page">
@@ -163,18 +163,19 @@ function Profile() {
 }
 
 export default Profile;
-*/
+*/Q
 
 
-// test
 
-function Profile() {
+
+function Profile() {      // Definiera tillstånd för profildata, laddningsstatus och felmeddelanden
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);  // För att hantera eventuella fel
 
-  useEffect(() => {
-    fetch("http://127.0.0.1:5000/profile", { credentials: 'include' }) // Skickar cookies/session
+  useEffect(() => {     // useEffect körs en gång när komponenten laddas
+    fetch("http://127.0.0.1:5000/profile", { credentials: 'include' })    // Hämta profildata från backend
+
       .then((res) => {
         // if (!res.ok) {
         //   return res.json().then((data) => {
@@ -183,50 +184,51 @@ function Profile() {
         // }
         // return res.json()
         if (res.status === 401) {
-          navigate("/login");  // Skicka till login om användaren inte är inloggad
+          navigate("/login");   // Om användaren inte är inloggad, navigera till inloggningssidan
+
           return null;
         }
-        return res.json();
+        return res.json();    // Om allt är OK, returnera JSON-data
       })
       .then((data) => {
-        console.log("Fetched profile data:", data); // Logga för debugging
-        setProfile(data);
+        console.log("Fetched profile data:", data);   // Logga datan för felsökning
+        setProfile(data);   // Spara profildatan i state
       })
-      .catch((error) => {
+      .catch((error) => {   // Fånga eventuella fel och spara meddelande i state
         console.error("Error fetching profile data:", error);
         setError(error.message || "Failed to load profile data.");
       })
-      .finally(() => {
+      .finally(() => {    // När allt är klart (oavsett om det lyckades eller inte), sluta visa laddning
         setLoading(false);
       });
   }, []);
 
-  if (loading) {
+  if (loading) {    // Visa laddningsmeddelande medan datan hämtas
     return <div>Loading profile...</div>;
   }
 
-  if (error) {
+  if (error) {    // Visa felmeddelande om något gick fel
     return <div>Error: {error}</div>;  // Om ett fel inträffade, visa det
   }
 
-  if (!profile) {
+  if (!profile) {   // Om ingen profildata hittades
     return <div>Profile not found här</div>;
   }
 
   return (
-    <div className="profile-page">
+    <div className="profile-page">    {/* Profilsidan */}
       <div className="left-column">
         <div className="profile-group">
           <div className="profile-container">
-            <div className="profile-header">
-              <img
+            <div className="profile-header"> 
+              <img 
                 src={profile.profile_picture || "https://i1.sndcdn.com/avatars-000339644685-3ctegw-t500x500.jpg"}
                 alt="Profile"
                 className="profile-pic-large"
-              />
+              />    {/* Profilbild med fallback */}
               <div className="profile-info">
-                <h1 className="profile-username">{profile.username || "Unknown User"}</h1>
-                <div className="favorite-genres">
+                <h1 className="profile-username">{profile.username || "Unknown User"}</h1>    {/* Användarnamn med fallback */}
+                <div className="favorite-genres">   {/* Lista med favoritgenrer eller fallback-text */}
                   {profile.favorite_genres && profile.favorite_genres.length > 0 ? (
                     profile.favorite_genres.map((genre, index) => (
                       <span key={index} className="genre">
@@ -239,10 +241,10 @@ function Profile() {
                 </div>
               </div>
             </div>
-            <Link to="/profile-customization">Edit Profile</Link>
+            <Link to="/profile-customization">Edit Profile</Link>   {/* Länk till profilredigering */}
           </div>
 
-          <div className="favorite-songs-showcase">
+          <div className="favorite-songs-showcase">   {/* Showcase-sektion för favoritsånger */}
             <div className="favorite-songs-container">
               <h2>Top Songs</h2>
               <ul className="favorite-songs">
@@ -263,7 +265,7 @@ function Profile() {
               </ul>
             </div>
 
-            <div className="showcase">
+            <div className="showcase">    {/* Showcase-sektion för album */}
               <div className="showcase-section">
                 <h2>Albums</h2>
                 <div className="showcase-items">
@@ -279,7 +281,7 @@ function Profile() {
                 </div>
               </div>
 
-              <div className="showcase-section">
+              <div className="showcase-section">    {/* Showcase-sektion för artister */}
                 <h2>Artists</h2>
                 <div className="showcase-items">
                   {profile.artists && profile.artists.length > 0 ? (
@@ -294,7 +296,7 @@ function Profile() {
                 </div>
               </div>
 
-              <div className="showcase-section">
+              <div className="showcase-section">    {/* sektion för badges */}
                 <h2>Badges</h2>
                 <div className="showcase-items">
                   <p>Coming soon...</p>
@@ -305,7 +307,7 @@ function Profile() {
         </div>
       </div>
 
-      <div className="feed">
+      <div className="feed">    {/* feed med inlägg */}
         <h2>Posts</h2>
         <div className="post">Post 1</div>
         <div className="post">Post 2</div>

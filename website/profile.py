@@ -3,54 +3,62 @@ from flask_login import login_required, current_user, login_user
 from . import db
 from .models import User, ProfileSong, ProfileAlbum, ProfileArtist, Song, Album, Artist, Profiles
 
-#Skapar en blueprint som säger hur vi hanterar användarprofilens funktioner
+# Blueprint som hanterar användarens profilrelaterade endpoints
 show_profile = Blueprint('profile', __name__)
 
-# hämtar just nu all data, måste då uppdatera resterande kod om vi ska göra såhär
-@show_profile.route('/profile', methods=['GET', 'OPTIONS'])
 
+@show_profile.route('/profile', methods=['GET', 'OPTIONS'])
 def get_full_profile():
-    """Hämtar all profilinfo i ett anrop"""
+    """
+    Hämtar en användares fullständiga profilinformation, inklusive användarnamn,
+    profilbild, biografi, favoritgenrer, samt sparade låtar, album och artister.
+    Returnerar mock-data om användaren inte är inloggad.
+    """
     print(f"Profile route accessed. Session data: {dict(session)}")
     print(f"Current user authenticated: {current_user.is_authenticated}")
 
-    # Temporärt kommenterat bort, lite strul med sessions
-    # session["user_id"] = user.user_id
-    # session["username"] = user.username
-
-    #Get är en metod för hitta info i inloggat läge, options är som en begäran till senare
     if request.method == 'OPTIONS':
-        print("OPTIONS request received")
         return '', 200
 
     elif request.method == 'GET':
-        print(f"GET request received. User ID in session: {session.get('user_id')}")
-
-        #Testar om den är inloggad, annars kör vi på mock_datan för att testa systemet
         if not current_user.is_authenticated:
-            print("User not authenticated, returning mock data for testing")
             return jsonify(mock_profile), 200
 
-        print(f"User authenticated as: {current_user.username}")
         profile = Profiles.query.filter_by(user_id=current_user.user_id).first()
         if not profile:
-            print(f"No profile found for user ID: {current_user.user_id}")
             return jsonify({"error": "Profile not found"}), 404
-        
-        #Här hämtar vi favorit låtar, album och artisterna. 
+
         songs = [
-            {"song_id": entry.song_id, "title": entry.song.title, "artist": entry.song.artist, "cover_url": entry.song.cover_url, "spotify_url": entry.song.spotify_url, "embed_url": entry.song.embed_url}
+            {
+                "song_id": entry.song_id,
+                "title": entry.song.title,
+                "artist": entry.song.artist,
+                "cover_url": entry.song.cover_url,
+                "spotify_url": entry.song.spotify_url,
+                "embed_url": entry.song.embed_url
+            }
             for entry in ProfileSong.query.filter_by(profile_id=profile.profile_id).join(Song).all()
         ]
         albums = [
-            {"album_id": entry.album_id, "title": entry.album.title, "artist": entry.album.artist, "cover_url": entry.album.cover_url, "spotify_url": entry.album.spotify_url}
+            {
+                "album_id": entry.album_id,
+                "title": entry.album.title,
+                "artist": entry.album.artist,
+                "cover_url": entry.album.cover_url,
+                "spotify_url": entry.album.spotify_url
+            }
             for entry in ProfileAlbum.query.filter_by(profile_id=profile.profile_id).join(Album).all()
         ]
         artists = [
-            {"artist_id": entry.artist_id, "name": entry.artist.name, "cover_url": entry.artist.cover_url, "spotify_url": entry.artist.spotify_url}
+            {
+                "artist_id": entry.artist_id,
+                "name": entry.artist.name,
+                "cover_url": entry.artist.cover_url,
+                "spotify_url": entry.artist.spotify_url
+            }
             for entry in ProfileArtist.query.filter_by(profile_id=profile.profile_id).join(Artist).all()
         ]
-        # Nu returnerar vi den ihopsamlade profildatan
+
         return jsonify({
             "username": current_user.username,
             "profile_picture": profile.profile_picture or "https://i1.sndcdn.com/avatars-000339644685-3ctegw-t500x500.jpg",
@@ -65,63 +73,79 @@ def get_full_profile():
 @show_profile.route('/api/profile-showcase', methods=['GET', 'POST'])
 @login_required
 def profile_content():
-    """ Hanterar showcase-innehåll: Hämtar, lägger till och tar bort låtar, album och artister. """
+    """
+    Hanterar showcase-innehåll:
+    - GET: Hämtar låtar, album och artister i användarens profil.
+    - POST: Lägger till eller tar bort innehåll baserat på typ och åtgärd ('add' eller 'remove').
+    """
     profile = Profiles.query.filter_by(user_id=current_user.user_id).first()
     if not profile:
-        #Returnerar profilinnehållet eller statusmeddelande
         return jsonify({"error": "Profile not found"}), 404
-    
-    #Här hämtar vi profildatan för showcase-biten
+
     if request.method == 'GET':
         songs = [
-            {"song_id": entry.song_id, "title": entry.song.title, "artist": entry.song.artist, "cover_url": entry.song.cover_url, "spotify_url": entry.song.spotify_url}
+            {
+                "song_id": entry.song_id,
+                "title": entry.song.title,
+                "artist": entry.song.artist,
+                "cover_url": entry.song.cover_url,
+                "spotify_url": entry.song.spotify_url
+            }
             for entry in ProfileSong.query.filter_by(profile_id=profile.profile_id).join(Song).all()
         ]
         albums = [
-            {"album_id": entry.album_id, "title": entry.album.title, "artist": entry.album.artist, "cover_url": entry.album.cover_url, "spotify_url": entry.album.spotify_url}
+            {
+                "album_id": entry.album_id,
+                "title": entry.album.title,
+                "artist": entry.album.artist,
+                "cover_url": entry.album.cover_url,
+                "spotify_url": entry.album.spotify_url
+            }
             for entry in ProfileAlbum.query.filter_by(profile_id=profile.profile_id).join(Album).all()
         ]
         artists = [
-            {"artist_id": entry.artist_id, "name": entry.artist.name, "cover_url": entry.artist.cover_url, "spotify_url": entry.artist.spotify_url}
+            {
+                "artist_id": entry.artist_id,
+                "name": entry.artist.name,
+                "cover_url": entry.artist.cover_url,
+                "spotify_url": entry.artist.spotify_url
+            }
             for entry in ProfileArtist.query.filter_by(profile_id=profile.profile_id).join(Artist).all()
         ]
-        #Returnerar showcase-datan
+
         return jsonify({
             "message": "Showcase retrieved successfully",
-            "songs": songs or [],
-            "albums": albums or [],
-            "artists": artists or []
+            "songs": songs,
+            "albums": albums,
+            "artists": artists
         }), 200
 
     elif request.method == 'POST':
         data = request.get_json()
-        action = data.get("action")  # 'add' eller 'remove'
-        content_type = data.get("content_type")  # 'song', 'album' eller 'artist'
-        content_id = data.get("content_id")  # ID från Spotify API
-        content_data = data.get("content_data")  # Metadata från frontend
+        action = data.get("action")
+        content_type = data.get("content_type")
+        content_id = data.get("content_id")
+        content_data = data.get("content_data")
 
         if not content_id or not content_type:
             return jsonify({"error": "Missing content ID or type"}), 400
-        
-        #Definierar modellassociationer för de olika innehållen
+
         model_map = {
             "song": (ProfileSong, Song, "song_id"),
             "album": (ProfileAlbum, Album, "album_id"),
             "artist": (ProfileArtist, Artist, "artist_id")
         }
-        # Om innehållet inte är en av de ovan definierade modellerna så är det fel
+
         if content_type not in model_map:
             return jsonify({"error": "Invalid content type"}), 400
 
         profile_model, main_model, column = model_map[content_type]
 
         if action == "add":
-            #Kontrollerar så det inte redan finns i databasen
             existing_item = main_model.query.filter_by(**{column: content_id}).first()
             if not existing_item:
                 if not content_data:
                     return jsonify({"error": f"Missing {content_type} data"}), 400
-                # Om det inte redan finns så skapas det här
                 new_item = main_model(**{
                     column: content_id,
                     "title" if content_type != "artist" else "name": content_data.get("title") or content_data.get("name"),
@@ -131,34 +155,34 @@ def profile_content():
                 })
                 db.session.add(new_item)
 
-            #Kollar om det finns i profilen
             existing_entry = profile_model.query.filter_by(profile_id=profile.profile_id, **{column: content_id}).first()
             if existing_entry:
                 return jsonify({"message": f"{content_type.capitalize()} already in showcase"}), 200
-            # Om inte så lägger vi till det
+
             new_entry = profile_model(profile_id=profile.profile_id, **{column: content_id})
             db.session.add(new_entry)
 
-        #Här så tar vi bort content 
         elif action == "remove":
             existing_entry = profile_model.query.filter_by(profile_id=profile.profile_id, **{column: content_id}).first()
             if existing_entry:
                 db.session.delete(existing_entry)
             else:
                 return jsonify({"error": f"{content_type.capitalize()} not found in showcase"}), 404
-
         else:
             return jsonify({"error": "Invalid action"}), 400
 
-        #Sparar ändringen i databasen
         db.session.commit()
         return jsonify({"message": f"{content_type.capitalize()} updated successfully"}), 200
 
-#Här hanterar vi användarens profilbild
+
 @show_profile.route('/profile-picture', methods=['GET', 'POST'])
 @login_required
 def profile_picture():
-    """ Hanterar profilbild: Hämtar eller uppdaterar. """
+    """
+    Hämtar eller uppdaterar användarens profilbild.
+    - GET: Returnerar aktuell profilbild.
+    - POST: Uppdaterar profilbild med ny URL.
+    """
     profile = Profiles.query.filter_by(user_id=current_user.user_id).first()
     if not profile:
         return jsonify({"error": "Profile not found"}), 404
@@ -181,10 +205,13 @@ def profile_picture():
             "profile_picture": profile.profile_picture
         }), 200
 
+
 @show_profile.route('/api/profile-bio', methods=['GET', 'POST'])
 @login_required
 def profile_bio():
-    """ Hanterar användarens biografi. """
+    """
+    Hämtar eller uppdaterar användarens biografi.
+    """
     profile = Profiles.query.filter_by(user_id=current_user.user_id).first()
     if not profile:
         return jsonify({"error": "Profile not found"}), 404
@@ -207,11 +234,13 @@ def profile_bio():
             "bio": profile.bio
         }), 200
 
-@show_profile.route('/api/profile-genres', methods=['GET', 'POST'])
-#@login_required
 
+@show_profile.route('/api/profile-genres', methods=['GET', 'POST'])
+# @login_required  # Aktivera om det krävs inloggning
 def profile_genres():
-    """ Hanterar favoritgenrer. """
+    """
+    Hämtar eller uppdaterar användarens favoritgenrer.
+    """
     profile = Profiles.query.filter_by(user_id=current_user.user_id).first()
     if not profile:
         return jsonify({"error": "Profile not found"}), 404
@@ -236,8 +265,9 @@ def profile_genres():
             "message": "Genres updated successfully",
             "favorite_genres": profile.favorite_genres
         }), 200
-    
-# Detta var för att testa funktionerna medan vi utvecklade
+
+
+# Mockdata som används om ingen användare är inloggad
 mock_profile = {
     "username": "TestUser",
     "profile_picture": "https://i1.sndcdn.com/avatars-000339644685-3ctegw-t500x500.jpg",
